@@ -66,6 +66,7 @@ public class PengajuanSDMController {
         PengajuanSDMResponse response = pengajuanSDMService.closeJobPosted(id);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", response), HttpStatus.OK);
+
     }
 
 }

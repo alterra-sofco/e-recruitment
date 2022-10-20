@@ -60,7 +60,9 @@ public class PengajuanSDMService {
             pengajuanSDMEntity.setIdPengajuan(id);
         }
         pengajuanSDMEntity.setStatus((short) 1);
-        PengajuanSDMEntity pengajuanSDMEntity1 = pengajuanSDMRepository.save(pengajuanSDMEntity);
+        pengajuanSDMRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Data with ID: " + id + " not found"));
+        pengajuanSDMEntity.setIdPengajuan(id);
+         PengajuanSDMEntity pengajuanSDMEntity1 = pengajuanSDMRepository.save(pengajuanSDMEntity);
         if (!listSkill.isEmpty()) {
             for (SkillEntity skillEntity : listSkill) {
                 PengajuanSDMSkillEntity pengajuanSDMSkillEntity = new PengajuanSDMSkillEntity();
@@ -86,7 +88,6 @@ public class PengajuanSDMService {
             } else {
                 pengajuanSDMEntities = pengajuanSDMRepository.findByPosisiContainingIgnoreCase(keyword, paging);
             }
-
         } else {
             if (status > 0) {
                 pengajuanSDMEntities = pengajuanSDMRepository.findByStatus(Short.valueOf(status), paging);
@@ -161,6 +162,7 @@ public class PengajuanSDMService {
         pengajuanSDMEntity.setStatus((short) 4);
         return convertToDto(pengajuanSDMRepository.save(pengajuanSDMEntity));
     }
+
 
     private void validate(AddPengajuanSDMRequest request) {
         if (request == null) {
