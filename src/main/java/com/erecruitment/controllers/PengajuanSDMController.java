@@ -1,6 +1,7 @@
 package com.erecruitment.controllers;
 
 import com.erecruitment.dtos.requests.AddPengajuanSDMRequest;
+import com.erecruitment.dtos.requests.UpdateStatusPengajuanSDMRequest;
 import com.erecruitment.dtos.response.CommonResponse;
 import com.erecruitment.dtos.response.PageableResponse;
 import com.erecruitment.dtos.response.PengajuanSDMResponse;
@@ -50,7 +51,21 @@ public class PengajuanSDMController {
     public ResponseEntity<CommonResponse> removeOne(@PathVariable Long id) {
         pengajuanSDMService.removeOne(id);
         ResponseGenerator responseGenerator = new ResponseGenerator();
-        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", id), HttpStatus.CREATED);
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/update_status")
+    public ResponseEntity<CommonResponse<PengajuanSDMResponse>> updateStatus(@RequestBody UpdateStatusPengajuanSDMRequest request, @PathVariable("id") Long id) {
+        PengajuanSDMResponse response = pengajuanSDMService.updateStatus(request, id);
+        ResponseGenerator responseGenerator = new ResponseGenerator();
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", response), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/close_job")
+    public ResponseEntity<CommonResponse<PengajuanSDMResponse>> closeJob(@PathVariable("id") Long id) {
+        PengajuanSDMResponse response = pengajuanSDMService.closeJobPosted(id);
+        ResponseGenerator responseGenerator = new ResponseGenerator();
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", response), HttpStatus.OK);
     }
 
 }

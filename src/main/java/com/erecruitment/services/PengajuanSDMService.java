@@ -1,6 +1,7 @@
 package com.erecruitment.services;
 
 import com.erecruitment.dtos.requests.AddPengajuanSDMRequest;
+import com.erecruitment.dtos.requests.UpdateStatusPengajuanSDMRequest;
 import com.erecruitment.dtos.response.PageableResponse;
 import com.erecruitment.dtos.response.PengajuanSDMResponse;
 import com.erecruitment.entities.PengajuanSDMEntity;
@@ -23,6 +24,7 @@ import org.springframework.util.StringUtils;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,9 +49,17 @@ public class PengajuanSDMService {
         List<SkillEntity> listSkill = skillRepository.findBySkillIdIn(request.getListSkill());
         PengajuanSDMEntity pengajuanSDMEntity = convertToEntity(request);
         if (id > 0) {
-            pengajuanSDMRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Data with ID: " + id + " not found"));
+            Optional<PengajuanSDMEntity> dt = pengajuanSDMRepository.findById(id);
+            if (!dt.isPresent()) {
+                throw new DataNotFoundException("Data with ID: " + id + " not found");
+            }
+            int status = dt.get().getStatus();
+            if (status > 1) {
+                throw new ValidationErrorException("data cannot be edit");
+            }
             pengajuanSDMEntity.setIdPengajuan(id);
         }
+        pengajuanSDMEntity.setStatus((short) 1);
         PengajuanSDMEntity pengajuanSDMEntity1 = pengajuanSDMRepository.save(pengajuanSDMEntity);
         if (!listSkill.isEmpty()) {
             for (SkillEntity skillEntity : listSkill) {
@@ -107,6 +117,49 @@ public class PengajuanSDMService {
     public void removeOne(Long id) {
         pengajuanSDMRepository.findById(id).orElseThrow(() -> new DataNotFoundException("data id : " + id + " not found"));
         pengajuanSDMRepository.deleteById(id);
+    }
+
+    public PengajuanSDMResponse updateStatus(UpdateStatusPengajuanSDMRequest request, Long id) {
+        if (id == 0L) {
+            throw new ValidationErrorException("id required");
+        }
+        if (request.getStatus() > 3 || request.getStatus() == 1) {
+            throw new ValidationErrorException("status invalid");
+        }
+        if (request.getStatus() == 3 && StringUtils.isEmpty(request.getDeadline())) {
+            throw new ValidationErrorException("deadline required");
+        }
+        Optional<PengajuanSDMEntity> dt = pengajuanSDMRepository.findById(id);
+        if (!dt.isPresent()) {
+            throw new DataNotFoundException("Data with ID: " + id + " not found");
+        }
+        PengajuanSDMEntity pengajuanSDMEntity = dt.get();
+        if (pengajuanSDMEntity.getStatus() > 1) {
+            throw new ValidationErrorException("status cannot be update");
+        }
+
+        pengajuanSDMEntity.setIdPengajuan(id);
+        pengajuanSDMEntity.setStatus(request.getStatus());
+        pengajuanSDMEntity.setRemarkHR(request.getRemarkHR());
+        pengajuanSDMEntity.setDeadline(request.getDeadline());
+        return convertToDto(pengajuanSDMRepository.save(pengajuanSDMEntity));
+    }
+
+    public PengajuanSDMResponse closeJobPosted(Long id) {
+        if (id == 0L) {
+            throw new ValidationErrorException("id required");
+        }
+        Optional<PengajuanSDMEntity> dt = pengajuanSDMRepository.findById(id);
+        if (!dt.isPresent()) {
+            throw new DataNotFoundException("Data with ID: " + id + " not found");
+        }
+        PengajuanSDMEntity pengajuanSDMEntity = dt.get();
+        if (pengajuanSDMEntity.getStatus() == 2 || pengajuanSDMEntity.getStatus() == 4) {
+            throw new ValidationErrorException("status cannot be update");
+        }
+        pengajuanSDMEntity.setIdPengajuan(id);
+        pengajuanSDMEntity.setStatus((short) 4);
+        return convertToDto(pengajuanSDMRepository.save(pengajuanSDMEntity));
     }
 
     private void validate(AddPengajuanSDMRequest request) {

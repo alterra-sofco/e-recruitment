@@ -32,8 +32,11 @@ public class PengajuanSDMEntity implements Serializable {
     @Column(columnDefinition = "text", nullable = true)
     private String description;
 
-    @Column(columnDefinition = "text", nullable = true)
-    private String remark_staff;
+    @Column(name = "remark_staff", columnDefinition = "text", nullable = true)
+    private String remarkStaff;
+
+    @Column(name = "remark_hr", columnDefinition = "text", nullable = true)
+    private String remarkHR;
 
     @Column(columnDefinition = "INT2", length = 1)
     private Short status;
