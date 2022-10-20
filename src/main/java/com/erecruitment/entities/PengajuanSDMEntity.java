@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class PengajuanSDMEntity implements Serializable {
 
     @Id
@@ -36,13 +38,14 @@ public class PengajuanSDMEntity implements Serializable {
     @Column(columnDefinition = "INT2", length = 1)
     private Short status;
 
-    @Column(name ="number_required",  columnDefinition = "integer default 0", nullable = true)
+    @Column(name = "number_required", columnDefinition = "integer default 0", nullable = true)
     private Integer numberRequired;
 
-    @Column(name ="number_applicant",  columnDefinition = "integer default 0", nullable = true)
+    @Column(name = "number_applicant", columnDefinition = "integer default 0", nullable = true)
     private Integer numberApplicant;
 
     @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
     private Date deadline;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -54,5 +57,11 @@ public class PengajuanSDMEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
+
+/*
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pengajuanSDMEntity")
+    @JsonManagedReference(value = "companyUsers")
+    private Set<PengajuanSDMSkillEntity> listSkill = new HashSet<>();
+*/
 
 }
