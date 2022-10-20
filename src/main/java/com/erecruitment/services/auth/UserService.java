@@ -28,6 +28,14 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("user with email '%s' not found", email)));
     }
 
+    public UserDetails loadUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with id : " + id)
+        );
+
+        return user;
+    }
+
     public User registration(User user){
         boolean userExist = userRepository.findByEmail(user.getEmail()).isPresent();
         if (userExist){
