@@ -49,7 +49,7 @@ public class AuthenticationController {
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<CommonResponse> registerUser(@Valid @RequestBody UserRegisterRequestDTO requestDTO, @ApiIgnore Errors errors){
+    public ResponseEntity<CommonResponse> registerUser(@Valid @RequestBody UserRegisterRequestDTO requestDTO, @ApiIgnore Errors errors) {
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {

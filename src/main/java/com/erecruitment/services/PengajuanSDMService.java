@@ -39,6 +39,7 @@ public class PengajuanSDMService {
 
     @Autowired
     private PengajuanSDMSkillRepository pengajuanSDMSkillRepository;
+
     @Autowired
     private SkillRepository skillRepository;
 
@@ -62,7 +63,7 @@ public class PengajuanSDMService {
         pengajuanSDMEntity.setStatus((short) 1);
         pengajuanSDMRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Data with ID: " + id + " not found"));
         pengajuanSDMEntity.setIdPengajuan(id);
-         PengajuanSDMEntity pengajuanSDMEntity1 = pengajuanSDMRepository.save(pengajuanSDMEntity);
+        PengajuanSDMEntity pengajuanSDMEntity1 = pengajuanSDMRepository.save(pengajuanSDMEntity);
         if (!listSkill.isEmpty()) {
             for (SkillEntity skillEntity : listSkill) {
                 PengajuanSDMSkillEntity pengajuanSDMSkillEntity = new PengajuanSDMSkillEntity();
@@ -138,7 +139,6 @@ public class PengajuanSDMService {
         if (pengajuanSDMEntity.getStatus() > 1) {
             throw new ValidationErrorException("status cannot be update");
         }
-
         pengajuanSDMEntity.setIdPengajuan(id);
         pengajuanSDMEntity.setStatus(request.getStatus());
         pengajuanSDMEntity.setRemarkHR(request.getRemarkHR());
@@ -165,9 +165,6 @@ public class PengajuanSDMService {
 
 
     private void validate(AddPengajuanSDMRequest request) {
-        if (request == null) {
-            throw new ValidationErrorException("body request cannot be empty");
-        }
         if (StringUtils.isEmpty(request.getPosisi())) {
             throw new ValidationErrorException("posisi cannot be empty");
         }

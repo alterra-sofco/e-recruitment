@@ -39,7 +39,7 @@ public class SkillServiceTest {
     @Test
     public void givenValidRequest_whenAddNewData() {
         SkillRequest request = new SkillRequest();
-        request.setSkillName("Samsung");
+        request.setSkillName("JAVA");
         SkillEntity skillEntity = modelMapper.map(request, SkillEntity.class);
         when(skillRepository.save(any(SkillEntity.class)))
                 .thenReturn(skillEntity);

@@ -50,7 +50,7 @@ public class FileService implements IFileService {
 
     @Override
     public FileResponse getFile(Long fileId) {
-        Optional<File> file  = fileRepository.findById(fileId);
+        Optional<File> file = fileRepository.findById(fileId);
         String fileDownloadUri = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/api/file/download/")
