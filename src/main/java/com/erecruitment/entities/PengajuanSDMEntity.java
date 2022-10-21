@@ -1,5 +1,6 @@
 package com.erecruitment.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,5 +55,12 @@ public class PengajuanSDMEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
+
+    //staff relation by ID, mandatory when it needed
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "staff_job", nullable = false)
+    // @OnDelete(action = OnDeleteAction.CASCADE) an option
+    @JsonIgnore
+    private Staff staff;
 
 }
