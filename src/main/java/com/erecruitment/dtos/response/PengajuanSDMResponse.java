@@ -27,4 +27,8 @@ public class PengajuanSDMResponse {
 
     private Date createdAt;
 
+    private Long userId;
+
+    private String name;
+
 }
