@@ -804,3 +804,6 @@ Caused by: org.springframework.data.mapping.PropertyReferenceException: No prope
 2022-10-21 18:58:42.685  INFO 6128 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2022-10-21 18:58:42.685  INFO 6128 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2022-10-21 18:58:42.685  INFO 6128 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2022-10-21 19:41:04.744  WARN 6128 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=35m13s741ms359µs200ns).
+2022-10-21 22:20:54.913  WARN 6128 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h50m49s400ms544µs900ns).
+2022-10-21 22:46:11.957  WARN 6128 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m16s690ms362µs900ns).
