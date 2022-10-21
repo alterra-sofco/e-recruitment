@@ -72,7 +72,7 @@ public class StaffController {
     @PutMapping("/{id}")
     public ResponseEntity<CommonResponse<StaffRequestDTO>> updateStaff (@RequestBody StaffRequestDTO staff, @PathVariable("id") Long staffId){
         Staff request = modelMapper.map(staff,Staff.class);
-        Optional<Staff> newStaff = staffService.updateStaff(staffId,request);
+        Optional<Staff> newStaff = Optional.ofNullable(staffService.updateStaff(staffId, request));
         if(newStaff.isPresent()) {
             Staff convStaff = newStaff.get();
             StaffRequestDTO response = modelMapper.map(convStaff,StaffRequestDTO.class);

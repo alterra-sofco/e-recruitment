@@ -36,20 +36,20 @@ public class StaffService implements IStaffService {
         dataStaff.setUserId(staff.getUserId());
         dataStaff.setDepartmentId(staff.getDepartmentId());
 
-        staffRepository.save(dataStaff);
-        return dataStaff;
+        return staffRepository.save(dataStaff);
     }
 
     @Override
-    public Optional<Staff> updateStaff(Long staffId, Staff staff) {
+    public Staff updateStaff(Long staffId, Staff staff) {
         Optional<Staff> dataStaff = staffRepository.findById(staffId);
         if (dataStaff.isPresent()) {
-            dataStaff.get().setUserId(staff.getUserId());
-            dataStaff.get().setDepartmentId(staff.getDepartmentId());
+            Staff newStaff = dataStaff.get();
+            newStaff.setUserId(staff.getUserId());
+            newStaff.setDepartmentId(staff.getDepartmentId());
 
-            staffRepository.save(dataStaff.get());
+            return staffRepository.save(newStaff);
         }
-        return dataStaff;
+        return null;
     }
 
     @Override

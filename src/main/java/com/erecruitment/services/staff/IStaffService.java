@@ -9,7 +9,7 @@ public interface IStaffService {
     List<Staff> findAllStaff();
     Optional<Staff> findById(Long staffId);
     Staff addStaff(Staff staff);
-    Optional<Staff> updateStaff (Long staffId, Staff staff);
+    Staff updateStaff (Long staffId, Staff staff);
     void deleteStaff(Long staffId);
 
 }
