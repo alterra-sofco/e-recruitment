@@ -4,7 +4,6 @@ import com.erecruitment.dtos.requests.StaffRequestDTO;
 import com.erecruitment.dtos.response.CommonResponse;
 import com.erecruitment.dtos.response.ResponseGenerator;
 import com.erecruitment.entities.Staff;
-import com.erecruitment.repositories.UserRepository;
 import com.erecruitment.services.interfaces.IStaffService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

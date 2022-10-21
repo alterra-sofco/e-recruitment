@@ -2,13 +2,11 @@ package com.erecruitment.services;
 
 import com.erecruitment.entities.Staff;
 import com.erecruitment.entities.User;
-import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.repositories.PengajuanSDMRepository;
 import com.erecruitment.repositories.StaffRepository;
 import com.erecruitment.repositories.UserRepository;
 import com.erecruitment.services.interfaces.IStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +26,7 @@ public class StaffService implements IStaffService {
     @Override
     public List<Staff> findAllStaff() {
         //sorted based on input on controller
-        return staffRepository.findAll(Sort.by("id").ascending());
+        return staffRepository.findAll();
     }
 
     @Override
@@ -40,31 +38,19 @@ public class StaffService implements IStaffService {
     public Staff addStaff(Long userId, Staff staff) {
         Staff dataStaff = new Staff();
 
-        Optional<User> selectedUser = Optional.ofNullable(userRepository.findById(userId)
-                .orElseThrow(() -> new DataNotFoundException("data not found")));
-            if(selectedUser.isPresent()){
-                User userConv = selectedUser.get();
-                dataStaff.setUser(userConv); //object
-                dataStaff.setDepartmentId(staff.getDepartmentId()); //id
-                return staffRepository.save(dataStaff);
-            } else {
-                return null;
-            }
+        User selectedUser = userRepository.findById(userId).get();
+        dataStaff.setUser(selectedUser); //object
+        dataStaff.setDepartmentId(staff.getDepartmentId()); //id
+        return staffRepository.save(dataStaff);
     }
 
     @Override
     public Staff updateStaff(Long staffId, Staff staff) {
-        Optional<Staff> dataStaff = Optional.ofNullable(staffRepository.findById(staffId)
-                .orElseThrow(() -> new DataNotFoundException("data not found")));
-            if(dataStaff.isPresent()) {
-                Staff newStaff = dataStaff.get();
-                newStaff.setUser(staff.getUser()); //objects
-                newStaff.setDepartmentId(staff.getDepartmentId());
+        Staff dataStaff = staffRepository.findById(staffId).get();
+        dataStaff.setUser(staff.getUser()); //objects
+        dataStaff.setDepartmentId(staff.getDepartmentId());
 
-                return staffRepository.save(newStaff);
-            } else {
-                return null;
-            }
+        return staffRepository.save(dataStaff);
     }
 
     @Override

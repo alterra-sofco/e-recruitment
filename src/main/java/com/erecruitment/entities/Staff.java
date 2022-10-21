@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Getter
@@ -20,9 +19,10 @@ public class Staff {
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "staff_generator")
     private Long staffId;
 
+    // Unidirectional
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "staff_user_id")
     private User user;
 
     @Column (nullable = false)
