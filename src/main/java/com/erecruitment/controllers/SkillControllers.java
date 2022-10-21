@@ -49,6 +49,6 @@ public class SkillControllers {
     public ResponseEntity<CommonResponse> removeOne(@PathVariable Long id) {
         skillService.removeOne(id);
         ResponseGenerator responseGenerator = new ResponseGenerator();
-        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", id), HttpStatus.CREATED);
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", id), HttpStatus.OK);
     }
 }
