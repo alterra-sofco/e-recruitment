@@ -9,7 +9,7 @@ public interface IDepartmentService {
 
     List<Department> findAllDepartment ();
     Optional<Department> findDepartmentById (Long departmentId);
-    Department addStaff(Department department);
-    Department updateStaff (Long departmentId, Department department);
-    void deleteStaff(Long departmentId);
+    Department addDepartment(Department department);
+    Department updateDepartment (Long departmentId, Department department);
+    void deleteDepartment(Long departmentId);
 }

@@ -25,14 +25,14 @@ public class DepartmentService implements IDepartmentService{
     }
 
     @Override
-    public Department addStaff(Department department) {
+    public Department addDepartment(Department department) {
         Department newDept = new Department();
         newDept.setDepartmentName(department.getDepartmentName());
         return departmentRepository.save(newDept);
     }
 
     @Override
-    public Department updateStaff(Long departmentId, Department department) {
+    public Department updateDepartment(Long departmentId, Department department) {
         Optional<Department> newDept = departmentRepository.findById(departmentId);
         if (newDept.isPresent()){
             Department response = newDept.get();
@@ -43,7 +43,7 @@ public class DepartmentService implements IDepartmentService{
     }
 
     @Override
-    public void deleteStaff(Long departmentId) {
+    public void deleteDepartment(Long departmentId) {
         departmentRepository.deleteById(departmentId);
     }
 }
