@@ -6,9 +6,9 @@ import com.erecruitment.entities.SkillEntity;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.SkillRepository;
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -43,7 +43,7 @@ public class SkillServiceTest {
         SkillEntity skillEntity = modelMapper.map(request, SkillEntity.class);
         when(skillRepository.save(any(SkillEntity.class)))
                 .thenReturn(skillEntity);
-        SkillResponse response = serviceUnderTest.saveData(request, 0l);
+        SkillResponse response = serviceUnderTest.saveData(request, 0L);
         assertThat(response.getSkillName()).isEqualTo(request.getSkillName());
     }
 
@@ -51,14 +51,14 @@ public class SkillServiceTest {
     public void givenInValidRequestEmptySkillName_whenAddNewData() {
         SkillRequest request = new SkillRequest();
         request.setSkillName("");
-        serviceUnderTest.saveData(request,0l);
+        serviceUnderTest.saveData(request, 0L);
     }
 
     @Test(expected = DataNotFoundException.class)
     public void should_throw_exception_whenUpdateData_thanNotFound() {
         SkillRequest request = new SkillRequest();
         request.setSkillName("Java");
-        serviceUnderTest.saveData(request, 1l);
+        serviceUnderTest.saveData(request, 1L);
     }
 
     @Test(expected = DataNotFoundException.class)

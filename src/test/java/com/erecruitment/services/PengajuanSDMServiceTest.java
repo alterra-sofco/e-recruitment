@@ -3,9 +3,7 @@ package com.erecruitment.services;
 import com.erecruitment.dtos.requests.AddPengajuanSDMRequest;
 import com.erecruitment.dtos.requests.UpdateStatusPengajuanSDMRequest;
 import com.erecruitment.dtos.response.PengajuanSDMResponse;
-import com.erecruitment.dtos.response.SkillResponse;
 import com.erecruitment.entities.PengajuanSDMEntity;
-import com.erecruitment.entities.SkillEntity;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.PengajuanSDMRepository;
@@ -207,7 +205,7 @@ public class PengajuanSDMServiceTest {
     public void givenInValidRequestStatusNotMatch_closeJobPosted() {
         PengajuanSDMEntity entity = new PengajuanSDMEntity();
         entity.setIdPengajuan(19L);
-        entity.setStatus((short)4);
+        entity.setStatus((short) 4);
         when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(entity));
         serviceUnderTest.closeJobPosted(entity.getIdPengajuan());
     }
@@ -216,12 +214,12 @@ public class PengajuanSDMServiceTest {
     public void givenValidData_closeJobPosted() {
         PengajuanSDMEntity entity = new PengajuanSDMEntity();
         entity.setIdPengajuan(19L);
-        entity.setStatus((short)3);
+        entity.setStatus((short) 3);
         when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(entity));
 
         PengajuanSDMEntity entity1 = new PengajuanSDMEntity();
         entity1.setIdPengajuan(entity.getIdPengajuan());
-        entity1.setStatus((short)4);
+        entity1.setStatus((short) 4);
         when(pengajuanSDMRepository.save(any(PengajuanSDMEntity.class)))
                 .thenReturn(entity1);
         PengajuanSDMResponse response = serviceUnderTest.closeJobPosted(entity.getIdPengajuan());
