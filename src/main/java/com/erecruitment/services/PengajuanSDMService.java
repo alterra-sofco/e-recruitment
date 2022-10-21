@@ -4,9 +4,7 @@ import com.erecruitment.dtos.requests.AddPengajuanSDMRequest;
 import com.erecruitment.dtos.requests.UpdateStatusPengajuanSDMRequest;
 import com.erecruitment.dtos.response.PageableResponse;
 import com.erecruitment.dtos.response.PengajuanSDMResponse;
-import com.erecruitment.entities.PengajuanSDMEntity;
-import com.erecruitment.entities.PengajuanSDMSkillEntity;
-import com.erecruitment.entities.SkillEntity;
+import com.erecruitment.entities.*;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.PengajuanSDMRepository;
@@ -18,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -46,6 +46,9 @@ public class PengajuanSDMService {
 
     public PengajuanSDMResponse saveData(AddPengajuanSDMRequest request, Long id) {
         validate(request);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
         List<PengajuanSDMSkillEntity> dataList = new ArrayList<>();
         List<SkillEntity> listSkill = skillRepository.findBySkillIdIn(request.getListSkill());
         PengajuanSDMEntity pengajuanSDMEntity = convertToEntity(request);
@@ -61,8 +64,7 @@ public class PengajuanSDMService {
             pengajuanSDMEntity.setIdPengajuan(id);
         }
         pengajuanSDMEntity.setStatus((short) 1);
-        pengajuanSDMRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Data with ID: " + id + " not found"));
-        pengajuanSDMEntity.setIdPengajuan(id);
+        pengajuanSDMEntity.setUser(user);
         PengajuanSDMEntity pengajuanSDMEntity1 = pengajuanSDMRepository.save(pengajuanSDMEntity);
         if (!listSkill.isEmpty()) {
             for (SkillEntity skillEntity : listSkill) {
@@ -74,6 +76,7 @@ public class PengajuanSDMService {
             }
             pengajuanSDMSkillRepository.saveAll(dataList);
         }
+
         return convertToDto(pengajuanSDMEntity1);
     }
 
@@ -81,19 +84,38 @@ public class PengajuanSDMService {
                                                           String sortOrder, short status) {
         Sort sort = sortOrder.toLowerCase() == "desc" ? Sort.by(sortColumn).descending()
                 : Sort.by(sortColumn).ascending();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        RoleName role = user.getRole();
         Pageable paging = PageRequest.of(page, size, sort);
         Page<PengajuanSDMEntity> pengajuanSDMEntities;
-        if (keyword != null) {
-            if (status > 0) {
-                pengajuanSDMEntities = pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus(keyword, Short.valueOf(status), paging);
+        if (role == RoleName.USER) {
+            if (keyword != null) {
+                if (status > 0) {
+                    pengajuanSDMEntities = pengajuanSDMRepository.findByUserAndPosisiContainingIgnoreCaseAndStatus(user, keyword, Short.valueOf(status), paging);
+                } else {
+                    pengajuanSDMEntities = pengajuanSDMRepository.findByUserAndPosisiContainingIgnoreCase(user, keyword, paging);
+                }
             } else {
-                pengajuanSDMEntities = pengajuanSDMRepository.findByPosisiContainingIgnoreCase(keyword, paging);
+                if (status > 0) {
+                    pengajuanSDMEntities = pengajuanSDMRepository.findByUserAndStatus(user, Short.valueOf(status), paging);
+                } else {
+                    pengajuanSDMEntities = pengajuanSDMRepository.findByUser(user, paging);
+                }
             }
         } else {
-            if (status > 0) {
-                pengajuanSDMEntities = pengajuanSDMRepository.findByStatus(Short.valueOf(status), paging);
+            if (keyword != null) {
+                if (status > 0) {
+                    pengajuanSDMEntities = pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus(keyword, Short.valueOf(status), paging);
+                } else {
+                    pengajuanSDMEntities = pengajuanSDMRepository.findByPosisiContainingIgnoreCase(keyword, paging);
+                }
             } else {
-                pengajuanSDMEntities = pengajuanSDMRepository.findAll(paging);
+                if (status > 0) {
+                    pengajuanSDMEntities = pengajuanSDMRepository.findByStatus(Short.valueOf(status), paging);
+                } else {
+                    pengajuanSDMEntities = pengajuanSDMRepository.findAll(paging);
+                }
             }
         }
         List<PengajuanSDMEntity> dataList = pengajuanSDMEntities.getContent();
