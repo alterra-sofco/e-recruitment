@@ -56,6 +56,12 @@ public class PengajuanSDMEntity implements Serializable {
     @LastModifiedDate
     private Date updatedAt;
 
+/*
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pengajuanSDMEntity")
+    @JsonManagedReference(value = "companyUsers")
+    private Set<PengajuanSDMSkillEntity> listSkill = new HashSet<>();
+*/
+
     //staff relation by ID, mandatory when it needed
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "staff_job", nullable = false)

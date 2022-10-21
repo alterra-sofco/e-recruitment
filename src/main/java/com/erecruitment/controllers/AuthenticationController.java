@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.sql.Timestamp;
@@ -48,10 +49,16 @@ public class AuthenticationController {
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<CommonResponse> registerUser(@Valid @RequestBody UserRegisterRequestDTO requestDTO){
+    public ResponseEntity<CommonResponse> registerUser(@Valid @RequestBody UserRegisterRequestDTO requestDTO, @ApiIgnore Errors errors) {
+
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                throw new ValidationErrorException(error.getDefaultMessage());
+            }
+        }
+
         User user = modelMapper.map(requestDTO, User.class);
 
-//        return new ResponseEntity<>(userService.registration(user), HttpStatus.CREATED);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.CREATED.value()),
                 "Account success registered!",
@@ -59,7 +66,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse> authenticateUser(@Valid @RequestBody UserLoginRequestDTO loginRequest, Errors errors) {
+    public ResponseEntity<CommonResponse> authenticateUser(@Valid @RequestBody UserLoginRequestDTO loginRequest, @ApiIgnore Errors errors) {
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {

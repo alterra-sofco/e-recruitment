@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.ValidationException;
 
 @Service
 @Transactional
@@ -39,9 +38,9 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User registration(User user){
+    public User registration(User user) {
         boolean userExist = userRepository.findByEmail(user.getEmail()).isPresent();
-        if (userExist){
+        if (userExist) {
             System.out.println("test");
             throw new ValidationErrorException(
                     String.format("User with email '%s' already exist", user.getEmail())

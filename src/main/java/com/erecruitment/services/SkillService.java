@@ -46,13 +46,13 @@ public class SkillService {
         Sort sort = sortOrder.toLowerCase() == "desc" ? Sort.by(sortColumn).descending()
                 : Sort.by(sortColumn).ascending();
         Pageable paging = PageRequest.of(page, size, sort);
-        Page<SkillEntity> dataBarang;
+        Page<SkillEntity> skillEntities;
         if (keyword != null) {
-            dataBarang = skillRepository.findBySkillNameContainingIgnoreCase(keyword, paging);
+            skillEntities = skillRepository.findBySkillNameContainingIgnoreCase(keyword, paging);
         } else {
-            dataBarang = skillRepository.findAll(paging);
+            skillEntities = skillRepository.findAll(paging);
         }
-        List<SkillEntity> dataList = dataBarang.getContent();
+        List<SkillEntity> dataList = skillEntities.getContent();
         PageableResponse response = new PageableResponse();
         if (!dataList.isEmpty()) {
             response.setMessage("ok");
@@ -63,17 +63,17 @@ public class SkillService {
         } else {
             throw new DataNotFoundException("Data not found");
         }
-        response.setTotalData(dataBarang.getTotalElements());
-        response.setTotalPages(dataBarang.getTotalPages());
-        response.setCurrentPage(dataBarang.getNumber() + 1);
-        response.setNext(dataBarang.hasNext());
-        response.setPrevious(dataBarang.hasPrevious());
-        response.setPageSize(dataBarang.getSize());
+        response.setTotalData(skillEntities.getTotalElements());
+        response.setTotalPages(skillEntities.getTotalPages());
+        response.setCurrentPage(skillEntities.getNumber() + 1);
+        response.setNext(skillEntities.hasNext());
+        response.setPrevious(skillEntities.hasPrevious());
+        response.setPageSize(skillEntities.getSize());
         return response;
     }
 
     public void removeOne(Long id) {
-        skillRepository.findById(id).orElseThrow(() -> new DataNotFoundException("id harga : " + id + " not found"));
+        skillRepository.findById(id).orElseThrow(() -> new DataNotFoundException("data id : " + id + " not found"));
         skillRepository.deleteById(id);
     }
 
