@@ -42,12 +42,11 @@ public class FileController {
     public ResponseEntity<byte[]> downloadFile(@PathVariable Long fileId, @RequestParam(defaultValue = "1") boolean Isview) {
         File file = fileService.downloadFile(fileId);
 
-        if(file.getType().contains("image") && Isview){
+        if (file.getType().contains("image") && Isview) {
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(file.getData());
-        }
-        else if (file.getType().contains("pdf")) {
+        } else if (file.getType().contains("pdf")) {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
                     .body(file.getData());

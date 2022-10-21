@@ -9,8 +9,6 @@ import java.util.List;
 @Getter
 public class AddPengajuanSDMRequest {
 
-    private Long idPengajuan;
-
     private String posisi;
 
     private String description;
