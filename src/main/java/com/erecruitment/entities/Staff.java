@@ -13,15 +13,17 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor @NoArgsConstructor
 @Table(name = "staff")
-public class Staff implements Serializable {
+public class Staff {
 
     @Id
     //primary key's naming to avoid default by the system
     @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "staff_generator")
     private Long staffId;
 
-    @Column (nullable = false)
-    private Long userId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column (nullable = false)
     private Long departmentId;

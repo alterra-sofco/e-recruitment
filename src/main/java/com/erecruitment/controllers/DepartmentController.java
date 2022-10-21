@@ -4,7 +4,7 @@ import com.erecruitment.dtos.requests.DepartmentRequestDTO;
 import com.erecruitment.dtos.response.CommonResponse;
 import com.erecruitment.dtos.response.ResponseGenerator;
 import com.erecruitment.entities.Department;
-import com.erecruitment.services.staff.DepartmentService;
+import com.erecruitment.services.DepartmentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

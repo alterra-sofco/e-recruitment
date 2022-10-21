@@ -1,4 +1,4 @@
-package com.erecruitment.services.staff;
+package com.erecruitment.services.interfaces;
 
 import com.erecruitment.entities.Department;
 

@@ -1,7 +1,8 @@
-package com.erecruitment.services.staff;
+package com.erecruitment.services;
 
 import com.erecruitment.entities.Department;
 import com.erecruitment.repositories.DepartmentRepository;
+import com.erecruitment.services.interfaces.IDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DepartmentService implements IDepartmentService{
+public class DepartmentService implements IDepartmentService {
 
     @Autowired
     private DepartmentRepository departmentRepository;

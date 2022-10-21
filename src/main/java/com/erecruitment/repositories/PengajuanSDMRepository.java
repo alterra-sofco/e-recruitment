@@ -10,9 +10,6 @@ import java.util.List;
 
 public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity, Long> {
 
-    //related to staff entity,
-    List<PengajuanSDMEntity> findByStaff (Long staffId);
-
     Page<PengajuanSDMEntity> findAll(Pageable pageable);
 
     Page<PengajuanSDMEntity> findByUser(User user, Pageable pageable);
