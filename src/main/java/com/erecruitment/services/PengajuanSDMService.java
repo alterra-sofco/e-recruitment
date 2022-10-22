@@ -163,7 +163,7 @@ public class PengajuanSDMService {
         }
         pengajuanSDMEntity.setIdPengajuan(id);
         pengajuanSDMEntity.setStatus(request.getStatus());
-        pengajuanSDMEntity.setRemarkHR(request.getRemarkHR());
+        pengajuanSDMEntity.setRemark_staff(request.getRemarkHR());
         pengajuanSDMEntity.setDeadline(request.getDeadline());
         return convertToDto(pengajuanSDMRepository.save(pengajuanSDMEntity));
     }
