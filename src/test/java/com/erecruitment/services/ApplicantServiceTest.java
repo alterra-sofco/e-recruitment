@@ -1832,5 +1832,265 @@ class ApplicantServiceTest {
         verify(skillRepository).findBySkillName((String) any());
     }
 
+    /**
+     * Method under test: {@link ApplicantService#removeSkill(Long, User)}
+     */
+    @Test
+    void testRemoveSkill() throws UnsupportedEncodingException {
+        File file = new File();
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setDeleted(true);
+        file.setDisplayName("Display Name");
+        file.setFileId(123L);
+        file.setType("Type");
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file.setUpdatedAt(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
+
+        File file1 = new File();
+        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
+        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setDeleted(true);
+        file1.setDisplayName("Display Name");
+        file1.setFileId(123L);
+        file1.setType("Type");
+        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file1.setUpdatedAt(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
+
+        User user = new User();
+        user.setEmail("jane.doe@example.org");
+        LocalDateTime atStartOfDayResult4 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user.setJoinedAt(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult5 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user.setLastLogin(Date.from(atStartOfDayResult5.atZone(ZoneId.of("UTC")).toInstant()));
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        user.setPhoneNumber("4105551212");
+        user.setRole(RoleName.USER);
+        user.setUserId(123L);
+
+        Applicant applicant = new Applicant();
+        applicant.setAddress("42 Main St");
+        applicant.setApplicantId(123L);
+        applicant.setAvatar(file);
+        applicant.setBio("Bio");
+        LocalDateTime atStartOfDayResult6 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant.setCreatedAt(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
+        applicant.setCv(file1);
+        applicant.setDeleted(true);
+        LocalDateTime atStartOfDayResult7 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant.setDob(Date.from(atStartOfDayResult7.atZone(ZoneId.of("UTC")).toInstant()));
+        applicant.setOwnedBy(user);
+        applicant.setPortofolioURL("https://example.org/example");
+        applicant.setSkills(new HashSet<>());
+        LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
+        Optional<Applicant> ofResult = Optional.of(applicant);
+        when(applicantRepository.save((Applicant) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
+
+        SkillEntity skillEntity = new SkillEntity();
+        LocalDateTime atStartOfDayResult9 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        skillEntity.setCreatedAt(Date.from(atStartOfDayResult9.atZone(ZoneId.of("UTC")).toInstant()));
+        skillEntity.setDeleted(true);
+        skillEntity.setSkillId(123L);
+        skillEntity.setSkillName("Skill Name");
+        LocalDateTime atStartOfDayResult10 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        skillEntity.setUpdatedAt(Date.from(atStartOfDayResult10.atZone(ZoneId.of("UTC")).toInstant()));
+        Optional<SkillEntity> ofResult1 = Optional.of(skillEntity);
+        when(skillRepository.findById((Long) any())).thenReturn(ofResult1);
+
+        User user1 = new User();
+        user1.setEmail("jane.doe@example.org");
+        LocalDateTime atStartOfDayResult11 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user1.setJoinedAt(Date.from(atStartOfDayResult11.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult12 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user1.setLastLogin(Date.from(atStartOfDayResult12.atZone(ZoneId.of("UTC")).toInstant()));
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        user1.setPhoneNumber("4105551212");
+        user1.setRole(RoleName.USER);
+        user1.setUserId(123L);
+        assertThrows(ValidationErrorException.class, () -> applicantService.removeSkill(123L, user1));
+        verify(applicantRepository).save((Applicant) any());
+        verify(applicantRepository).findByOwnedBy((User) any());
+        verify(skillRepository).findById((Long) any());
+    }
+
+    /**
+     * Method under test: {@link ApplicantService#removeSkill(Long, User)}
+     */
+    @Test
+    void testRemoveSkill2() throws UnsupportedEncodingException {
+        File file = new File();
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setDeleted(true);
+        file.setDisplayName("Display Name");
+        file.setFileId(123L);
+        file.setType("Type");
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file.setUpdatedAt(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
+
+        File file1 = new File();
+        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
+        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setDeleted(true);
+        file1.setDisplayName("Display Name");
+        file1.setFileId(123L);
+        file1.setType("Type");
+        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file1.setUpdatedAt(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
+
+        User user = new User();
+        user.setEmail("jane.doe@example.org");
+        LocalDateTime atStartOfDayResult4 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user.setJoinedAt(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult5 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user.setLastLogin(Date.from(atStartOfDayResult5.atZone(ZoneId.of("UTC")).toInstant()));
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        user.setPhoneNumber("4105551212");
+        user.setRole(RoleName.USER);
+        user.setUserId(123L);
+
+        Applicant applicant = new Applicant();
+        applicant.setAddress("42 Main St");
+        applicant.setApplicantId(123L);
+        applicant.setAvatar(file);
+        applicant.setBio("Bio");
+        LocalDateTime atStartOfDayResult6 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant.setCreatedAt(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
+        applicant.setCv(file1);
+        applicant.setDeleted(true);
+        LocalDateTime atStartOfDayResult7 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant.setDob(Date.from(atStartOfDayResult7.atZone(ZoneId.of("UTC")).toInstant()));
+        applicant.setOwnedBy(user);
+        applicant.setPortofolioURL("https://example.org/example");
+        applicant.setSkills(new HashSet<>());
+        LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
+        Optional<Applicant> ofResult = Optional.of(applicant);
+
+        File file2 = new File();
+        LocalDateTime atStartOfDayResult9 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file2.setCreatedAt(Date.from(atStartOfDayResult9.atZone(ZoneId.of("UTC")).toInstant()));
+        file2.setData("AAAAAAAA".getBytes("UTF-8"));
+        file2.setDeleted(true);
+        file2.setDisplayName("Display Name");
+        file2.setFileId(123L);
+        file2.setType("Type");
+        LocalDateTime atStartOfDayResult10 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file2.setUpdatedAt(Date.from(atStartOfDayResult10.atZone(ZoneId.of("UTC")).toInstant()));
+
+        File file3 = new File();
+        LocalDateTime atStartOfDayResult11 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file3.setCreatedAt(Date.from(atStartOfDayResult11.atZone(ZoneId.of("UTC")).toInstant()));
+        file3.setData("AAAAAAAA".getBytes("UTF-8"));
+        file3.setDeleted(true);
+        file3.setDisplayName("Display Name");
+        file3.setFileId(123L);
+        file3.setType("Type");
+        LocalDateTime atStartOfDayResult12 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        file3.setUpdatedAt(Date.from(atStartOfDayResult12.atZone(ZoneId.of("UTC")).toInstant()));
+
+        User user1 = new User();
+        user1.setEmail("jane.doe@example.org");
+        LocalDateTime atStartOfDayResult13 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user1.setJoinedAt(Date.from(atStartOfDayResult13.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult14 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user1.setLastLogin(Date.from(atStartOfDayResult14.atZone(ZoneId.of("UTC")).toInstant()));
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        user1.setPhoneNumber("4105551212");
+        user1.setRole(RoleName.USER);
+        user1.setUserId(123L);
+
+        Applicant applicant1 = new Applicant();
+        applicant1.setAddress("42 Main St");
+        applicant1.setApplicantId(123L);
+        applicant1.setAvatar(file2);
+        applicant1.setBio("Bio");
+        LocalDateTime atStartOfDayResult15 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant1.setCreatedAt(Date.from(atStartOfDayResult15.atZone(ZoneId.of("UTC")).toInstant()));
+        applicant1.setCv(file3);
+        applicant1.setDeleted(true);
+        LocalDateTime atStartOfDayResult16 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant1.setDob(Date.from(atStartOfDayResult16.atZone(ZoneId.of("UTC")).toInstant()));
+        applicant1.setOwnedBy(user1);
+        applicant1.setPortofolioURL("https://example.org/example");
+        applicant1.setSkills(new HashSet<>());
+        LocalDateTime atStartOfDayResult17 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicant1.setUpdatedAt(Date.from(atStartOfDayResult17.atZone(ZoneId.of("UTC")).toInstant()));
+        when(applicantRepository.save((Applicant) any())).thenReturn(applicant1);
+        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
+        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
+        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
+        when(iFileService.generateUrlFile((Long) any())).thenReturn("https://example.org/example");
+
+        ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
+        applicantProfileResponse.setAddress("42 Main St");
+        applicantProfileResponse.setAvatarFileId("42");
+        applicantProfileResponse.setAvatarURL("https://example.org/example");
+        applicantProfileResponse.setBio("Bio");
+        applicantProfileResponse.setCvFileId("42");
+        applicantProfileResponse.setCvURL("https://example.org/example");
+        LocalDateTime atStartOfDayResult18 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applicantProfileResponse.setDob(Date.from(atStartOfDayResult18.atZone(ZoneId.of("UTC")).toInstant()));
+        applicantProfileResponse.setEducations(new HashSet<>());
+        applicantProfileResponse.setEmail("jane.doe@example.org");
+        applicantProfileResponse.setExperiences(new HashSet<>());
+        applicantProfileResponse.setName("Name");
+        applicantProfileResponse.setPhoneNumber("4105551212");
+        applicantProfileResponse.setSkills(new HashSet<>());
+        applicantProfileResponse.setUserId(123L);
+        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+                .thenReturn(applicantProfileResponse);
+
+        SkillEntity skillEntity = new SkillEntity();
+        LocalDateTime atStartOfDayResult19 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        skillEntity.setCreatedAt(Date.from(atStartOfDayResult19.atZone(ZoneId.of("UTC")).toInstant()));
+        skillEntity.setDeleted(true);
+        skillEntity.setSkillId(123L);
+        skillEntity.setSkillName("Skill Name");
+        LocalDateTime atStartOfDayResult20 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        skillEntity.setUpdatedAt(Date.from(atStartOfDayResult20.atZone(ZoneId.of("UTC")).toInstant()));
+        Optional<SkillEntity> ofResult1 = Optional.of(skillEntity);
+        when(skillRepository.findById((Long) any())).thenReturn(ofResult1);
+
+        User user2 = new User();
+        user2.setEmail("jane.doe@example.org");
+        LocalDateTime atStartOfDayResult21 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user2.setJoinedAt(Date.from(atStartOfDayResult21.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult22 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        user2.setLastLogin(Date.from(atStartOfDayResult22.atZone(ZoneId.of("UTC")).toInstant()));
+        user2.setName("Name");
+        user2.setPassword("iloveyou");
+        user2.setPhoneNumber("4105551212");
+        user2.setRole(RoleName.USER);
+        user2.setUserId(123L);
+        ApplicantProfileResponse actualRemoveSkillResult = applicantService.removeSkill(123L, user2);
+        assertSame(applicantProfileResponse, actualRemoveSkillResult);
+        assertEquals(123L, actualRemoveSkillResult.getUserId().longValue());
+        assertEquals("4105551212", actualRemoveSkillResult.getPhoneNumber());
+        assertEquals("Name", actualRemoveSkillResult.getName());
+        assertTrue(actualRemoveSkillResult.getExperiences().isEmpty());
+        assertEquals("jane.doe@example.org", actualRemoveSkillResult.getEmail());
+        assertTrue(actualRemoveSkillResult.getEducations().isEmpty());
+        assertEquals("https://example.org/example", actualRemoveSkillResult.getCvURL());
+        assertEquals("https://example.org/example", actualRemoveSkillResult.getAvatarURL());
+        verify(applicantRepository).save((Applicant) any());
+        verify(applicantRepository, atLeast(1)).findByOwnedBy((User) any());
+        verify(educationRepository).findByOwnedBy((User) any());
+        verify(experienceRepository).findByOwnedBy((User) any());
+        verify(iFileService, atLeast(1)).generateUrlFile((Long) any());
+        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
+        verify(skillRepository).findById((Long) any());
+    }
+
 }
 

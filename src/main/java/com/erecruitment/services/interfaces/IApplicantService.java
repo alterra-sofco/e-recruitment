@@ -32,4 +32,6 @@ public interface IApplicantService {
     ApplicantProfileResponse deleteExperience(Long experienceId, User user);
 
     ApplicantProfileResponse addSkill(User user, SkillApplicantRequest bodyRequest);
+
+    ApplicantProfileResponse removeSkill(Long skillId, User user);
 }
