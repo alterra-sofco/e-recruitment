@@ -1,11 +1,5 @@
 package com.erecruitment.services.auth;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.erecruitment.entities.Applicant;
 import com.erecruitment.entities.File;
 import com.erecruitment.entities.RoleName;
@@ -15,16 +9,6 @@ import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.ApplicantRepository;
 import com.erecruitment.repositories.UserRepository;
-
-import java.io.UnsupportedEncodingException;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +17,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {UserService.class, BCryptPasswordEncoder.class})
 @ExtendWith(SpringExtension.class)
@@ -63,9 +60,9 @@ class UserServiceTest {
         user.setRole(RoleName.USER);
         user.setUserId(123L);
         Optional<User> ofResult = Optional.of(user);
-        when(userRepository.findByEmail((String) any())).thenReturn(ofResult);
+        when(userRepository.findByEmail(any())).thenReturn(ofResult);
         assertSame(user, userService.loadUserByUsername("jane.doe@example.org"));
-        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).findByEmail(any());
     }
 
     /**
@@ -73,9 +70,9 @@ class UserServiceTest {
      */
     @Test
     void testLoadUserByUsername2() throws UsernameNotFoundException {
-        when(userRepository.findByEmail((String) any())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
         assertThrows(CredentialErrorException.class, () -> userService.loadUserByUsername("jane.doe@example.org"));
-        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).findByEmail(any());
     }
 
     /**
@@ -83,9 +80,9 @@ class UserServiceTest {
      */
     @Test
     void testLoadUserByUsername3() throws UsernameNotFoundException {
-        when(userRepository.findByEmail((String) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(userRepository.findByEmail(any())).thenThrow(new ValidationErrorException("An error occurred"));
         assertThrows(ValidationErrorException.class, () -> userService.loadUserByUsername("jane.doe@example.org"));
-        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).findByEmail(any());
     }
 
     /**
@@ -105,9 +102,9 @@ class UserServiceTest {
         user.setRole(RoleName.USER);
         user.setUserId(123L);
         Optional<User> ofResult = Optional.of(user);
-        when(userRepository.findById((Long) any())).thenReturn(ofResult);
+        when(userRepository.findById(any())).thenReturn(ofResult);
         assertSame(user, userService.loadUserById(123L));
-        verify(userRepository).findById((Long) any());
+        verify(userRepository).findById(any());
     }
 
     /**
@@ -115,9 +112,9 @@ class UserServiceTest {
      */
     @Test
     void testLoadUserById2() {
-        when(userRepository.findById((Long) any())).thenReturn(Optional.empty());
+        when(userRepository.findById(any())).thenReturn(Optional.empty());
         assertThrows(DataNotFoundException.class, () -> userService.loadUserById(123L));
-        verify(userRepository).findById((Long) any());
+        verify(userRepository).findById(any());
     }
 
     /**
@@ -125,9 +122,9 @@ class UserServiceTest {
      */
     @Test
     void testLoadUserById3() {
-        when(userRepository.findById((Long) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(userRepository.findById(any())).thenThrow(new ValidationErrorException("An error occurred"));
         assertThrows(ValidationErrorException.class, () -> userService.loadUserById(123L));
-        verify(userRepository).findById((Long) any());
+        verify(userRepository).findById(any());
     }
 
     /**
@@ -138,7 +135,7 @@ class UserServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -149,7 +146,7 @@ class UserServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -185,7 +182,7 @@ class UserServiceTest {
         applicant.setSkills(new HashSet<>());
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
-        when(applicantRepository.save((Applicant) any())).thenReturn(applicant);
+        when(applicantRepository.save(any())).thenReturn(applicant);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -211,8 +208,8 @@ class UserServiceTest {
         user2.setRole(RoleName.USER);
         user2.setUserId(123L);
         Optional<User> ofResult = Optional.of(user2);
-        when(userRepository.save((User) any())).thenReturn(user1);
-        when(userRepository.findByEmail((String) any())).thenReturn(ofResult);
+        when(userRepository.save(any())).thenReturn(user1);
+        when(userRepository.findByEmail(any())).thenReturn(ofResult);
 
         User user3 = new User();
         user3.setEmail("jane.doe@example.org");
@@ -226,7 +223,7 @@ class UserServiceTest {
         user3.setRole(RoleName.USER);
         user3.setUserId(123L);
         assertThrows(ValidationErrorException.class, () -> userService.registration(user3));
-        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).findByEmail(any());
     }
 
     /**
@@ -237,7 +234,7 @@ class UserServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -248,7 +245,7 @@ class UserServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -284,9 +281,9 @@ class UserServiceTest {
         applicant.setSkills(new HashSet<>());
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
-        when(applicantRepository.save((Applicant) any())).thenReturn(applicant);
-        when(userRepository.save((User) any())).thenThrow(new UsernameNotFoundException("Msg"));
-        when(userRepository.findByEmail((String) any())).thenThrow(new UsernameNotFoundException("Msg"));
+        when(applicantRepository.save(any())).thenReturn(applicant);
+        when(userRepository.save(any())).thenThrow(new UsernameNotFoundException("Msg"));
+        when(userRepository.findByEmail(any())).thenThrow(new UsernameNotFoundException("Msg"));
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -300,7 +297,7 @@ class UserServiceTest {
         user1.setRole(RoleName.USER);
         user1.setUserId(123L);
         assertThrows(UsernameNotFoundException.class, () -> userService.registration(user1));
-        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).findByEmail(any());
     }
 }
 

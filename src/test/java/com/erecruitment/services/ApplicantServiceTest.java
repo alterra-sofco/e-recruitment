@@ -1,43 +1,25 @@
 package com.erecruitment.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyBoolean;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.erecruitment.dtos.requests.ApplicantEditProfileRequest;
 import com.erecruitment.dtos.requests.EducationRequest;
 import com.erecruitment.dtos.requests.ExperienceRequest;
 import com.erecruitment.dtos.requests.SkillApplicantRequest;
 import com.erecruitment.dtos.response.ApplicantProfileResponse;
-import com.erecruitment.entities.Applicant;
-import com.erecruitment.entities.Degree;
-import com.erecruitment.entities.Education;
-import com.erecruitment.entities.Experience;
-import com.erecruitment.entities.File;
-import com.erecruitment.entities.RoleName;
-import com.erecruitment.entities.SkillEntity;
-import com.erecruitment.entities.User;
+import com.erecruitment.entities.*;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
-import com.erecruitment.repositories.ApplicantRepository;
-import com.erecruitment.repositories.EducationRepository;
-import com.erecruitment.repositories.ExperienceRepository;
-import com.erecruitment.repositories.SkillRepository;
-import com.erecruitment.repositories.UserRepository;
+import com.erecruitment.repositories.*;
 import com.erecruitment.services.interfaces.IFileService;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -46,17 +28,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.multipart.MultipartFile;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {ApplicantService.class})
 @ExtendWith(SpringExtension.class)
@@ -93,7 +66,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -104,7 +77,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -141,10 +114,10 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(iFileService.generateUrlFile((Long) any())).thenReturn("https://example.org/example");
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(iFileService.generateUrlFile(any())).thenReturn("https://example.org/example");
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -162,7 +135,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any())).thenReturn(applicantProfileResponse);
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any())).thenReturn(applicantProfileResponse);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -175,7 +148,7 @@ class ApplicantServiceTest {
         user1.setPhoneNumber("4105551212");
         user1.setRole(RoleName.USER);
         user1.setUserId(123L);
-        when(userRepository.save((User) any())).thenReturn(user1);
+        when(userRepository.save(any())).thenReturn(user1);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -207,12 +180,12 @@ class ApplicantServiceTest {
         assertTrue(actualUpdateUserDetailResult.getEducations().isEmpty());
         assertEquals("https://example.org/example", actualUpdateUserDetailResult.getCvURL());
         assertEquals("https://example.org/example", actualUpdateUserDetailResult.getAvatarURL());
-        verify(applicantRepository, atLeast(1)).findByOwnedBy((User) any());
-        verify(educationRepository).findByOwnedBy((User) any());
-        verify(experienceRepository).findByOwnedBy((User) any());
-        verify(iFileService, atLeast(1)).generateUrlFile((Long) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
-        verify(userRepository).save((User) any());
+        verify(applicantRepository, atLeast(1)).findByOwnedBy(any());
+        verify(educationRepository).findByOwnedBy(any());
+        verify(experienceRepository).findByOwnedBy(any());
+        verify(iFileService, atLeast(1)).generateUrlFile(any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
+        verify(userRepository).save(any());
         assertEquals("4105551212", user2.getPhoneNumber());
         assertEquals("Name", user2.getName());
     }
@@ -225,7 +198,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -236,7 +209,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -273,10 +246,10 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(iFileService.generateUrlFile((Long) any())).thenReturn("https://example.org/example");
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(iFileService.generateUrlFile(any())).thenReturn("https://example.org/example");
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -294,7 +267,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(userRepository.save((User) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(userRepository.save(any())).thenThrow(new ValidationErrorException("An error occurred"));
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -317,8 +290,8 @@ class ApplicantServiceTest {
         applicantEditProfileRequest.setPhoneNumber("4105551212");
         assertThrows(ValidationErrorException.class,
                 () -> applicantService.updateUserDetail(user1, applicantEditProfileRequest));
-        verify(applicantRepository).findByOwnedBy((User) any());
-        verify(userRepository).save((User) any());
+        verify(applicantRepository).findByOwnedBy(any());
+        verify(userRepository).save(any());
     }
 
     /**
@@ -329,7 +302,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -340,7 +313,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -377,8 +350,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(educationRepository.save((Education) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(educationRepository.save(any())).thenThrow(new ValidationErrorException("An error occurred"));
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -408,7 +381,7 @@ class ApplicantServiceTest {
         education.setStartDate(Date.from(atStartOfDayResult13.atZone(ZoneId.of("UTC")).toInstant()));
         LocalDateTime atStartOfDayResult14 = LocalDate.of(1970, 1, 1).atStartOfDay();
         education.setUpdatedAt(Date.from(atStartOfDayResult14.atZone(ZoneId.of("UTC")).toInstant()));
-        when(modelMapper.map((Object) any(), (Class<Education>) any())).thenReturn(education);
+        when(modelMapper.map(any(), (Class<Education>) any())).thenReturn(education);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -432,8 +405,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult18 = LocalDate.of(1970, 1, 1).atStartOfDay();
         educationRequest.setStartDate(Date.from(atStartOfDayResult18.atZone(ZoneId.of("UTC")).toInstant()));
         assertThrows(ValidationErrorException.class, () -> applicantService.addEducation(user2, educationRequest));
-        verify(educationRepository).save((Education) any());
-        verify(modelMapper).map((Object) any(), (Class<Education>) any());
+        verify(educationRepository).save(any());
+        verify(modelMapper).map(any(), (Class<Education>) any());
     }
 
     /**
@@ -444,7 +417,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -455,7 +428,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -492,7 +465,7 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -523,8 +496,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult14 = LocalDate.of(1970, 1, 1).atStartOfDay();
         education.setUpdatedAt(Date.from(atStartOfDayResult14.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Education> ofResult1 = Optional.of(education);
-        when(educationRepository.save((Education) any())).thenThrow(new ValidationErrorException("An error occurred"));
-        when(educationRepository.findByIdaAndOwnedBy((Long) any(), (User) any())).thenReturn(ofResult1);
+        when(educationRepository.save(any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(educationRepository.findByIdaAndOwnedBy(any(), any())).thenReturn(ofResult1);
 
         EducationRequest educationRequest = new EducationRequest();
         educationRequest.setDegree(Degree.HIGH_SCHOOL);
@@ -549,8 +522,8 @@ class ApplicantServiceTest {
         user2.setUserId(123L);
         assertThrows(ValidationErrorException.class,
                 () -> applicantService.updateEducation(123L, educationRequest, user2));
-        verify(educationRepository).save((Education) any());
-        verify(educationRepository).findByIdaAndOwnedBy((Long) any(), (User) any());
+        verify(educationRepository).save(any());
+        verify(educationRepository).findByIdaAndOwnedBy(any(), any());
     }
 
     /**
@@ -561,7 +534,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -572,7 +545,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -609,7 +582,7 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -669,11 +642,11 @@ class ApplicantServiceTest {
         education1.setStartDate(Date.from(atStartOfDayResult19.atZone(ZoneId.of("UTC")).toInstant()));
         LocalDateTime atStartOfDayResult20 = LocalDate.of(1970, 1, 1).atStartOfDay();
         education1.setUpdatedAt(Date.from(atStartOfDayResult20.atZone(ZoneId.of("UTC")).toInstant()));
-        when(educationRepository.save((Education) any())).thenReturn(education1);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(educationRepository.findByIdaAndOwnedBy((Long) any(), (User) any())).thenReturn(ofResult1);
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(iFileService.generateUrlFile((Long) any())).thenReturn("https://example.org/example");
+        when(educationRepository.save(any())).thenReturn(education1);
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(educationRepository.findByIdaAndOwnedBy(any(), any())).thenReturn(ofResult1);
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(iFileService.generateUrlFile(any())).thenReturn("https://example.org/example");
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -691,7 +664,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenReturn(applicantProfileResponse);
 
         EducationRequest educationRequest = new EducationRequest();
@@ -726,13 +699,13 @@ class ApplicantServiceTest {
         assertTrue(actualUpdateEducationResult.getEducations().isEmpty());
         assertEquals("https://example.org/example", actualUpdateEducationResult.getCvURL());
         assertEquals("https://example.org/example", actualUpdateEducationResult.getAvatarURL());
-        verify(applicantRepository).findByOwnedBy((User) any());
-        verify(educationRepository).save((Education) any());
-        verify(educationRepository).findByIdaAndOwnedBy((Long) any(), (User) any());
-        verify(educationRepository).findByOwnedBy((User) any());
-        verify(experienceRepository).findByOwnedBy((User) any());
-        verify(iFileService, atLeast(1)).generateUrlFile((Long) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
+        verify(applicantRepository).findByOwnedBy(any());
+        verify(educationRepository).save(any());
+        verify(educationRepository).findByIdaAndOwnedBy(any(), any());
+        verify(educationRepository).findByOwnedBy(any());
+        verify(experienceRepository).findByOwnedBy(any());
+        verify(iFileService, atLeast(1)).generateUrlFile(any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
     }
 
     /**
@@ -743,7 +716,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -754,7 +727,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -791,7 +764,7 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -822,11 +795,11 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult14 = LocalDate.of(1970, 1, 1).atStartOfDay();
         education.setUpdatedAt(Date.from(atStartOfDayResult14.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Education> ofResult1 = Optional.of(education);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        doNothing().when(educationRepository).deleteById((Long) any());
-        when(educationRepository.findByIdaAndOwnedBy((Long) any(), (User) any())).thenReturn(ofResult1);
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(iFileService.generateUrlFile((Long) any())).thenReturn("https://example.org/example");
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        doNothing().when(educationRepository).deleteById(any());
+        when(educationRepository.findByIdaAndOwnedBy(any(), any())).thenReturn(ofResult1);
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(iFileService.generateUrlFile(any())).thenReturn("https://example.org/example");
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -844,7 +817,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenReturn(applicantProfileResponse);
 
         User user2 = new User();
@@ -868,13 +841,13 @@ class ApplicantServiceTest {
         assertTrue(actualDeleteEducationResult.getEducations().isEmpty());
         assertEquals("https://example.org/example", actualDeleteEducationResult.getCvURL());
         assertEquals("https://example.org/example", actualDeleteEducationResult.getAvatarURL());
-        verify(applicantRepository).findByOwnedBy((User) any());
-        verify(educationRepository).findByIdaAndOwnedBy((Long) any(), (User) any());
-        verify(educationRepository).findByOwnedBy((User) any());
-        verify(educationRepository).deleteById((Long) any());
-        verify(experienceRepository).findByOwnedBy((User) any());
-        verify(iFileService, atLeast(1)).generateUrlFile((Long) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
+        verify(applicantRepository).findByOwnedBy(any());
+        verify(educationRepository).findByIdaAndOwnedBy(any(), any());
+        verify(educationRepository).findByOwnedBy(any());
+        verify(educationRepository).deleteById(any());
+        verify(experienceRepository).findByOwnedBy(any());
+        verify(iFileService, atLeast(1)).generateUrlFile(any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
     }
 
     /**
@@ -885,7 +858,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -896,7 +869,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -933,7 +906,7 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -964,11 +937,11 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult14 = LocalDate.of(1970, 1, 1).atStartOfDay();
         education.setUpdatedAt(Date.from(atStartOfDayResult14.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Education> ofResult1 = Optional.of(education);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        doNothing().when(educationRepository).deleteById((Long) any());
-        when(educationRepository.findByIdaAndOwnedBy((Long) any(), (User) any())).thenReturn(ofResult1);
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(iFileService.generateUrlFile((Long) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        doNothing().when(educationRepository).deleteById(any());
+        when(educationRepository.findByIdaAndOwnedBy(any(), any())).thenReturn(ofResult1);
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(iFileService.generateUrlFile(any())).thenThrow(new ValidationErrorException("An error occurred"));
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -986,7 +959,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenReturn(applicantProfileResponse);
 
         User user2 = new User();
@@ -1001,11 +974,11 @@ class ApplicantServiceTest {
         user2.setRole(RoleName.USER);
         user2.setUserId(123L);
         assertThrows(ValidationErrorException.class, () -> applicantService.deleteEducation(123L, user2));
-        verify(applicantRepository).findByOwnedBy((User) any());
-        verify(educationRepository).findByIdaAndOwnedBy((Long) any(), (User) any());
-        verify(educationRepository).deleteById((Long) any());
-        verify(iFileService).generateUrlFile((Long) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
+        verify(applicantRepository).findByOwnedBy(any());
+        verify(educationRepository).findByIdaAndOwnedBy(any(), any());
+        verify(educationRepository).deleteById(any());
+        verify(iFileService).generateUrlFile(any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
     }
 
     /**
@@ -1016,7 +989,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -1027,7 +1000,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -1064,8 +1037,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(experienceRepository.save((Experience) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(experienceRepository.save(any())).thenThrow(new ValidationErrorException("An error occurred"));
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -1089,7 +1062,7 @@ class ApplicantServiceTest {
         experience.setPosition("Position");
         LocalDateTime atStartOfDayResult12 = LocalDate.of(1970, 1, 1).atStartOfDay();
         experience.setStartDate(Date.from(atStartOfDayResult12.atZone(ZoneId.of("UTC")).toInstant()));
-        when(modelMapper.map((Object) any(), (Class<Experience>) any())).thenReturn(experience);
+        when(modelMapper.map(any(), (Class<Experience>) any())).thenReturn(experience);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -1112,8 +1085,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult16 = LocalDate.of(1970, 1, 1).atStartOfDay();
         experienceRequest.setStartDate(Date.from(atStartOfDayResult16.atZone(ZoneId.of("UTC")).toInstant()));
         assertThrows(ValidationErrorException.class, () -> applicantService.addExperience(user2, experienceRequest));
-        verify(experienceRepository).save((Experience) any());
-        verify(modelMapper).map((Object) any(), (Class<Experience>) any());
+        verify(experienceRepository).save(any());
+        verify(modelMapper).map(any(), (Class<Experience>) any());
     }
 
     /**
@@ -1124,7 +1097,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -1135,7 +1108,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -1172,7 +1145,7 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -1220,9 +1193,9 @@ class ApplicantServiceTest {
         experience1.setPosition("Position");
         LocalDateTime atStartOfDayResult16 = LocalDate.of(1970, 1, 1).atStartOfDay();
         experience1.setStartDate(Date.from(atStartOfDayResult16.atZone(ZoneId.of("UTC")).toInstant()));
-        when(experienceRepository.save((Experience) any())).thenReturn(experience1);
-        when(experienceRepository.findByIdaAndOwnedBy((Long) any(), (User) any())).thenReturn(ofResult1);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(experienceRepository.save(any())).thenReturn(experience1);
+        when(experienceRepository.findByIdaAndOwnedBy(any(), any())).thenReturn(ofResult1);
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenThrow(new ValidationErrorException("An error occurred"));
 
         ExperienceRequest experienceRequest = new ExperienceRequest();
@@ -1247,10 +1220,10 @@ class ApplicantServiceTest {
         user3.setUserId(123L);
         assertThrows(ValidationErrorException.class,
                 () -> applicantService.updateExperience(123L, experienceRequest, user3));
-        verify(applicantRepository).findByOwnedBy((User) any());
-        verify(experienceRepository).save((Experience) any());
-        verify(experienceRepository).findByIdaAndOwnedBy((Long) any(), (User) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
+        verify(applicantRepository).findByOwnedBy(any());
+        verify(experienceRepository).save(any());
+        verify(experienceRepository).findByIdaAndOwnedBy(any(), any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
     }
 
     /**
@@ -1261,7 +1234,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -1272,7 +1245,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -1309,8 +1282,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -1335,10 +1308,10 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult12 = LocalDate.of(1970, 1, 1).atStartOfDay();
         experience.setStartDate(Date.from(atStartOfDayResult12.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Experience> ofResult1 = Optional.of(experience);
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        doNothing().when(experienceRepository).deleteById((Long) any());
-        when(experienceRepository.findByIdaAndOwnedBy((Long) any(), (User) any())).thenReturn(ofResult1);
-        when(iFileService.generateUrlFile((Long) any())).thenReturn("https://example.org/example");
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        doNothing().when(experienceRepository).deleteById(any());
+        when(experienceRepository.findByIdaAndOwnedBy(any(), any())).thenReturn(ofResult1);
+        when(iFileService.generateUrlFile(any())).thenReturn("https://example.org/example");
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -1356,7 +1329,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenReturn(applicantProfileResponse);
 
         User user2 = new User();
@@ -1380,13 +1353,13 @@ class ApplicantServiceTest {
         assertTrue(actualDeleteExperienceResult.getEducations().isEmpty());
         assertEquals("https://example.org/example", actualDeleteExperienceResult.getCvURL());
         assertEquals("https://example.org/example", actualDeleteExperienceResult.getAvatarURL());
-        verify(applicantRepository).findByOwnedBy((User) any());
-        verify(educationRepository).findByOwnedBy((User) any());
-        verify(experienceRepository).findByIdaAndOwnedBy((Long) any(), (User) any());
-        verify(experienceRepository).findByOwnedBy((User) any());
-        verify(experienceRepository).deleteById((Long) any());
-        verify(iFileService, atLeast(1)).generateUrlFile((Long) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
+        verify(applicantRepository).findByOwnedBy(any());
+        verify(educationRepository).findByOwnedBy(any());
+        verify(experienceRepository).findByIdaAndOwnedBy(any(), any());
+        verify(experienceRepository).findByOwnedBy(any());
+        verify(experienceRepository).deleteById(any());
+        verify(iFileService, atLeast(1)).generateUrlFile(any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
     }
 
     /**
@@ -1397,7 +1370,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -1408,7 +1381,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -1445,8 +1418,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -1471,10 +1444,10 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult12 = LocalDate.of(1970, 1, 1).atStartOfDay();
         experience.setStartDate(Date.from(atStartOfDayResult12.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Experience> ofResult1 = Optional.of(experience);
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        doNothing().when(experienceRepository).deleteById((Long) any());
-        when(experienceRepository.findByIdaAndOwnedBy((Long) any(), (User) any())).thenReturn(ofResult1);
-        when(iFileService.generateUrlFile((Long) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        doNothing().when(experienceRepository).deleteById(any());
+        when(experienceRepository.findByIdaAndOwnedBy(any(), any())).thenReturn(ofResult1);
+        when(iFileService.generateUrlFile(any())).thenThrow(new ValidationErrorException("An error occurred"));
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -1492,7 +1465,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenReturn(applicantProfileResponse);
 
         User user2 = new User();
@@ -1507,11 +1480,11 @@ class ApplicantServiceTest {
         user2.setRole(RoleName.USER);
         user2.setUserId(123L);
         assertThrows(ValidationErrorException.class, () -> applicantService.deleteExperience(123L, user2));
-        verify(applicantRepository).findByOwnedBy((User) any());
-        verify(experienceRepository).findByIdaAndOwnedBy((Long) any(), (User) any());
-        verify(experienceRepository).deleteById((Long) any());
-        verify(iFileService).generateUrlFile((Long) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
+        verify(applicantRepository).findByOwnedBy(any());
+        verify(experienceRepository).findByIdaAndOwnedBy(any(), any());
+        verify(experienceRepository).deleteById(any());
+        verify(iFileService).generateUrlFile(any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
     }
 
     /**
@@ -1522,7 +1495,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -1533,7 +1506,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -1568,18 +1541,18 @@ class ApplicantServiceTest {
         when(applicant.getAvatar()).thenThrow(new DataNotFoundException("An error occurred"));
         when(applicant.getCv()).thenThrow(new DataNotFoundException("An error occurred"));
         when(applicant.getOwnedBy()).thenReturn(user1);
-        doNothing().when(applicant).setAddress((String) any());
-        doNothing().when(applicant).setApplicantId((Long) any());
-        doNothing().when(applicant).setAvatar((File) any());
-        doNothing().when(applicant).setBio((String) any());
-        doNothing().when(applicant).setCv((File) any());
-        doNothing().when(applicant).setDob((Date) any());
-        doNothing().when(applicant).setOwnedBy((User) any());
-        doNothing().when(applicant).setPortofolioURL((String) any());
-        doNothing().when(applicant).setSkills((Set<SkillEntity>) any());
-        doNothing().when(applicant).setCreatedAt((Date) any());
+        doNothing().when(applicant).setAddress(any());
+        doNothing().when(applicant).setApplicantId(any());
+        doNothing().when(applicant).setAvatar(any());
+        doNothing().when(applicant).setBio(any());
+        doNothing().when(applicant).setCv(any());
+        doNothing().when(applicant).setDob(any());
+        doNothing().when(applicant).setOwnedBy(any());
+        doNothing().when(applicant).setPortofolioURL(any());
+        doNothing().when(applicant).setSkills(any());
+        doNothing().when(applicant).setCreatedAt(any());
         doNothing().when(applicant).setDeleted(anyBoolean());
-        doNothing().when(applicant).setUpdatedAt((Date) any());
+        doNothing().when(applicant).setUpdatedAt(any());
         applicant.setAddress("42 Main St");
         applicant.setApplicantId(123L);
         applicant.setAvatar(file);
@@ -1596,8 +1569,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult10 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult10.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -1622,10 +1595,10 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult14 = LocalDate.of(1970, 1, 1).atStartOfDay();
         experience.setStartDate(Date.from(atStartOfDayResult14.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Experience> ofResult1 = Optional.of(experience);
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        doNothing().when(experienceRepository).deleteById((Long) any());
-        when(experienceRepository.findByIdaAndOwnedBy((Long) any(), (User) any())).thenReturn(ofResult1);
-        when(iFileService.generateUrlFile((Long) any())).thenReturn("https://example.org/example");
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        doNothing().when(experienceRepository).deleteById(any());
+        when(experienceRepository.findByIdaAndOwnedBy(any(), any())).thenReturn(ofResult1);
+        when(iFileService.generateUrlFile(any())).thenReturn("https://example.org/example");
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -1643,7 +1616,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenReturn(applicantProfileResponse);
 
         User user3 = new User();
@@ -1658,24 +1631,24 @@ class ApplicantServiceTest {
         user3.setRole(RoleName.USER);
         user3.setUserId(123L);
         assertThrows(DataNotFoundException.class, () -> applicantService.deleteExperience(123L, user3));
-        verify(applicantRepository).findByOwnedBy((User) any());
+        verify(applicantRepository).findByOwnedBy(any());
         verify(applicant).getAvatar();
         verify(applicant, atLeast(1)).getOwnedBy();
-        verify(applicant).setAddress((String) any());
-        verify(applicant).setApplicantId((Long) any());
-        verify(applicant).setAvatar((File) any());
-        verify(applicant).setBio((String) any());
-        verify(applicant).setCv((File) any());
-        verify(applicant).setDob((Date) any());
-        verify(applicant).setOwnedBy((User) any());
-        verify(applicant).setPortofolioURL((String) any());
-        verify(applicant).setSkills((Set<SkillEntity>) any());
-        verify(applicant).setCreatedAt((Date) any());
+        verify(applicant).setAddress(any());
+        verify(applicant).setApplicantId(any());
+        verify(applicant).setAvatar(any());
+        verify(applicant).setBio(any());
+        verify(applicant).setCv(any());
+        verify(applicant).setDob(any());
+        verify(applicant).setOwnedBy(any());
+        verify(applicant).setPortofolioURL(any());
+        verify(applicant).setSkills(any());
+        verify(applicant).setCreatedAt(any());
         verify(applicant).setDeleted(anyBoolean());
-        verify(applicant).setUpdatedAt((Date) any());
-        verify(experienceRepository).findByIdaAndOwnedBy((Long) any(), (User) any());
-        verify(experienceRepository).deleteById((Long) any());
-        verify(modelMapper).map((Object) any(), (Class<Object>) any());
+        verify(applicant).setUpdatedAt(any());
+        verify(experienceRepository).findByIdaAndOwnedBy(any(), any());
+        verify(experienceRepository).deleteById(any());
+        verify(modelMapper).map(any(), any());
     }
 
     /**
@@ -1686,7 +1659,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -1697,7 +1670,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -1738,7 +1711,7 @@ class ApplicantServiceTest {
         File file2 = new File();
         LocalDateTime atStartOfDayResult9 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file2.setCreatedAt(Date.from(atStartOfDayResult9.atZone(ZoneId.of("UTC")).toInstant()));
-        file2.setData("AAAAAAAA".getBytes("UTF-8"));
+        file2.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file2.setDeleted(true);
         file2.setDisplayName("Display Name");
         file2.setFileId(123L);
@@ -1749,7 +1722,7 @@ class ApplicantServiceTest {
         File file3 = new File();
         LocalDateTime atStartOfDayResult11 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file3.setCreatedAt(Date.from(atStartOfDayResult11.atZone(ZoneId.of("UTC")).toInstant()));
-        file3.setData("AAAAAAAA".getBytes("UTF-8"));
+        file3.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file3.setDeleted(true);
         file3.setDisplayName("Display Name");
         file3.setFileId(123L);
@@ -1785,9 +1758,9 @@ class ApplicantServiceTest {
         applicant1.setSkills(new HashSet<>());
         LocalDateTime atStartOfDayResult17 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant1.setUpdatedAt(Date.from(atStartOfDayResult17.atZone(ZoneId.of("UTC")).toInstant()));
-        when(applicantRepository.save((Applicant) any())).thenReturn(applicant1);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(applicantRepository.save(any())).thenReturn(applicant1);
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenThrow(new ValidationErrorException("An error occurred"));
 
         SkillEntity skillEntity = new SkillEntity();
@@ -1808,8 +1781,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult21 = LocalDate.of(1970, 1, 1).atStartOfDay();
         skillEntity1.setUpdatedAt(Date.from(atStartOfDayResult21.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<SkillEntity> ofResult1 = Optional.of(skillEntity1);
-        when(skillRepository.save((SkillEntity) any())).thenReturn(skillEntity);
-        when(skillRepository.findBySkillName((String) any())).thenReturn(ofResult1);
+        when(skillRepository.save(any())).thenReturn(skillEntity);
+        when(skillRepository.findBySkillName(any())).thenReturn(ofResult1);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -1826,10 +1799,10 @@ class ApplicantServiceTest {
         SkillApplicantRequest skillApplicantRequest = new SkillApplicantRequest();
         skillApplicantRequest.setSkillName("Skill Name");
         assertThrows(ValidationErrorException.class, () -> applicantService.addSkill(user2, skillApplicantRequest));
-        verify(applicantRepository).save((Applicant) any());
-        verify(applicantRepository, atLeast(1)).findByOwnedBy((User) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
-        verify(skillRepository).findBySkillName((String) any());
+        verify(applicantRepository).save(any());
+        verify(applicantRepository, atLeast(1)).findByOwnedBy(any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
+        verify(skillRepository).findBySkillName(any());
     }
 
     /**
@@ -1840,7 +1813,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -1851,7 +1824,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -1888,8 +1861,8 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant.setUpdatedAt(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<Applicant> ofResult = Optional.of(applicant);
-        when(applicantRepository.save((Applicant) any())).thenThrow(new ValidationErrorException("An error occurred"));
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
+        when(applicantRepository.save(any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
 
         SkillEntity skillEntity = new SkillEntity();
         LocalDateTime atStartOfDayResult9 = LocalDate.of(1970, 1, 1).atStartOfDay();
@@ -1900,7 +1873,7 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult10 = LocalDate.of(1970, 1, 1).atStartOfDay();
         skillEntity.setUpdatedAt(Date.from(atStartOfDayResult10.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<SkillEntity> ofResult1 = Optional.of(skillEntity);
-        when(skillRepository.findById((Long) any())).thenReturn(ofResult1);
+        when(skillRepository.findById(any())).thenReturn(ofResult1);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -1914,9 +1887,9 @@ class ApplicantServiceTest {
         user1.setRole(RoleName.USER);
         user1.setUserId(123L);
         assertThrows(ValidationErrorException.class, () -> applicantService.removeSkill(123L, user1));
-        verify(applicantRepository).save((Applicant) any());
-        verify(applicantRepository).findByOwnedBy((User) any());
-        verify(skillRepository).findById((Long) any());
+        verify(applicantRepository).save(any());
+        verify(applicantRepository).findByOwnedBy(any());
+        verify(skillRepository).findById(any());
     }
 
     /**
@@ -1927,7 +1900,7 @@ class ApplicantServiceTest {
         File file = new File();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         file.setCreatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        file.setData("AAAAAAAA".getBytes("UTF-8"));
+        file.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file.setDeleted(true);
         file.setDisplayName("Display Name");
         file.setFileId(123L);
@@ -1938,7 +1911,7 @@ class ApplicantServiceTest {
         File file1 = new File();
         LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file1.setCreatedAt(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        file1.setData("AAAAAAAA".getBytes("UTF-8"));
+        file1.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file1.setDeleted(true);
         file1.setDisplayName("Display Name");
         file1.setFileId(123L);
@@ -1979,7 +1952,7 @@ class ApplicantServiceTest {
         File file2 = new File();
         LocalDateTime atStartOfDayResult9 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file2.setCreatedAt(Date.from(atStartOfDayResult9.atZone(ZoneId.of("UTC")).toInstant()));
-        file2.setData("AAAAAAAA".getBytes("UTF-8"));
+        file2.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file2.setDeleted(true);
         file2.setDisplayName("Display Name");
         file2.setFileId(123L);
@@ -1990,7 +1963,7 @@ class ApplicantServiceTest {
         File file3 = new File();
         LocalDateTime atStartOfDayResult11 = LocalDate.of(1970, 1, 1).atStartOfDay();
         file3.setCreatedAt(Date.from(atStartOfDayResult11.atZone(ZoneId.of("UTC")).toInstant()));
-        file3.setData("AAAAAAAA".getBytes("UTF-8"));
+        file3.setData("AAAAAAAA".getBytes(StandardCharsets.UTF_8));
         file3.setDeleted(true);
         file3.setDisplayName("Display Name");
         file3.setFileId(123L);
@@ -2026,11 +1999,11 @@ class ApplicantServiceTest {
         applicant1.setSkills(new HashSet<>());
         LocalDateTime atStartOfDayResult17 = LocalDate.of(1970, 1, 1).atStartOfDay();
         applicant1.setUpdatedAt(Date.from(atStartOfDayResult17.atZone(ZoneId.of("UTC")).toInstant()));
-        when(applicantRepository.save((Applicant) any())).thenReturn(applicant1);
-        when(applicantRepository.findByOwnedBy((User) any())).thenReturn(ofResult);
-        when(educationRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(experienceRepository.findByOwnedBy((User) any())).thenReturn(new HashSet<>());
-        when(iFileService.generateUrlFile((Long) any())).thenReturn("https://example.org/example");
+        when(applicantRepository.save(any())).thenReturn(applicant1);
+        when(applicantRepository.findByOwnedBy(any())).thenReturn(ofResult);
+        when(educationRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(experienceRepository.findByOwnedBy(any())).thenReturn(new HashSet<>());
+        when(iFileService.generateUrlFile(any())).thenReturn("https://example.org/example");
 
         ApplicantProfileResponse applicantProfileResponse = new ApplicantProfileResponse();
         applicantProfileResponse.setAddress("42 Main St");
@@ -2048,7 +2021,7 @@ class ApplicantServiceTest {
         applicantProfileResponse.setPhoneNumber("4105551212");
         applicantProfileResponse.setSkills(new HashSet<>());
         applicantProfileResponse.setUserId(123L);
-        when(modelMapper.map((Object) any(), (Class<ApplicantProfileResponse>) any()))
+        when(modelMapper.map(any(), (Class<ApplicantProfileResponse>) any()))
                 .thenReturn(applicantProfileResponse);
 
         SkillEntity skillEntity = new SkillEntity();
@@ -2060,7 +2033,7 @@ class ApplicantServiceTest {
         LocalDateTime atStartOfDayResult20 = LocalDate.of(1970, 1, 1).atStartOfDay();
         skillEntity.setUpdatedAt(Date.from(atStartOfDayResult20.atZone(ZoneId.of("UTC")).toInstant()));
         Optional<SkillEntity> ofResult1 = Optional.of(skillEntity);
-        when(skillRepository.findById((Long) any())).thenReturn(ofResult1);
+        when(skillRepository.findById(any())).thenReturn(ofResult1);
 
         User user2 = new User();
         user2.setEmail("jane.doe@example.org");
@@ -2083,13 +2056,13 @@ class ApplicantServiceTest {
         assertTrue(actualRemoveSkillResult.getEducations().isEmpty());
         assertEquals("https://example.org/example", actualRemoveSkillResult.getCvURL());
         assertEquals("https://example.org/example", actualRemoveSkillResult.getAvatarURL());
-        verify(applicantRepository).save((Applicant) any());
-        verify(applicantRepository, atLeast(1)).findByOwnedBy((User) any());
-        verify(educationRepository).findByOwnedBy((User) any());
-        verify(experienceRepository).findByOwnedBy((User) any());
-        verify(iFileService, atLeast(1)).generateUrlFile((Long) any());
-        verify(modelMapper).map((Object) any(), (Class<ApplicantProfileResponse>) any());
-        verify(skillRepository).findById((Long) any());
+        verify(applicantRepository).save(any());
+        verify(applicantRepository, atLeast(1)).findByOwnedBy(any());
+        verify(educationRepository).findByOwnedBy(any());
+        verify(experienceRepository).findByOwnedBy(any());
+        verify(iFileService, atLeast(1)).generateUrlFile(any());
+        verify(modelMapper).map(any(), (Class<ApplicantProfileResponse>) any());
+        verify(skillRepository).findById(any());
     }
 
 }
