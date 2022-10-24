@@ -11,14 +11,14 @@ import java.util.Date;
 @Setter
 public class ExperienceRequest {
 
-    @NotBlank( message =  "corporateName is required")
+    @NotBlank(message = "corporateName is required")
     private String corporateName;
 
-    @NotBlank( message =  "position is required")
+    @NotBlank(message = "position is required")
     private String position;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @NotBlank( message =  "date is required")
+    @NotBlank(message = "date is required")
     private Date startDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

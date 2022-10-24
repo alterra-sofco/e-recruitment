@@ -1,5 +1,6 @@
 package com.erecruitment.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class PengajuanSDMSkillEntity implements Serializable {
     @Column(length = 100, name = "skill_name", nullable = false)
     private String skillName;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "pengajuan_id", nullable = false)
     private PengajuanSDMEntity pengajuanSDMEntity;

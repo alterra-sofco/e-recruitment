@@ -25,6 +25,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -123,7 +124,7 @@ public class PengajuanSDMService {
         if (!dataList.isEmpty()) {
             response.setMessage("ok");
             List<PengajuanSDMResponse> dt = dataList.stream()
-                    .map(harga -> modelMapper.map(harga, PengajuanSDMResponse.class))
+                    .map(this::convertToDto)
                     .collect(Collectors.toList());
             response.setData(dt);
         } else {
@@ -185,6 +186,17 @@ public class PengajuanSDMService {
         return convertToDto(pengajuanSDMRepository.save(pengajuanSDMEntity));
     }
 
+    public PengajuanSDMResponse getDetail(Long id) {
+        if (id == 0L) {
+            throw new ValidationErrorException("id required");
+        }
+        Optional<PengajuanSDMEntity> dt = pengajuanSDMRepository.findById(id);
+        if (!dt.isPresent()) {
+            throw new DataNotFoundException("Data with ID: " + id + " not found");
+        }
+        PengajuanSDMEntity pengajuanSDMEntity = dt.get();
+        return convertDetailToDto(pengajuanSDMEntity);
+    }
 
     private void validate(AddPengajuanSDMRequest request) {
         if (StringUtils.isEmpty(request.getPosisi())) {
@@ -206,6 +218,20 @@ public class PengajuanSDMService {
     }
 
     private PengajuanSDMResponse convertToDto(PengajuanSDMEntity pengajuanSDMEntity) {
-        return modelMapper.map(pengajuanSDMEntity, PengajuanSDMResponse.class);
+        PengajuanSDMResponse response = modelMapper.map(pengajuanSDMEntity, PengajuanSDMResponse.class);
+        User user = pengajuanSDMEntity.getUser();
+        response.setRequestName(user.getName());
+        return response;
+    }
+
+    private PengajuanSDMResponse convertDetailToDto(PengajuanSDMEntity pengajuanSDMEntity) {
+        PengajuanSDMResponse response = modelMapper.map(pengajuanSDMEntity, PengajuanSDMResponse.class);
+
+        User user = pengajuanSDMEntity.getUser();
+        response.setRequestName(user.getName());
+
+        Set<PengajuanSDMSkillEntity> listSkill = pengajuanSDMSkillRepository.findByPengajuanId(pengajuanSDMEntity.getIdPengajuan());
+        response.setListSkill(listSkill);
+        return response;
     }
 }
