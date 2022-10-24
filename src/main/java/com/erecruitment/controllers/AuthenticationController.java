@@ -6,7 +6,9 @@ import com.erecruitment.dtos.requests.auth.UserRegisterRequestDTO;
 import com.erecruitment.dtos.response.CommonResponse;
 import com.erecruitment.dtos.response.ResponseGenerator;
 import com.erecruitment.dtos.response.auth.JwtAuthenticationResponseDTO;
+import com.erecruitment.entities.RoleName;
 import com.erecruitment.entities.User;
+import com.erecruitment.exceptions.CredentialErrorException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.UserRepository;
 import com.erecruitment.services.auth.UserService;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
@@ -65,7 +68,42 @@ public class AuthenticationController {
                 userService.registration(user)), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login/dashboard")
+    public ResponseEntity<CommonResponse> authenticateStaffUser(@Valid @RequestBody UserLoginRequestDTO loginRequest, @ApiIgnore Errors errors) {
+
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                throw new ValidationErrorException(error.getDefaultMessage());
+            }
+        }
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = tokenProvider.generateToken(authentication);
+            Timestamp currentDatetime = new Timestamp(System.currentTimeMillis());
+            User user = (User) authentication.getPrincipal();
+            if (user.getRole() != RoleName.ADMIN && user.getRole() != RoleName.USER){
+                throw new CredentialErrorException("Bad Credentials");
+            }
+            user.setLastLogin(currentDatetime);
+            userRepository.save(user);
+            ResponseGenerator responseGenerator = new ResponseGenerator();
+            return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.CREATED.value()),
+                    "Login success!",
+                    new JwtAuthenticationResponseDTO(jwt, user.getRole())), HttpStatus.CREATED);
+        } catch (Exception e){
+            throw new CredentialErrorException(e.getMessage());
+        }
+
+    }
+
+    @PostMapping("/login/job-seeker")
     public ResponseEntity<CommonResponse> authenticateUser(@Valid @RequestBody UserLoginRequestDTO loginRequest, @ApiIgnore Errors errors) {
 
         if (errors.hasErrors()) {
@@ -73,23 +111,27 @@ public class AuthenticationController {
                 throw new ValidationErrorException(error.getDefaultMessage());
             }
         }
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.generateToken(authentication);
+            Timestamp currentDatetime = new Timestamp(System.currentTimeMillis());
+            User user = (User) authentication.getPrincipal();
+            user.setLastLogin(currentDatetime);
+            userRepository.save(user);
+            ResponseGenerator responseGenerator = new ResponseGenerator();
+            return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.CREATED.value()),
+                    "Login success!",
+                    new JwtAuthenticationResponseDTO(jwt, user.getRole())), HttpStatus.CREATED);
+        } catch (Exception e){
+            throw new CredentialErrorException(e.getMessage());
+        }
 
-        String jwt = tokenProvider.generateToken(authentication);
-        Timestamp currentDatetime = new Timestamp(System.currentTimeMillis());
-        User user = (User) authentication.getPrincipal();
-        user.setLastLogin(currentDatetime);
-        userRepository.save(user);
-        ResponseGenerator responseGenerator = new ResponseGenerator();
-        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.CREATED.value()),
-                "Login success!",
-                new JwtAuthenticationResponseDTO(jwt)), HttpStatus.CREATED);
     }
 }
