@@ -1,8 +1,10 @@
 package com.erecruitment.services.auth;
 
+import com.erecruitment.entities.Applicant;
 import com.erecruitment.entities.User;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
+import com.erecruitment.repositories.ApplicantRepository;
 import com.erecruitment.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ApplicantRepository applicantRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -49,6 +54,9 @@ public class UserService implements UserDetailsService {
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        Applicant profile = new Applicant();
+        profile.setOwnedBy(user);
+        applicantRepository.save(profile);
         return userRepository.save(user);
     }
 
