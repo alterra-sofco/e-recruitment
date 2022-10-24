@@ -94,9 +94,9 @@ public class AuthenticationController {
             user.setLastLogin(currentDatetime);
             userRepository.save(user);
             ResponseGenerator responseGenerator = new ResponseGenerator();
-            return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.CREATED.value()),
+            return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
                     "Login success!",
-                    new JwtAuthenticationResponseDTO(jwt, user.getRole())), HttpStatus.CREATED);
+                    new JwtAuthenticationResponseDTO(jwt, user.getRole())), HttpStatus.OK);
         } catch (Exception e){
             throw new CredentialErrorException(e.getMessage());
         }
@@ -126,9 +126,9 @@ public class AuthenticationController {
             user.setLastLogin(currentDatetime);
             userRepository.save(user);
             ResponseGenerator responseGenerator = new ResponseGenerator();
-            return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.CREATED.value()),
+            return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
                     "Login success!",
-                    new JwtAuthenticationResponseDTO(jwt, user.getRole())), HttpStatus.CREATED);
+                    new JwtAuthenticationResponseDTO(jwt, user.getRole())), HttpStatus.OK);
         } catch (Exception e){
             throw new CredentialErrorException(e.getMessage());
         }
