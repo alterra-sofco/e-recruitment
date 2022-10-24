@@ -2,12 +2,12 @@ package com.erecruitment.dtos.response;
 
 import com.erecruitment.entities.Education;
 import com.erecruitment.entities.Experience;
+import com.erecruitment.entities.SkillEntity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -39,5 +39,7 @@ public class ApplicantProfileResponse {
     private Set<Education> educations;
 
     private Set<Experience> experiences;
+
+    private Set<SkillEntity> skills;
 
 }

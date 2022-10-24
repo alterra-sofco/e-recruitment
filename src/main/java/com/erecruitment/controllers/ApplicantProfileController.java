@@ -3,11 +3,17 @@ package com.erecruitment.controllers;
 import com.erecruitment.dtos.requests.ApplicantEditProfileRequest;
 import com.erecruitment.dtos.requests.EducationRequest;
 import com.erecruitment.dtos.requests.ExperienceRequest;
+import com.erecruitment.dtos.requests.SkillApplicantRequest;
 import com.erecruitment.dtos.response.ApplicantProfileResponse;
 import com.erecruitment.dtos.response.CommonResponse;
 import com.erecruitment.dtos.response.ResponseGenerator;
+import com.erecruitment.entities.Education;
+import com.erecruitment.entities.Experience;
 import com.erecruitment.entities.User;
+import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
+import com.erecruitment.repositories.EducationRepository;
+import com.erecruitment.repositories.ExperienceRepository;
 import com.erecruitment.services.ApplicantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +29,12 @@ public class ApplicantProfileController {
 
     @Autowired
     private ApplicantService applicantService;
+
+    @Autowired
+    private ExperienceRepository experienceRepository;
+
+    @Autowired
+    private EducationRepository educationRepository;
 
     @GetMapping
     public ResponseEntity<CommonResponse<ApplicantProfileResponse>> getProfile(){
@@ -104,6 +116,20 @@ public class ApplicantProfileController {
                 response), HttpStatus.CREATED);
     }
 
+    @GetMapping("education/{educationId}")
+    public ResponseEntity<CommonResponse<Education>> getEducational(@PathVariable("educationId") Long educationId){
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Education education = educationRepository.findByIdaAndOwnedBy(educationId, user).orElseThrow(() ->
+                new DataNotFoundException("educationId not found!"));
+
+        ResponseGenerator responseGenerator = new ResponseGenerator();
+
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
+                "OK", education), HttpStatus.OK);
+    }
+
     @PutMapping("/education/{educationId}")
     public ResponseEntity<CommonResponse<ApplicantProfileResponse>> updateEducational(@RequestBody EducationRequest bodyRequest,
                                                                                       @PathVariable("educationId") Long educationId){
@@ -146,6 +172,20 @@ public class ApplicantProfileController {
                 response), HttpStatus.CREATED);
     }
 
+    @GetMapping("experience/{experienceId}")
+    public ResponseEntity<CommonResponse<Experience>> getExperience(@PathVariable("experienceId") Long experienceId){
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Experience experience = experienceRepository.findByIdaAndOwnedBy(experienceId, user).orElseThrow(() ->
+                new DataNotFoundException("experienceId not found!"));
+
+        ResponseGenerator responseGenerator = new ResponseGenerator();
+
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
+                "OK", experience), HttpStatus.OK);
+    }
+
     @PutMapping("experience/{experienceId}")
     public ResponseEntity<CommonResponse<ApplicantProfileResponse>> updateExperience(@PathVariable("experienceId") Long experienceId,
                                                                                      @RequestBody ExperienceRequest bodyRequest){
@@ -173,6 +213,21 @@ public class ApplicantProfileController {
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
                 "success, experience data deleted!",
                 response), HttpStatus.OK);
+    }
+
+    @PostMapping("skill")
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> addSkills(@RequestBody SkillApplicantRequest bodyRequest){
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        ApplicantProfileResponse response = applicantService.addSkill(user, bodyRequest);
+
+        ResponseGenerator responseGenerator = new ResponseGenerator();
+
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
+                "success, skill added!",
+                response), HttpStatus.OK);
+
     }
 
 }

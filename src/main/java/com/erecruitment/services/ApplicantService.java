@@ -3,6 +3,7 @@ package com.erecruitment.services;
 import com.erecruitment.dtos.requests.ApplicantEditProfileRequest;
 import com.erecruitment.dtos.requests.EducationRequest;
 import com.erecruitment.dtos.requests.ExperienceRequest;
+import com.erecruitment.dtos.requests.SkillApplicantRequest;
 import com.erecruitment.dtos.response.ApplicantProfileResponse;
 import com.erecruitment.entities.*;
 import com.erecruitment.exceptions.DataNotFoundException;
@@ -11,6 +12,7 @@ import com.erecruitment.repositories.ApplicantRepository;
 import com.erecruitment.repositories.EducationRepository;
 import com.erecruitment.repositories.ExperienceRepository;
 import com.erecruitment.repositories.UserRepository;
+import com.erecruitment.repositories.SkillRepository;
 import com.erecruitment.services.interfaces.IApplicantService;
 import com.erecruitment.services.interfaces.IFileService;
 import org.modelmapper.ModelMapper;
@@ -43,6 +45,9 @@ public class ApplicantService implements IApplicantService {
 
     @Autowired
     private ExperienceRepository experienceRepository;
+
+    @Autowired
+    private SkillRepository skillRepository;
 
     @Override
     public ApplicantProfileResponse getUserDetail(User user) {
@@ -192,6 +197,27 @@ public class ApplicantService implements IApplicantService {
     public ApplicantProfileResponse deleteExperience(Long experienceId, User user) {
         Experience experience = experienceRepository.findByIdaAndOwnedBy(experienceId, user).orElseThrow(() -> new DataNotFoundException("experienceId not found!"));
         experienceRepository.deleteById(experience.getExperienceId());
+        return getUserDetail(user);
+    }
+
+    @Override
+    public ApplicantProfileResponse addSkill(User user, SkillApplicantRequest bodyRequest) {
+        Applicant applicant = applicantRepository.findByOwnedBy(user).orElseGet(() -> {
+            Applicant profile = new Applicant();
+            profile.setOwnedBy(user);
+            return profile;
+        });
+
+        SkillEntity skill = skillRepository.findBySkillName(bodyRequest.getSkillName()).orElseGet(() -> {
+            SkillEntity skillEntity = new SkillEntity();
+            skillEntity.setSkillName(bodyRequest.getSkillName());
+            skillRepository.save(skillEntity);
+            return skillEntity;
+        });
+
+        applicant.getSkills().add(skill);
+        applicantRepository.save(applicant);
+
         return getUserDetail(user);
     }
 

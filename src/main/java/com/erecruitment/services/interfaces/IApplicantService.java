@@ -3,6 +3,7 @@ package com.erecruitment.services.interfaces;
 import com.erecruitment.dtos.requests.ApplicantEditProfileRequest;
 import com.erecruitment.dtos.requests.EducationRequest;
 import com.erecruitment.dtos.requests.ExperienceRequest;
+import com.erecruitment.dtos.requests.SkillApplicantRequest;
 import com.erecruitment.dtos.response.ApplicantProfileResponse;
 import com.erecruitment.entities.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,4 +30,6 @@ public interface IApplicantService {
     ApplicantProfileResponse updateExperience(Long experienceId, ExperienceRequest bodyRequest, User user);
 
     ApplicantProfileResponse deleteExperience(Long experienceId, User user);
+
+    ApplicantProfileResponse addSkill(User user, SkillApplicantRequest bodyRequest);
 }
