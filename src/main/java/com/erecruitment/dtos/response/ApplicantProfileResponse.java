@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -30,6 +31,10 @@ public class ApplicantProfileResponse {
     private String avatarURL;
 
     private String avatarFileId;
+
+    private String cvURL;
+
+    private String cvFileId;
 
     private Set<Education> educations;
 

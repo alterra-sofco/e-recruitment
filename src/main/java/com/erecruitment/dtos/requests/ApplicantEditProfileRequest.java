@@ -2,6 +2,8 @@ package com.erecruitment.dtos.requests;
 
 import com.erecruitment.entities.Education;
 import com.erecruitment.entities.Experience;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,9 +28,6 @@ public class ApplicantEditProfileRequest {
     private String bio;
 
     @Past(message = "date not valid")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dob;
-
-    private Long avatarFileId;
-
-    private Long cvFileId;
 }

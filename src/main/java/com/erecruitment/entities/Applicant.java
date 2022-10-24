@@ -44,10 +44,4 @@ public class Applicant extends BaseEntity implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<SkillEntity> skills;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<Experience> experiences;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<Education> educations;
-
 }

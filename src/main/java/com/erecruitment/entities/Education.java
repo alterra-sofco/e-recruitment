@@ -24,6 +24,9 @@ public class Education extends BaseEntity implements Serializable {
     @Column(nullable = false, name = "education_name", length = 155)
     private String educationName;
 
+    @Column(nullable = false, length = 100)
+    private String major;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Degree degree;

@@ -2,6 +2,8 @@ package com.erecruitment.services;
 
 import com.erecruitment.dtos.response.FileResponse;
 import com.erecruitment.entities.File;
+import com.erecruitment.exceptions.DataNotFoundException;
+import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.FileRepository;
 import com.erecruitment.services.interfaces.IFileService;
 import org.modelmapper.ModelMapper;
@@ -24,14 +26,8 @@ public class FileService implements IFileService {
     private FileRepository fileRepository;
 
     @Override
-    public Object store(MultipartFile file) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        File FileDB = new File();
-        FileDB.setDisplayName(fileName);
-        FileDB.setType(file.getContentType());
-        FileDB.setData(file.getBytes());
-        File fileData = fileRepository.save(FileDB);
-
+    public FileResponse store(MultipartFile file) throws IOException {
+        File fileData = upload(file);
         String fileDownloadUri = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/api/file/download/")
@@ -41,6 +37,27 @@ public class FileService implements IFileService {
         response.setUrl(fileDownloadUri);
         response.setSize(fileData.getData().length);
         return response;
+    }
+
+    @Override
+    public File upload(MultipartFile file) throws IOException {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        File FileDB = new File();
+        FileDB.setDisplayName(fileName);
+        FileDB.setType(file.getContentType());
+        FileDB.setData(file.getBytes());
+        File fileData = fileRepository.save(FileDB);
+        return fileData;
+    }
+
+    @Override
+    public File uploadChange(MultipartFile file, Long fileId) throws IOException {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        File fileData = fileRepository.findById(fileId).orElseThrow(() -> new DataNotFoundException("file not found"));
+        fileData.setDisplayName(fileName);
+        fileData.setType(file.getContentType());
+        fileData.setData(file.getBytes());
+        return fileRepository.save(fileData);
     }
 
     @Override
@@ -61,6 +78,17 @@ public class FileService implements IFileService {
         response.setSize(file.get().getData().length);
         return response;
     }
+
+    @Override
+    public String generateUrlFile(Long fileId) {
+        Optional<File> file = fileRepository.findById(fileId);
+        return ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/api/file/download/")
+                .path(file.get().getFileId().toString())
+                .toUriString();
+    }
+
 
     private FileResponse fileConvertToDto(File file) {
         return modelMapper.map(file, FileResponse.class);
