@@ -20,8 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api/account/applicant")
@@ -50,9 +53,17 @@ public class ApplicantProfileController {
     }
 
     @PatchMapping("/basic")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> editProfile(@RequestBody ApplicantEditProfileRequest bodyRequest){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> editProfile(@RequestBody ApplicantEditProfileRequest bodyRequest, @ApiIgnore Errors errors){
+
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                throw new ValidationErrorException(error.getDefaultMessage());
+            }
+        }
+
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
+
         ApplicantProfileResponse response = applicantService.updateUserDetail(user, bodyRequest);
 
         ResponseGenerator responseGenerator = new ResponseGenerator();
@@ -104,7 +115,13 @@ public class ApplicantProfileController {
     }
 
     @PostMapping("/education")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> createEducational(@RequestBody EducationRequest bodyRequest){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> createEducational(@RequestBody EducationRequest bodyRequest, @ApiIgnore Errors errors){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                throw new ValidationErrorException(error.getDefaultMessage());
+            }
+        }
+
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
@@ -132,7 +149,13 @@ public class ApplicantProfileController {
 
     @PutMapping("/education/{educationId}")
     public ResponseEntity<CommonResponse<ApplicantProfileResponse>> updateEducational(@RequestBody EducationRequest bodyRequest,
-                                                                                      @PathVariable("educationId") Long educationId){
+                                                                                      @PathVariable("educationId") Long educationId,
+                                                                                      @ApiIgnore Errors errors){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                throw new ValidationErrorException(error.getDefaultMessage());
+            }
+        }
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
@@ -160,7 +183,13 @@ public class ApplicantProfileController {
     }
 
     @PostMapping("experience")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> createExperience(@RequestBody ExperienceRequest bodyRequest){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> createExperience(@RequestBody ExperienceRequest bodyRequest, @ApiIgnore Errors errors){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                throw new ValidationErrorException(error.getDefaultMessage());
+            }
+        }
+
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
@@ -188,7 +217,14 @@ public class ApplicantProfileController {
 
     @PutMapping("experience/{experienceId}")
     public ResponseEntity<CommonResponse<ApplicantProfileResponse>> updateExperience(@PathVariable("experienceId") Long experienceId,
-                                                                                     @RequestBody ExperienceRequest bodyRequest){
+                                                                                     @RequestBody ExperienceRequest bodyRequest,
+                                                                                     @ApiIgnore Errors errors){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                throw new ValidationErrorException(error.getDefaultMessage());
+            }
+        }
+
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
@@ -216,7 +252,13 @@ public class ApplicantProfileController {
     }
 
     @PostMapping("skill")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> addSkills(@RequestBody SkillApplicantRequest bodyRequest){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> addSkills(@RequestBody SkillApplicantRequest bodyRequest, @ApiIgnore Errors errors){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                throw new ValidationErrorException(error.getDefaultMessage());
+            }
+        }
+
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
