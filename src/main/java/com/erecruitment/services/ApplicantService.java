@@ -221,6 +221,23 @@ public class ApplicantService implements IApplicantService {
         return getUserDetail(user);
     }
 
+    @Override
+    public ApplicantProfileResponse removeSkill(Long skillId, User user) {
+        Applicant applicant = applicantRepository.findByOwnedBy(user).orElseGet(() -> {
+            Applicant profile = new Applicant();
+            profile.setOwnedBy(user);
+            return profile;
+        });
+
+        SkillEntity skill = skillRepository.findById(skillId).orElseThrow(() -> new DataNotFoundException("skill not found!"));
+
+        applicant.getSkills().remove(skill);
+
+        applicantRepository.save(applicant);
+
+        return getUserDetail(user);
+    }
+
     private ApplicantProfileResponse conversationalistProfileResponse(Applicant applicant){
         ApplicantProfileResponse response = modelMapper.map(applicant, ApplicantProfileResponse.class);
 

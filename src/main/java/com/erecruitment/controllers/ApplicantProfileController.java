@@ -272,4 +272,20 @@ public class ApplicantProfileController {
 
     }
 
+    @DeleteMapping("skill/{skillId}")
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> removeSkill(@PathVariable("skillId") Long skillId){
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        ApplicantProfileResponse response = applicantService.removeSkill(skillId, user);
+
+        ResponseGenerator responseGenerator = new ResponseGenerator();
+
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
+                "success, skill removed!",
+                response), HttpStatus.OK);
+
+
+    }
+
 }
