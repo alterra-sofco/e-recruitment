@@ -30,4 +30,12 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, responseData, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler(CredentialErrorException.class)
+    public ResponseEntity<Object> credentialErrorExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse responseData = new ExceptionResponse<>();
+        responseData.setStatus(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+        responseData.setMessage(ex.getMessage());
+        return handleExceptionInternal(ex, responseData, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.erecruitment.services.auth;
 
 import com.erecruitment.entities.Applicant;
 import com.erecruitment.entities.User;
+import com.erecruitment.exceptions.CredentialErrorException;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.ApplicantRepository;
@@ -32,7 +33,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new DataNotFoundException(String.format("user with email '%s' not found", email)));
+                .orElseThrow(() -> new CredentialErrorException("Bad Credentials"));
     }
 
     public UserDetails loadUserById(Long id) {
