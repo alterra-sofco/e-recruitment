@@ -26,7 +26,6 @@ public class JobPostingExcelExporter {
     private List<PengajuanSDMEntity> listJobPosting;
     private List<PengajuanSDMSkillEntity> skillTree;
     private List<Department> tempDept;
-
     @Autowired
     private StaffRepository staffRepository;
 
