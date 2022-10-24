@@ -66,7 +66,13 @@ public class PengajuanSDMController {
         PengajuanSDMResponse response = pengajuanSDMService.closeJobPosted(id);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", response), HttpStatus.OK);
+    }
 
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<CommonResponse<PengajuanSDMResponse>> getDetail(@PathVariable("id") Long id) {
+        PengajuanSDMResponse response = pengajuanSDMService.getDetail(id);
+        ResponseGenerator responseGenerator = new ResponseGenerator();
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", response), HttpStatus.OK);
     }
 
 }

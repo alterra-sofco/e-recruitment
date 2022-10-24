@@ -1,9 +1,11 @@
 package com.erecruitment.dtos.response;
 
+import com.erecruitment.entities.PengajuanSDMSkillEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -29,6 +31,8 @@ public class PengajuanSDMResponse {
 
     private Long userId;
 
-    private String name;
+    private String requestName;
+
+    private Set<PengajuanSDMSkillEntity> listSkill;
 
 }

@@ -3,7 +3,6 @@ package com.erecruitment.dtos.response;
 import com.erecruitment.entities.Education;
 import com.erecruitment.entities.Experience;
 import com.erecruitment.entities.SkillEntity;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

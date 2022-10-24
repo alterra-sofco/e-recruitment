@@ -4,6 +4,7 @@ import com.erecruitment.dtos.requests.AddPengajuanSDMRequest;
 import com.erecruitment.dtos.requests.UpdateStatusPengajuanSDMRequest;
 import com.erecruitment.dtos.response.PengajuanSDMResponse;
 import com.erecruitment.entities.PengajuanSDMEntity;
+import com.erecruitment.entities.User;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.PengajuanSDMRepository;
@@ -180,8 +181,14 @@ public class PengajuanSDMServiceTest {
         PengajuanSDMEntity entity = new PengajuanSDMEntity();
         entity.setIdPengajuan(1L);
         entity.setStatus((short) 1);
+
+        User user = new User();
+        user.setUserId(1L);
+        user.setName("admin");
+
         when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(entity));
         PengajuanSDMEntity entity1 = modelMapper.map(request, PengajuanSDMEntity.class);
+        entity1.setUser(user);
         when(pengajuanSDMRepository.save(any(PengajuanSDMEntity.class)))
                 .thenReturn(entity1);
         PengajuanSDMResponse response = serviceUnderTest.updateStatus(request, 1L);
@@ -217,12 +224,30 @@ public class PengajuanSDMServiceTest {
         entity.setStatus((short) 3);
         when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(entity));
 
+        User user = new User();
+        user.setUserId(1L);
+        user.setName("admin");
         PengajuanSDMEntity entity1 = new PengajuanSDMEntity();
         entity1.setIdPengajuan(entity.getIdPengajuan());
         entity1.setStatus((short) 4);
+        entity1.setUser(user);
         when(pengajuanSDMRepository.save(any(PengajuanSDMEntity.class)))
                 .thenReturn(entity1);
         PengajuanSDMResponse response = serviceUnderTest.closeJobPosted(entity.getIdPengajuan());
         assertThat(response.getStatus()).isEqualTo(entity1.getStatus());
     }
+
+    @Test(expected = DataNotFoundException.class)
+    public void givenInValidRequestIdNotFound_getDetail() {
+        PengajuanSDMEntity entity = new PengajuanSDMEntity();
+        entity.setIdPengajuan(19L);
+        when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(null));
+        serviceUnderTest.getDetail(entity.getIdPengajuan());
+    }
+
+    @Test(expected = ValidationErrorException.class)
+    public void givenInValidRequestIdIs0_getDetail() {
+        serviceUnderTest.getDetail(0L);
+    }
+
 }
