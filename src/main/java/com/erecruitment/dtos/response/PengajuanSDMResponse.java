@@ -19,6 +19,8 @@ public class PengajuanSDMResponse {
 
     private String remarkStaff;
 
+    private String remarkHR;
+
     private Integer numberRequired;
 
     private Short status;
