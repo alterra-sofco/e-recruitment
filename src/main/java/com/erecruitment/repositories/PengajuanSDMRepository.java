@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity, Long> {
 
     Page<PengajuanSDMEntity> findAll(Pageable pageable);
@@ -24,4 +26,6 @@ public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity
     Page<PengajuanSDMEntity> findByPosisiContainingIgnoreCaseAndStatus(String posisi, Short status, Pageable pageable);
 
     Page<PengajuanSDMEntity> findByStatus(Short status, Pageable paging);
+
+    Optional<PengajuanSDMEntity> findByIdPengajuanAndStatus(Long idPengajuan,short status);
 }
