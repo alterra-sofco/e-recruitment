@@ -5,6 +5,9 @@ import com.erecruitment.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity, Long> {
 
@@ -24,4 +27,7 @@ public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity
     Page<PengajuanSDMEntity> findByPosisiContainingIgnoreCaseAndStatus(String posisi, Short status, Pageable pageable);
 
     Page<PengajuanSDMEntity> findByStatus(Short status, Pageable paging);
+
+    @Query(value = "SELECT t.* FROM pengajuan_sdm t WHERE t.status = 3 and t.deadline < now()\\:\\:date", nativeQuery = true)
+    List<PengajuanSDMEntity> closeAutoJob();
 }
