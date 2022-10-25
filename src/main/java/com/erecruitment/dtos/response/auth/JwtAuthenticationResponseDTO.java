@@ -13,5 +13,7 @@ public class JwtAuthenticationResponseDTO {
 
     private String tokenType = "Bearer";
 
+    private final String name;
+
     private final RoleName role;
 }
