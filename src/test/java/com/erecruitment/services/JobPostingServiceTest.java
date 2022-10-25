@@ -115,7 +115,7 @@ class JobPostingServiceTest {
         pengajuanSDMEntity.setNumberApplicant(10);
         pengajuanSDMEntity.setNumberRequired(10);
         pengajuanSDMEntity.setPosisi("updatedAt");
-        pengajuanSDMEntity.setRemark_staff("updatedAt");
+        pengajuanSDMEntity.setRemarkHR("updatedAt");
         pengajuanSDMEntity.setStatus((short) 1);
         LocalDateTime atStartOfDayResult5 = LocalDate.of(1970, 1, 1).atStartOfDay();
         pengajuanSDMEntity.setUpdatedAt(Date.from(atStartOfDayResult5.atZone(ZoneId.of("UTC")).toInstant()));
@@ -175,7 +175,7 @@ class JobPostingServiceTest {
         pengajuanSDMEntity.setNumberApplicant(10);
         pengajuanSDMEntity.setNumberRequired(10);
         pengajuanSDMEntity.setPosisi("updatedAt");
-        pengajuanSDMEntity.setRemark_staff("updatedAt");
+        pengajuanSDMEntity.setRemarkHR("updatedAt");
         pengajuanSDMEntity.setStatus((short) 1);
         LocalDateTime atStartOfDayResult5 = LocalDate.of(1970, 1, 1).atStartOfDay();
         pengajuanSDMEntity.setUpdatedAt(Date.from(atStartOfDayResult5.atZone(ZoneId.of("UTC")).toInstant()));
@@ -203,7 +203,7 @@ class JobPostingServiceTest {
         pengajuanSDMEntity1.setNumberApplicant(10);
         pengajuanSDMEntity1.setNumberRequired(10);
         pengajuanSDMEntity1.setPosisi("updatedAt");
-        pengajuanSDMEntity1.setRemark_staff("updatedAt");
+        pengajuanSDMEntity1.setRemarkHR("updatedAt");
         pengajuanSDMEntity1.setStatus((short) 1);
         LocalDateTime atStartOfDayResult10 = LocalDate.of(1970, 1, 1).atStartOfDay();
         pengajuanSDMEntity1.setUpdatedAt(Date.from(atStartOfDayResult10.atZone(ZoneId.of("UTC")).toInstant()));
@@ -259,7 +259,7 @@ class JobPostingServiceTest {
         pengajuanSDMEntity.setNumberApplicant(10);
         pengajuanSDMEntity.setNumberRequired(10);
         pengajuanSDMEntity.setPosisi("Posisi");
-        pengajuanSDMEntity.setRemark_staff("Remark staff");
+        pengajuanSDMEntity.setRemarkHR("Remark staff");
         pengajuanSDMEntity.setStatus((short) 1);
         LocalDateTime atStartOfDayResult4 = LocalDate.of(1970, 1, 1).atStartOfDay();
         pengajuanSDMEntity.setUpdatedAt(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));

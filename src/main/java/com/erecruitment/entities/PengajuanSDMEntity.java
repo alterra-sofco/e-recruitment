@@ -29,19 +29,22 @@ public class PengajuanSDMEntity implements Serializable {
     @Column(length = 125)
     private String posisi;
 
-    @Column(nullable = true)
+    @Column(columnDefinition = "text", nullable = true)
     private String description;
 
-    @Column(nullable = true)
-    private String remark_staff;
+    @Column(name ="remark_staff", columnDefinition = "text", nullable = true)
+    private String remarkStaff;
 
-    @Column(length = 1)
+    @Column(name ="remark_hr",columnDefinition = "text", nullable = true)
+    private String remarkHR;
+
+    @Column(columnDefinition = "INT2", length = 1)
     private Short status;
 
-    @Column(name ="number_required", nullable = true)
+    @Column(name ="number_required",  columnDefinition = "integer default 0", nullable = true)
     private Integer numberRequired;
 
-    @Column(name ="number_applicant", nullable = true)
+    @Column(name ="number_applicant",  columnDefinition = "integer default 0", nullable = true)
     private Integer numberApplicant;
 
     @Column(nullable = true)
@@ -60,4 +63,6 @@ public class PengajuanSDMEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
     private User user;
+
+
 }
