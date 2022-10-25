@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/api/authentication/**", "/swagger-ui/**", "/api/file/download/**").permitAll()
+                .authorizeRequests().antMatchers("/api/authentication/**", "/swagger-ui/**", "/api/file/download/**","/api/master_skill/**").permitAll()
                 .anyRequest().authenticated();
         httpSecurity.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         httpSecurity.cors();
