@@ -198,6 +198,20 @@ public class PengajuanSDMService {
         return convertDetailToDto(pengajuanSDMEntity);
     }
 
+    public void closeAutoJobPosted() {
+        List<PengajuanSDMEntity> dataList = new ArrayList<>();
+        List<PengajuanSDMEntity> jobList = pengajuanSDMRepository.closeAutoJob();
+        if (!jobList.isEmpty()) {
+            for (PengajuanSDMEntity jl : jobList) {
+                PengajuanSDMEntity pengajuanSDMEntity = modelMapper.map(jl, PengajuanSDMEntity.class);
+                pengajuanSDMEntity.setIdPengajuan(jl.getIdPengajuan());
+                pengajuanSDMEntity.setStatus((short) 4);
+                dataList.add(pengajuanSDMEntity);
+            }
+            pengajuanSDMRepository.saveAll(dataList);
+        }
+    }
+
     private void validate(AddPengajuanSDMRequest request) {
         if (StringUtils.isEmpty(request.getPosisi())) {
             throw new ValidationErrorException("posisi cannot be empty");
@@ -234,4 +248,7 @@ public class PengajuanSDMService {
         response.setListSkill(listSkill);
         return response;
     }
+
+
+
 }
