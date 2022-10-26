@@ -3,7 +3,10 @@ package com.erecruitment.services;
 import com.erecruitment.dtos.requests.JobApplyRequest;
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
 import com.erecruitment.dtos.response.*;
-import com.erecruitment.entities.*;
+import com.erecruitment.entities.PengajuanSDMEntity;
+import com.erecruitment.entities.StatusRecruitment;
+import com.erecruitment.entities.Submission;
+import com.erecruitment.entities.User;
 import com.erecruitment.exceptions.CredentialErrorException;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
@@ -41,7 +44,7 @@ public class JobPostingService implements IJobPostingService {
         Page<PengajuanSDMEntity> jobPosting;
         Sort sort = Sort.by("updatedAt").descending();
         Pageable paging = PageRequest.of(page, size, sort);
-        jobPosting =  keyword != null ? pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus(keyword, (short) 3, paging) :
+        jobPosting = keyword != null ? pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus(keyword, (short) 3, paging) :
                 pengajuanSDMRepository.findByStatus((short) 3, paging);
 
         List<PengajuanSDMEntity> dataList = jobPosting.getContent();
@@ -71,11 +74,11 @@ public class JobPostingService implements IJobPostingService {
         PengajuanSDMEntity jobDetail = pengajuanSDMRepository.findByIdPengajuanAndStatus(jobPostingId, (short) 3).orElseThrow(() ->
                 new DataNotFoundException("data job not found!"));
         JobPostingDetailResponse response = modelMapper.map(jobDetail, JobPostingDetailResponse.class);
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
             User user = (User) authentication.getPrincipal();
             Boolean isApplied = submissionRepository.findByJobPostingAndAndAppliedBy(jobDetail, user).isPresent();
-            if (isApplied){
+            if (isApplied) {
                 response.setIsApplied(true);
             }
         }
@@ -85,13 +88,13 @@ public class JobPostingService implements IJobPostingService {
 
     @Override
     public Object applyJob(Long jobPostingId, JobApplyRequest bodyRequest) {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
             User user = (User) authentication.getPrincipal();
             PengajuanSDMEntity jobDetail = pengajuanSDMRepository.findByIdPengajuanAndStatus(jobPostingId, (short) 3).orElseThrow(() ->
                     new DataNotFoundException("data job not found!"));
             Boolean isApplied = submissionRepository.findByJobPostingAndAndAppliedBy(jobDetail, user).isPresent();
-            if (isApplied){
+            if (isApplied) {
                 throw new ValidationErrorException("You are already applied!");
             }
 
@@ -101,8 +104,7 @@ public class JobPostingService implements IJobPostingService {
             submission.setJobPosting(jobDetail);
 
             return submissionRepository.save(submission);
-        }
-        else {
+        } else {
             throw new CredentialErrorException("Login required!");
         }
 
@@ -110,13 +112,13 @@ public class JobPostingService implements IJobPostingService {
 
     @Override
     public PageableResponse getHistoryJobPosting(int page, int size, StatusRecruitment status) {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         Page<Submission> jobPosting;
         Sort sort = Sort.by("appliedAt").descending();
         Pageable paging = PageRequest.of(page, size, sort);
-        jobPosting =  status != null ? submissionRepository.findByAppliedByAndStatus(user,status, paging) :
+        jobPosting = status != null ? submissionRepository.findByAppliedByAndStatus(user, status, paging) :
                 submissionRepository.findByAppliedBy(user, paging);
 
         List<Submission> dataList = jobPosting.getContent();
@@ -151,7 +153,7 @@ public class JobPostingService implements IJobPostingService {
 
 
         Pageable paging = PageRequest.of(page, size, sort);
-        jobPosting =  status != null ? submissionRepository.findByJobPostingAndStatus(jobDetail, status, paging) :
+        jobPosting = status != null ? submissionRepository.findByJobPostingAndStatus(jobDetail, status, paging) :
                 submissionRepository.findByJobPosting(jobDetail, paging);
         List<Submission> dataList = jobPosting.getContent();
         PageableResponse response = new PageableResponse();
@@ -179,7 +181,7 @@ public class JobPostingService implements IJobPostingService {
     public Object setStatus(Long submissionId, StatusJobApplicantRequest bodyRequest) {
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new DataNotFoundException("submission not found"));
-        if (submission.getStatus() == bodyRequest.getStatus()){
+        if (submission.getStatus() == bodyRequest.getStatus()) {
             throw new ValidationErrorException(String.format("submission already %s", submission.getStatus()));
         }
         submission.setStatus(bodyRequest.getStatus());
@@ -203,11 +205,11 @@ public class JobPostingService implements IJobPostingService {
         return response;
     }
 
-    private JobAppliedHistoryResponse convertToHistory(Submission dataApplied){
-        return  modelMapper.map(dataApplied, JobAppliedHistoryResponse.class);
+    private JobAppliedHistoryResponse convertToHistory(Submission dataApplied) {
+        return modelMapper.map(dataApplied, JobAppliedHistoryResponse.class);
     }
 
-    private JobAppliedListResponse convertToApplicantList(Submission dataApplied){
+    private JobAppliedListResponse convertToApplicantList(Submission dataApplied) {
         return modelMapper.map(dataApplied, JobAppliedListResponse.class);
     }
 
