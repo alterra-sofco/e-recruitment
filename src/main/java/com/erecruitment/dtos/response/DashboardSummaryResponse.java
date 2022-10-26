@@ -12,5 +12,7 @@ public class DashboardSummaryResponse {
 
     private final Integer totalJobRequest;
 
+    private final Integer totalNewJobRequest;
+
     private final Integer totalApplied;
 }
