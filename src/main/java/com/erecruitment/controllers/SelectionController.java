@@ -55,7 +55,7 @@ public class SelectionController {
     }
 
     @PutMapping("/detail/{submissionId}")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> setJobStatusApplicant(@PathVariable("submissionId") Long submissionId,
+    public ResponseEntity<CommonResponse> setJobStatusApplicant(@PathVariable("submissionId") Long submissionId,
                                                                                           @RequestBody StatusJobApplicantRequest bodyRequest
                                                                                           ){
         jobPostingService.setStatus(submissionId, bodyRequest);
