@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import com.erecruitment.dtos.requests.JobApplyRequest;
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
+import com.erecruitment.dtos.response.DashboardSummaryResponse;
 import com.erecruitment.dtos.response.JobAppliedListResponse;
 import com.erecruitment.dtos.response.JobPostingDetailResponse;
 import com.erecruitment.dtos.response.JobPostingResponseList;
@@ -35,6 +36,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
@@ -564,6 +566,34 @@ class JobPostingServiceTest {
         statusJobApplicantRequest.setStatus(StatusRecruitment.APPLIED);
         assertThrows(ValidationErrorException.class, () -> jobPostingService.setStatus(123L, statusJobApplicantRequest));
         verify(submissionRepository).findById((Long) any());
+    }
+
+    /**
+     * Method under test: {@link JobPostingService#getSummary()}
+     */
+    @Test
+    void testGetSummary() {
+        when(pengajuanSDMRepository.findByStatus((Short) any())).thenReturn(new HashSet<>());
+        when(submissionRepository.findByStatus((StatusRecruitment) any())).thenReturn(new HashSet<>());
+        DashboardSummaryResponse actualSummary = jobPostingService.getSummary();
+        assertEquals(0, actualSummary.getTotalApplied().intValue());
+        assertEquals(0, actualSummary.getTotalJobRequest().intValue());
+        assertEquals(0, actualSummary.getTotalJobPosting().intValue());
+        verify(pengajuanSDMRepository, atLeast(1)).findByStatus((Short) any());
+        verify(submissionRepository).findByStatus((StatusRecruitment) any());
+    }
+
+    /**
+     * Method under test: {@link JobPostingService#getSummary()}
+     */
+    @Test
+    void testGetSummary2() {
+        when(pengajuanSDMRepository.findByStatus((Short) any())).thenReturn(new HashSet<>());
+        when(submissionRepository.findByStatus((StatusRecruitment) any()))
+                .thenThrow(new ValidationErrorException("An error occurred"));
+        assertThrows(ValidationErrorException.class, () -> jobPostingService.getSummary());
+        verify(pengajuanSDMRepository, atLeast(1)).findByStatus((Short) any());
+        verify(submissionRepository).findByStatus((StatusRecruitment) any());
     }
 
 }

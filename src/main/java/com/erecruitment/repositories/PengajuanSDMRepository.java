@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity, Long> {
 
@@ -34,4 +35,6 @@ public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity
     
     @Query(value = "SELECT t.* FROM pengajuan_sdm t WHERE t.status = 3 and t.deadline < now()\\:\\:date", nativeQuery = true)
     List<PengajuanSDMEntity> closeAutoJob();
+
+    Set<PengajuanSDMEntity> findByStatus(Short status);
 }
