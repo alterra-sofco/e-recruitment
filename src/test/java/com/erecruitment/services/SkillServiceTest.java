@@ -7,13 +7,12 @@ import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.SkillRepository;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
@@ -26,15 +25,11 @@ public class SkillServiceTest {
     @Mock
     SkillRepository skillRepository;
 
+    @MockBean
     ModelMapper modelMapper = spy(new ModelMapper());
 
     @InjectMocks
     SkillService serviceUnderTest = spy(new SkillService());
-
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void givenValidRequest_whenAddNewData() {

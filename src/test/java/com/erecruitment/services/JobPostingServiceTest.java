@@ -1,46 +1,16 @@
 package com.erecruitment.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyShort;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import com.erecruitment.dtos.requests.JobApplyRequest;
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
 import com.erecruitment.dtos.response.DashboardSummaryResponse;
 import com.erecruitment.dtos.response.JobAppliedListResponse;
 import com.erecruitment.dtos.response.JobPostingDetailResponse;
 import com.erecruitment.dtos.response.JobPostingResponseList;
 import com.erecruitment.dtos.response.PageableResponse;
-import com.erecruitment.entities.PengajuanSDMEntity;
-import com.erecruitment.entities.RoleName;
-import com.erecruitment.entities.StatusRecruitment;
-import com.erecruitment.entities.Submission;
-import com.erecruitment.entities.User;
+import com.erecruitment.entities.*;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.PengajuanSDMRepository;
 import com.erecruitment.repositories.SubmissionRepository;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Disabled;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
@@ -50,6 +20,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {JobPostingService.class})
 @ExtendWith(SpringExtension.class)
@@ -71,8 +49,8 @@ class JobPostingServiceTest {
      */
     @Test
     void testGetAllJobPosting() {
-        when(pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus((String) any(), (Short) any(),
-                (Pageable) any())).thenReturn(new PageImpl<>(new ArrayList<>()));
+        when(pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus(any(), any(),
+                any())).thenReturn(new PageImpl<>(new ArrayList<>()));
         PageableResponse actualAllJobPosting = jobPostingService.getAllJobPosting(1, 3, "Keyword");
         assertEquals(1, actualAllJobPosting.getCurrentPage().intValue());
         assertEquals(1, actualAllJobPosting.getTotalPages().intValue());
@@ -81,8 +59,8 @@ class JobPostingServiceTest {
         assertEquals(0, actualAllJobPosting.getPageSize().intValue());
         assertFalse(actualAllJobPosting.getNext());
         assertTrue(((Collection<Object>) actualAllJobPosting.getData()).isEmpty());
-        verify(pengajuanSDMRepository).findByPosisiContainingIgnoreCaseAndStatus((String) any(), (Short) any(),
-                (Pageable) any());
+        verify(pengajuanSDMRepository).findByPosisiContainingIgnoreCaseAndStatus(any(), any(),
+                any());
     }
 
     /**
@@ -96,7 +74,7 @@ class JobPostingServiceTest {
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         jobPostingResponseList.setUpdatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         jobPostingResponseList.setYearExperience(1);
-        when(modelMapper.map((Object) any(), (Class<JobPostingResponseList>) any())).thenReturn(jobPostingResponseList);
+        when(modelMapper.map(any(), (Class<JobPostingResponseList>) any())).thenReturn(jobPostingResponseList);
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -129,8 +107,8 @@ class JobPostingServiceTest {
         ArrayList<PengajuanSDMEntity> pengajuanSDMEntityList = new ArrayList<>();
         pengajuanSDMEntityList.add(pengajuanSDMEntity);
         PageImpl<PengajuanSDMEntity> pageImpl = new PageImpl<>(pengajuanSDMEntityList);
-        when(pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus((String) any(), (Short) any(),
-                (Pageable) any())).thenReturn(pageImpl);
+        when(pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus(any(), any(),
+                any())).thenReturn(pageImpl);
         PageableResponse actualAllJobPosting = jobPostingService.getAllJobPosting(1, 3, "Keyword");
         assertEquals(1, actualAllJobPosting.getCurrentPage().intValue());
         assertEquals(1, actualAllJobPosting.getTotalPages().intValue());
@@ -140,9 +118,9 @@ class JobPostingServiceTest {
         assertFalse(actualAllJobPosting.getNext());
         assertEquals("ok", actualAllJobPosting.getMessage());
         assertEquals(1, ((Collection<JobPostingResponseList>) actualAllJobPosting.getData()).size());
-        verify(modelMapper).map((Object) any(), (Class<JobPostingResponseList>) any());
-        verify(pengajuanSDMRepository).findByPosisiContainingIgnoreCaseAndStatus((String) any(), (Short) any(),
-                (Pageable) any());
+        verify(modelMapper).map(any(), (Class<JobPostingResponseList>) any());
+        verify(pengajuanSDMRepository).findByPosisiContainingIgnoreCaseAndStatus(any(), any(),
+                any());
     }
 
     /**
@@ -156,7 +134,7 @@ class JobPostingServiceTest {
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         jobPostingResponseList.setUpdatedAt(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         jobPostingResponseList.setYearExperience(1);
-        when(modelMapper.map((Object) any(), (Class<JobPostingResponseList>) any())).thenReturn(jobPostingResponseList);
+        when(modelMapper.map(any(), (Class<JobPostingResponseList>) any())).thenReturn(jobPostingResponseList);
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -218,8 +196,8 @@ class JobPostingServiceTest {
         pengajuanSDMEntityList.add(pengajuanSDMEntity1);
         pengajuanSDMEntityList.add(pengajuanSDMEntity);
         PageImpl<PengajuanSDMEntity> pageImpl = new PageImpl<>(pengajuanSDMEntityList);
-        when(pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus((String) any(), (Short) any(),
-                (Pageable) any())).thenReturn(pageImpl);
+        when(pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus(any(), any(),
+                any())).thenReturn(pageImpl);
         PageableResponse actualAllJobPosting = jobPostingService.getAllJobPosting(1, 3, "Keyword");
         assertEquals(1, actualAllJobPosting.getCurrentPage().intValue());
         assertEquals(1, actualAllJobPosting.getTotalPages().intValue());
@@ -229,9 +207,9 @@ class JobPostingServiceTest {
         assertFalse(actualAllJobPosting.getNext());
         assertEquals("ok", actualAllJobPosting.getMessage());
         assertEquals(2, ((Collection<JobPostingResponseList>) actualAllJobPosting.getData()).size());
-        verify(modelMapper, atLeast(1)).map((Object) any(), (Class<JobPostingResponseList>) any());
-        verify(pengajuanSDMRepository).findByPosisiContainingIgnoreCaseAndStatus((String) any(), (Short) any(),
-                (Pageable) any());
+        verify(modelMapper, atLeast(1)).map(any(), (Class<JobPostingResponseList>) any());
+        verify(pengajuanSDMRepository).findByPosisiContainingIgnoreCaseAndStatus(any(), any(),
+                any());
     }
 
     /**
@@ -239,7 +217,7 @@ class JobPostingServiceTest {
      */
     @Test
     void testGetJobById2() {
-        when(modelMapper.map((Object) any(), (Class<JobPostingDetailResponse>) any()))
+        when(modelMapper.map(any(), (Class<JobPostingDetailResponse>) any()))
                 .thenThrow(new ValidationErrorException("An error occurred"));
 
         User user = new User();
@@ -270,10 +248,10 @@ class JobPostingServiceTest {
         pengajuanSDMEntity.setUpdatedAt(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
         pengajuanSDMEntity.setUser(user);
         Optional<PengajuanSDMEntity> ofResult = Optional.of(pengajuanSDMEntity);
-        when(pengajuanSDMRepository.findByIdPengajuanAndStatus((Long) any(), anyShort())).thenReturn(ofResult);
+        when(pengajuanSDMRepository.findByIdPengajuanAndStatus(any(), anyShort())).thenReturn(ofResult);
         assertThrows(ValidationErrorException.class, () -> jobPostingService.getJobById(123L));
-        verify(modelMapper).map((Object) any(), (Class<JobPostingDetailResponse>) any());
-        verify(pengajuanSDMRepository).findByIdPengajuanAndStatus((Long) any(), anyShort());
+        verify(modelMapper).map(any(), (Class<JobPostingDetailResponse>) any());
+        verify(pengajuanSDMRepository).findByIdPengajuanAndStatus(any(), anyShort());
     }
 
     /**
@@ -310,9 +288,9 @@ class JobPostingServiceTest {
         pengajuanSDMEntity.setUpdatedAt(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
         pengajuanSDMEntity.setUser(user);
         Optional<PengajuanSDMEntity> ofResult = Optional.of(pengajuanSDMEntity);
-        when(pengajuanSDMRepository.findById((Long) any())).thenReturn(ofResult);
-        when(submissionRepository.findByJobPostingAndStatus((PengajuanSDMEntity) any(), (StatusRecruitment) any(),
-                (Pageable) any())).thenReturn(new PageImpl<>(new ArrayList<>()));
+        when(pengajuanSDMRepository.findById(any())).thenReturn(ofResult);
+        when(submissionRepository.findByJobPostingAndStatus(any(), any(),
+                any())).thenReturn(new PageImpl<>(new ArrayList<>()));
         PageableResponse actualApplicantJobPosting = jobPostingService.getApplicantJobPosting(1, 3,
                 StatusRecruitment.APPLIED, 123L);
         assertEquals(1, actualApplicantJobPosting.getCurrentPage().intValue());
@@ -322,9 +300,9 @@ class JobPostingServiceTest {
         assertEquals(0, actualApplicantJobPosting.getPageSize().intValue());
         assertFalse(actualApplicantJobPosting.getNext());
         assertTrue(((Collection<Object>) actualApplicantJobPosting.getData()).isEmpty());
-        verify(pengajuanSDMRepository).findById((Long) any());
-        verify(submissionRepository).findByJobPostingAndStatus((PengajuanSDMEntity) any(), (StatusRecruitment) any(),
-                (Pageable) any());
+        verify(pengajuanSDMRepository).findById(any());
+        verify(submissionRepository).findByJobPostingAndStatus(any(), any(),
+                any());
     }
 
     /**
@@ -361,14 +339,14 @@ class JobPostingServiceTest {
         pengajuanSDMEntity.setUpdatedAt(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
         pengajuanSDMEntity.setUser(user);
         Optional<PengajuanSDMEntity> ofResult = Optional.of(pengajuanSDMEntity);
-        when(pengajuanSDMRepository.findById((Long) any())).thenReturn(ofResult);
-        when(submissionRepository.findByJobPostingAndStatus((PengajuanSDMEntity) any(), (StatusRecruitment) any(),
-                (Pageable) any())).thenThrow(new ValidationErrorException("An error occurred"));
+        when(pengajuanSDMRepository.findById(any())).thenReturn(ofResult);
+        when(submissionRepository.findByJobPostingAndStatus(any(), any(),
+                any())).thenThrow(new ValidationErrorException("An error occurred"));
         assertThrows(ValidationErrorException.class,
                 () -> jobPostingService.getApplicantJobPosting(1, 3, StatusRecruitment.APPLIED, 123L));
-        verify(pengajuanSDMRepository).findById((Long) any());
-        verify(submissionRepository).findByJobPostingAndStatus((PengajuanSDMEntity) any(), (StatusRecruitment) any(),
-                (Pageable) any());
+        verify(pengajuanSDMRepository).findById(any());
+        verify(submissionRepository).findByJobPostingAndStatus(any(), any(),
+                any());
     }
 
     /**
@@ -376,12 +354,12 @@ class JobPostingServiceTest {
      */
     @Test
     void testGetApplicantJobPosting4() {
-        when(pengajuanSDMRepository.findById((Long) any())).thenReturn(Optional.empty());
-        when(submissionRepository.findByJobPostingAndStatus((PengajuanSDMEntity) any(), (StatusRecruitment) any(),
-                (Pageable) any())).thenReturn(new PageImpl<>(new ArrayList<>()));
+        when(pengajuanSDMRepository.findById(any())).thenReturn(Optional.empty());
+        when(submissionRepository.findByJobPostingAndStatus(any(), any(),
+                any())).thenReturn(new PageImpl<>(new ArrayList<>()));
         assertThrows(DataNotFoundException.class,
                 () -> jobPostingService.getApplicantJobPosting(1, 3, StatusRecruitment.APPLIED, 123L));
-        verify(pengajuanSDMRepository).findById((Long) any());
+        verify(pengajuanSDMRepository).findById(any());
     }
 
     /**
@@ -398,7 +376,7 @@ class JobPostingServiceTest {
         jobAppliedListResponse.setSubmissionId(123L);
         LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
         jobAppliedListResponse.setUpdatedAt(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        when(modelMapper.map((Object) any(), (Class<JobAppliedListResponse>) any())).thenReturn(jobAppliedListResponse);
+        when(modelMapper.map(any(), (Class<JobAppliedListResponse>) any())).thenReturn(jobAppliedListResponse);
 
         User user = new User();
         user.setEmail("jane.doe@example.org");
@@ -429,7 +407,7 @@ class JobPostingServiceTest {
         pengajuanSDMEntity.setUpdatedAt(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
         pengajuanSDMEntity.setUser(user);
         Optional<PengajuanSDMEntity> ofResult = Optional.of(pengajuanSDMEntity);
-        when(pengajuanSDMRepository.findById((Long) any())).thenReturn(ofResult);
+        when(pengajuanSDMRepository.findById(any())).thenReturn(ofResult);
 
         User user1 = new User();
         user1.setEmail("jane.doe@example.org");
@@ -485,8 +463,8 @@ class JobPostingServiceTest {
         ArrayList<Submission> submissionList = new ArrayList<>();
         submissionList.add(submission);
         PageImpl<Submission> pageImpl = new PageImpl<>(submissionList);
-        when(submissionRepository.findByJobPostingAndStatus((PengajuanSDMEntity) any(), (StatusRecruitment) any(),
-                (Pageable) any())).thenReturn(pageImpl);
+        when(submissionRepository.findByJobPostingAndStatus(any(), any(),
+                any())).thenReturn(pageImpl);
         PageableResponse actualApplicantJobPosting = jobPostingService.getApplicantJobPosting(1, 3,
                 StatusRecruitment.APPLIED, 123L);
         assertEquals(1, actualApplicantJobPosting.getCurrentPage().intValue());
@@ -497,10 +475,10 @@ class JobPostingServiceTest {
         assertFalse(actualApplicantJobPosting.getNext());
         assertEquals("ok", actualApplicantJobPosting.getMessage());
         assertEquals(1, ((Collection<JobAppliedListResponse>) actualApplicantJobPosting.getData()).size());
-        verify(modelMapper).map((Object) any(), (Class<JobAppliedListResponse>) any());
-        verify(pengajuanSDMRepository).findById((Long) any());
-        verify(submissionRepository).findByJobPostingAndStatus((PengajuanSDMEntity) any(), (StatusRecruitment) any(),
-                (Pageable) any());
+        verify(modelMapper).map(any(), (Class<JobAppliedListResponse>) any());
+        verify(pengajuanSDMRepository).findById(any());
+        verify(submissionRepository).findByJobPostingAndStatus(any(), any(),
+                any());
     }
 
     /**
@@ -559,13 +537,13 @@ class JobPostingServiceTest {
         submission.setStatus(StatusRecruitment.APPLIED);
         submission.setSubmissionId(123L);
         Optional<Submission> ofResult = Optional.of(submission);
-        when(submissionRepository.findById((Long) any())).thenReturn(ofResult);
+        when(submissionRepository.findById(any())).thenReturn(ofResult);
 
         StatusJobApplicantRequest statusJobApplicantRequest = new StatusJobApplicantRequest();
         statusJobApplicantRequest.setDescription("The characteristics of someone or something");
         statusJobApplicantRequest.setStatus(StatusRecruitment.APPLIED);
         assertThrows(ValidationErrorException.class, () -> jobPostingService.setStatus(123L, statusJobApplicantRequest));
-        verify(submissionRepository).findById((Long) any());
+        verify(submissionRepository).findById(any());
     }
 
     /**
