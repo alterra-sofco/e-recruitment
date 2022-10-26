@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class JobPostingDetailResponse extends JobPostingResponseList{
     @JsonProperty("JobDetail")
-    private String remarkHR;
+    private String description;
 
     private Boolean IsApplied = false;
 }
