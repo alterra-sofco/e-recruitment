@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -184,6 +185,17 @@ public class JobPostingService implements IJobPostingService {
         submission.setStatus(bodyRequest.getStatus());
         submission.setDescription(bodyRequest.getDescription());
         return submissionRepository.save(submission);
+    }
+
+    @Override
+    public DashboardSummaryResponse getSummary() {
+
+        Set<PengajuanSDMEntity> jobPosting = pengajuanSDMRepository.findByStatus((short) 3);
+        Set<PengajuanSDMEntity> jobRequest = pengajuanSDMRepository.findByStatus((short) 0);
+        Set<Submission> appliedJob = submissionRepository.findByStatus(StatusRecruitment.APPLIED);
+
+        DashboardSummaryResponse response = new DashboardSummaryResponse(jobPosting.size(), jobRequest.size(), appliedJob.size());
+        return response;
     }
 
     private JobPostingResponseList convertToDto(PengajuanSDMEntity pengajuanSDMEntity) {

@@ -22,4 +22,6 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     Page<Submission> findByJobPosting(PengajuanSDMEntity jobPosting, Pageable pageable);
 
     Page<Submission> findByJobPostingAndStatus(PengajuanSDMEntity jobPosting, StatusRecruitment status, Pageable pageable);
+
+    Set<Submission> findByStatus(StatusRecruitment status);
 }
