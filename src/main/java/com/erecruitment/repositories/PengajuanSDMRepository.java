@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+import java.util.Optional;
+
 public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity, Long> {
 
     Page<PengajuanSDMEntity> findAll(Pageable pageable);
@@ -28,6 +30,8 @@ public interface PengajuanSDMRepository extends JpaRepository<PengajuanSDMEntity
 
     Page<PengajuanSDMEntity> findByStatus(Short status, Pageable paging);
 
+    Optional<PengajuanSDMEntity> findByIdPengajuanAndStatus(Long idPengajuan,short status);
+    
     @Query(value = "SELECT t.* FROM pengajuan_sdm t WHERE t.status = 3 and t.deadline < now()\\:\\:date", nativeQuery = true)
     List<PengajuanSDMEntity> closeAutoJob();
 }

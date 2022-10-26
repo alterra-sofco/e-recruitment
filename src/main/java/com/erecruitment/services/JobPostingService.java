@@ -1,0 +1,155 @@
+package com.erecruitment.services;
+
+import com.erecruitment.dtos.requests.JobApplyRequest;
+import com.erecruitment.dtos.response.JobAppliedHistoryResponse;
+import com.erecruitment.dtos.response.JobPostingDetailResponse;
+import com.erecruitment.dtos.response.JobPostingResponseList;
+import com.erecruitment.dtos.response.PageableResponse;
+import com.erecruitment.entities.*;
+import com.erecruitment.exceptions.CredentialErrorException;
+import com.erecruitment.exceptions.DataNotFoundException;
+import com.erecruitment.exceptions.ValidationErrorException;
+import com.erecruitment.repositories.PengajuanSDMRepository;
+import com.erecruitment.repositories.SubmissionRepository;
+import com.erecruitment.services.interfaces.IJobPostingService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class JobPostingService implements IJobPostingService {
+    @Autowired
+    private PengajuanSDMRepository pengajuanSDMRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private SubmissionRepository submissionRepository;
+
+    @Override
+    public PageableResponse getAllJobPosting(int page, int size, String keyword) {
+        Page<PengajuanSDMEntity> jobPosting;
+        Sort sort = Sort.by("updatedAt").descending();
+        Pageable paging = PageRequest.of(page, size, sort);
+        jobPosting =  keyword != null ? pengajuanSDMRepository.findByPosisiContainingIgnoreCaseAndStatus(keyword, (short) 3, paging) :
+                pengajuanSDMRepository.findByStatus((short) 3, paging);
+
+        List<PengajuanSDMEntity> dataList = jobPosting.getContent();
+        PageableResponse response = new PageableResponse();
+        if (!dataList.isEmpty()) {
+            response.setMessage("ok");
+            List<JobPostingResponseList> dt = dataList.stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+            response.setData(dt);
+        } else {
+            List<JobPostingResponseList> dt = Collections.emptyList();
+            response.setData(dt);
+        }
+        response.setTotalData(jobPosting.getTotalElements());
+        response.setTotalPages(jobPosting.getTotalPages());
+        response.setCurrentPage(jobPosting.getNumber() + 1);
+        response.setNext(jobPosting.hasNext());
+        response.setPrevious(jobPosting.hasPrevious());
+        response.setPageSize(jobPosting.getSize());
+
+        return response;
+    }
+
+    @Override
+    public JobPostingDetailResponse getJobById(Long jobPostingId) {
+        PengajuanSDMEntity jobDetail = pengajuanSDMRepository.findByIdPengajuanAndStatus(jobPostingId, (short) 3).orElseThrow(() ->
+                new DataNotFoundException("data job not found!"));
+        JobPostingDetailResponse response = modelMapper.map(jobDetail, JobPostingDetailResponse.class);
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            User user = (User) authentication.getPrincipal();
+            Boolean isApplied = submissionRepository.findByJobPostingAndAndAppliedBy(jobDetail, user).isPresent();
+            if (isApplied){
+                response.setIsApplied(true);
+            }
+        }
+
+        return response;
+    }
+
+    @Override
+    public Object applyJob(Long jobPostingId, JobApplyRequest bodyRequest) {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()){
+            User user = (User) authentication.getPrincipal();
+            PengajuanSDMEntity jobDetail = pengajuanSDMRepository.findByIdPengajuanAndStatus(jobPostingId, (short) 3).orElseThrow(() ->
+                    new DataNotFoundException("data job not found!"));
+            Boolean isApplied = submissionRepository.findByJobPostingAndAndAppliedBy(jobDetail, user).isPresent();
+            if (isApplied){
+                throw new ValidationErrorException("You are already applied!");
+            }
+
+            Submission submission = modelMapper.map(bodyRequest, Submission.class);
+            submission.setStatus(StatusRecruitment.APPLIED);
+            submission.setAppliedBy(user);
+            submission.setJobPosting(jobDetail);
+
+            return submissionRepository.save(submission);
+        }
+        else {
+            throw new CredentialErrorException("Login required!");
+        }
+
+    }
+
+    @Override
+    public PageableResponse getHistoryJobPosting(int page, int size, StatusRecruitment status) {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Page<Submission> jobPosting;
+        Sort sort = Sort.by("appliedAt").descending();
+        Pageable paging = PageRequest.of(page, size, sort);
+        jobPosting =  status != null ? submissionRepository.findByAppliedByAndStatus(user,status, paging) :
+                submissionRepository.findByAppliedBy(user, paging);
+
+        List<Submission> dataList = jobPosting.getContent();
+        PageableResponse response = new PageableResponse();
+        if (!dataList.isEmpty()) {
+            response.setMessage("ok");
+            List<JobAppliedHistoryResponse> dt = dataList.stream()
+                    .map(this::convertToHistory)
+                    .collect(Collectors.toList());
+            response.setData(dt);
+        } else {
+            List<JobAppliedHistoryResponse> dt = Collections.emptyList();
+            response.setData(dt);
+        }
+        response.setTotalData(jobPosting.getTotalElements());
+        response.setTotalPages(jobPosting.getTotalPages());
+        response.setCurrentPage(jobPosting.getNumber() + 1);
+        response.setNext(jobPosting.hasNext());
+        response.setPrevious(jobPosting.hasPrevious());
+        response.setPageSize(jobPosting.getSize());
+
+        return response;
+    }
+
+    private JobPostingResponseList convertToDto(PengajuanSDMEntity pengajuanSDMEntity) {
+        JobPostingResponseList response = modelMapper.map(pengajuanSDMEntity, JobPostingResponseList.class);
+        return response;
+    }
+
+    private JobAppliedHistoryResponse convertToHistory(Submission dataApplied){
+        return  modelMapper.map(dataApplied, JobAppliedHistoryResponse.class);
+    }
+
+
+}
