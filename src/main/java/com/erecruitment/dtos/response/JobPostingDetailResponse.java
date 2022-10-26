@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JobPostingDetailResponse extends JobPostingResponseList{
+public class JobPostingDetailResponse extends JobPostingResponseList {
     @JsonProperty("JobDetail")
     private String description;
 

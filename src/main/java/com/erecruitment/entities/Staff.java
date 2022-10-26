@@ -10,13 +10,14 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "staff")
 public class Staff {
 
     @Id
     //primary key's naming to avoid default by the system
-    @GeneratedValue (strategy = GenerationType.SEQUENCE, generator = "staff_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "staff_generator")
     private Long staffId;
 
     // Unidirectional
@@ -25,6 +26,6 @@ public class Staff {
     @JoinColumn(name = "staff_user_id")
     private User user;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private Long departmentId;
 }

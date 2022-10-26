@@ -19,7 +19,7 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long departmentId;
 
-    @Column (length = 50,nullable = false)
+    @Column(length = 50, nullable = false)
     private String departmentName;
 
 }

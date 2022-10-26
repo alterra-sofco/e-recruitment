@@ -8,11 +8,7 @@ import com.erecruitment.dtos.response.ApplicantProfileResponse;
 import com.erecruitment.entities.*;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
-import com.erecruitment.repositories.ApplicantRepository;
-import com.erecruitment.repositories.EducationRepository;
-import com.erecruitment.repositories.ExperienceRepository;
-import com.erecruitment.repositories.UserRepository;
-import com.erecruitment.repositories.SkillRepository;
+import com.erecruitment.repositories.*;
 import com.erecruitment.services.interfaces.IApplicantService;
 import com.erecruitment.services.interfaces.IFileService;
 import org.modelmapper.ModelMapper;
@@ -22,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -59,7 +54,7 @@ public class ApplicantService implements IApplicantService {
 
         ApplicantProfileResponse response = conversationalistProfileResponse(applicant);
 
-       return response;
+        return response;
     }
 
     @Override
@@ -98,10 +93,9 @@ public class ApplicantService implements IApplicantService {
 
         File fileData = new File();
 
-        if (applicant.getAvatar() == null){
+        if (applicant.getAvatar() == null) {
             fileData = fileService.upload(file);
-        }
-        else {
+        } else {
             fileData = fileService.uploadChange(file, applicant.getAvatar().getFileId());
         }
 
@@ -126,10 +120,9 @@ public class ApplicantService implements IApplicantService {
 
         File fileData = new File();
 
-        if (applicant.getCv() == null){
+        if (applicant.getCv() == null) {
             fileData = fileService.upload(file);
-        }
-        else {
+        } else {
             fileData = fileService.uploadChange(file, applicant.getCv().getFileId());
         }
 
@@ -238,7 +231,7 @@ public class ApplicantService implements IApplicantService {
         return getUserDetail(user);
     }
 
-    private ApplicantProfileResponse conversationalistProfileResponse(Applicant applicant){
+    private ApplicantProfileResponse conversationalistProfileResponse(Applicant applicant) {
         ApplicantProfileResponse response = modelMapper.map(applicant, ApplicantProfileResponse.class);
 
         //generate basic user data
@@ -248,12 +241,12 @@ public class ApplicantService implements IApplicantService {
         response.setEmail(applicant.getOwnedBy().getEmail());
 
         //get url avatar file
-        if (applicant.getAvatar() != null){
+        if (applicant.getAvatar() != null) {
             response.setAvatarURL(fileService.generateUrlFile(applicant.getAvatar().getFileId()));
         }
 
         //get url cv file
-        if (applicant.getCv() != null){
+        if (applicant.getCv() != null) {
             response.setCvURL(fileService.generateUrlFile(applicant.getCv().getFileId()));
         }
 
@@ -268,11 +261,11 @@ public class ApplicantService implements IApplicantService {
         return response;
     }
 
-    private Education convertToEducationEntity(EducationRequest bodyRequest){
+    private Education convertToEducationEntity(EducationRequest bodyRequest) {
         return modelMapper.map(bodyRequest, Education.class);
     }
 
-    private Experience convertToExperienceEntity(ExperienceRequest bodyRequest){
+    private Experience convertToExperienceEntity(ExperienceRequest bodyRequest) {
         return modelMapper.map(bodyRequest, Experience.class);
     }
 

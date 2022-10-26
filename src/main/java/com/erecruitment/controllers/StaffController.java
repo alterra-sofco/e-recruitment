@@ -26,22 +26,22 @@ public class StaffController {
     private ModelMapper modelMapper;
 
     @GetMapping("/staff")
-    public ResponseEntity<CommonResponse<List<StaffRequestDTO>>> getAllStaff () {
+    public ResponseEntity<CommonResponse<List<StaffRequestDTO>>> getAllStaff() {
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(
                 String.valueOf(HttpStatus.OK.value()),
                 "Staff List",
-                staffService.findAllStaff().stream().map(data->modelMapper
-                        .map(data,StaffRequestDTO.class))
+                staffService.findAllStaff().stream().map(data -> modelMapper
+                                .map(data, StaffRequestDTO.class))
                         .collect(Collectors.toList())),
                 HttpStatus.OK);
     }
 
     @GetMapping("/staff/{id}")
-    public ResponseEntity<CommonResponse<StaffRequestDTO>> getStaffById (@PathVariable("id") Long staffId) {
+    public ResponseEntity<CommonResponse<StaffRequestDTO>> getStaffById(@PathVariable("id") Long staffId) {
         Optional<Staff> staff = staffService.findById(staffId);
 
-        if(staff.isPresent()) {
+        if (staff.isPresent()) {
             Staff convStaff = staff.get();
             StaffRequestDTO response = modelMapper.map(convStaff, StaffRequestDTO.class);
 
@@ -57,43 +57,43 @@ public class StaffController {
     }
 
     @PostMapping("user/{userId}/staff")
-    public ResponseEntity<CommonResponse<StaffRequestDTO>> addNewStaff(@PathVariable("userId") Long userId ,@RequestBody StaffRequestDTO staff){
-        Staff request = modelMapper.map(staff,Staff.class);
-        Staff newStaff = staffService.addStaff(userId,request);
+    public ResponseEntity<CommonResponse<StaffRequestDTO>> addNewStaff(@PathVariable("userId") Long userId, @RequestBody StaffRequestDTO staff) {
+        Staff request = modelMapper.map(staff, Staff.class);
+        Staff newStaff = staffService.addStaff(userId, request);
 
-        StaffRequestDTO response = modelMapper.map(newStaff,StaffRequestDTO.class);
+        StaffRequestDTO response = modelMapper.map(newStaff, StaffRequestDTO.class);
 
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(
                 String.valueOf(HttpStatus.CREATED.value()),
-                "new staff added", response ), HttpStatus.CREATED);
+                "new staff added", response), HttpStatus.CREATED);
     }
 
     @PutMapping("/staff/{id}")
-    public ResponseEntity<CommonResponse<StaffRequestDTO>> updateStaff (@RequestBody StaffRequestDTO staff, @PathVariable("id") Long staffId){
-        Staff request = modelMapper.map(staff,Staff.class);
+    public ResponseEntity<CommonResponse<StaffRequestDTO>> updateStaff(@RequestBody StaffRequestDTO staff, @PathVariable("id") Long staffId) {
+        Staff request = modelMapper.map(staff, Staff.class);
         Optional<Staff> newStaff = Optional.ofNullable(staffService.updateStaff(staffId, request));
-        if(newStaff.isPresent()) {
+        if (newStaff.isPresent()) {
             Staff convStaff = newStaff.get();
-            StaffRequestDTO response = modelMapper.map(convStaff,StaffRequestDTO.class);
+            StaffRequestDTO response = modelMapper.map(convStaff, StaffRequestDTO.class);
 
             ResponseGenerator responseGenerator = new ResponseGenerator();
             return new ResponseEntity<>(responseGenerator.responseData(
                     String.valueOf(HttpStatus.ACCEPTED.value()),
-                    "update by staff by Id: "+staffId,
+                    "update by staff by Id: " + staffId,
                     response), HttpStatus.ACCEPTED);
         } else {
-             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
 
     }
 
     @DeleteMapping("/staff/{id}")
-    public ResponseEntity<CommonResponse<Staff>> deleteStaff (@PathVariable("id") Long staffId){
+    public ResponseEntity<CommonResponse<Staff>> deleteStaff(@PathVariable("id") Long staffId) {
         staffService.deleteStaff(staffId);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(
                 String.valueOf(HttpStatus.ACCEPTED.value()),
-                "staff deleted",staffId), HttpStatus.ACCEPTED);
+                "staff deleted", staffId), HttpStatus.ACCEPTED);
     }
 }

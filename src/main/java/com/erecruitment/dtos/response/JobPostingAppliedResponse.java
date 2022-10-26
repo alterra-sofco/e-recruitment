@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JobPostingAppliedResponse extends JobPostingResponseList{
+public class JobPostingAppliedResponse extends JobPostingResponseList {
     private Short status;
 }

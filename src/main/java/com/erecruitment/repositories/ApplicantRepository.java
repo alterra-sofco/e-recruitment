@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
 
-    @Query( "select x from Applicant x where x.ownedBy = :user")
+    @Query("select x from Applicant x where x.ownedBy = :user")
     Optional<Applicant> findByOwnedBy(@Param("user") User user);
 
 }

@@ -10,10 +10,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class JwtAuthenticationResponseDTO {
     private final String accessToken;
-
-    private String tokenType = "Bearer";
-
     private final String name;
-
     private final RoleName role;
+    private String tokenType = "Bearer";
 }

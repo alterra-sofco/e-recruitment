@@ -3,9 +3,7 @@ package com.erecruitment.controllers;
 import com.erecruitment.dtos.requests.JobApplyRequest;
 import com.erecruitment.dtos.response.*;
 import com.erecruitment.entities.StatusRecruitment;
-import com.erecruitment.entities.User;
 import com.erecruitment.exceptions.CredentialErrorException;
-import com.erecruitment.repositories.SubmissionRepository;
 import com.erecruitment.services.interfaces.IJobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +25,7 @@ public class JobPostingController {
             @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
-    ){
+    ) {
         PageableResponse responseList = jobPostingService.getAllJobPosting(page, size, keyword);
 
         responseList.setStatus(String.valueOf(HttpStatus.OK.value()));
@@ -48,12 +46,11 @@ public class JobPostingController {
 
     @PostMapping("/{jobPostingId}/apply")
     public ResponseEntity<CommonResponse> applyJob(@PathVariable("jobPostingId") Long jobPostingId,
-                                                                             @RequestBody JobApplyRequest bodyRequest){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()){
+                                                   @RequestBody JobApplyRequest bodyRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
             jobPostingService.applyJob(jobPostingId, bodyRequest);
-        }
-        else {
+        } else {
             throw new CredentialErrorException("Login required!");
         }
 
@@ -69,7 +66,7 @@ public class JobPostingController {
             @RequestParam(required = false) StatusRecruitment status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
-    ){
+    ) {
         PageableResponse responseList = jobPostingService.getHistoryJobPosting(page, size, status);
 
         responseList.setStatus(String.valueOf(HttpStatus.OK.value()));

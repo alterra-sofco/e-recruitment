@@ -3,7 +3,6 @@ package com.erecruitment.services;
 import com.erecruitment.dtos.response.FileResponse;
 import com.erecruitment.entities.File;
 import com.erecruitment.exceptions.DataNotFoundException;
-import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.FileRepository;
 import com.erecruitment.services.interfaces.IFileService;
 import org.modelmapper.ModelMapper;

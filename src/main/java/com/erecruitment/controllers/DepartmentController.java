@@ -26,21 +26,21 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<DepartmentRequestDTO>>> getAllDept () {
+    public ResponseEntity<CommonResponse<List<DepartmentRequestDTO>>> getAllDept() {
 
         ResponseGenerator<DepartmentRequestDTO> responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(
-                String.valueOf(HttpStatus.OK.value()),"Department list",
-                departmentService.findAllDepartment().stream().map(data->modelMapper
-                                .map(data,DepartmentRequestDTO.class))
+                String.valueOf(HttpStatus.OK.value()), "Department list",
+                departmentService.findAllDepartment().stream().map(data -> modelMapper
+                                .map(data, DepartmentRequestDTO.class))
                         .collect(Collectors.toList())), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<DepartmentRequestDTO>> getStaffById (@PathVariable("id") Long deptId) {
+    public ResponseEntity<CommonResponse<DepartmentRequestDTO>> getStaffById(@PathVariable("id") Long deptId) {
         Optional<Department> dept = departmentService.findDepartmentById(deptId);
 
-        if(dept.isPresent()) {
+        if (dept.isPresent()) {
             Department convDept = dept.get();
             DepartmentRequestDTO response = modelMapper.map(convDept, DepartmentRequestDTO.class);
 
@@ -56,30 +56,30 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<CommonResponse<DepartmentRequestDTO>> addNewStaff(@RequestBody DepartmentRequestDTO dept){
-        Department request = modelMapper.map(dept,Department.class);
+    public ResponseEntity<CommonResponse<DepartmentRequestDTO>> addNewStaff(@RequestBody DepartmentRequestDTO dept) {
+        Department request = modelMapper.map(dept, Department.class);
         Department newDept = departmentService.addDepartment(request);
 
-        DepartmentRequestDTO response = modelMapper.map(newDept,DepartmentRequestDTO.class);
+        DepartmentRequestDTO response = modelMapper.map(newDept, DepartmentRequestDTO.class);
 
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(
                 String.valueOf(HttpStatus.CREATED.value()),
-                "new Department added", response ), HttpStatus.CREATED);
+                "new Department added", response), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommonResponse<DepartmentRequestDTO>> updateStaff (@RequestBody DepartmentRequestDTO dept, @PathVariable("id") Long deptId){
-        Department request = modelMapper.map(dept,Department.class);
+    public ResponseEntity<CommonResponse<DepartmentRequestDTO>> updateStaff(@RequestBody DepartmentRequestDTO dept, @PathVariable("id") Long deptId) {
+        Department request = modelMapper.map(dept, Department.class);
         Optional<Department> newDept = Optional.ofNullable(departmentService.updateDepartment(deptId, request));
-        if(newDept.isPresent()) {
+        if (newDept.isPresent()) {
             Department convDept = newDept.get();
-            DepartmentRequestDTO response = modelMapper.map(convDept,DepartmentRequestDTO.class);
+            DepartmentRequestDTO response = modelMapper.map(convDept, DepartmentRequestDTO.class);
 
             ResponseGenerator responseGenerator = new ResponseGenerator();
             return new ResponseEntity<>(responseGenerator.responseData(
                     String.valueOf(HttpStatus.ACCEPTED.value()),
-                    "update by staff by Id: "+deptId,
+                    "update by staff by Id: " + deptId,
                     response), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
@@ -88,11 +88,11 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CommonResponse<Department>> deleteStaff (@PathVariable("id") Long deptId){
+    public ResponseEntity<CommonResponse<Department>> deleteStaff(@PathVariable("id") Long deptId) {
         departmentService.deleteDepartment(deptId);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(
                 String.valueOf(HttpStatus.ACCEPTED.value()),
-                "department name deleted",deptId), HttpStatus.ACCEPTED);
+                "department name deleted", deptId), HttpStatus.ACCEPTED);
     }
 }

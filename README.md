@@ -4,8 +4,8 @@
 
 ### **User Bagian**
 
-1. Mengajukan Permintaan Penambahan SDM
-2. Memantau progres/realisasi ata permintaan yang diajukan
+1. Mengajukan Permintaan Penambahan SDM.
+2. Memantau progres/realisasi atas permintaan yang diajukan.
 
 ### **User Recruitment**
 
@@ -21,7 +21,7 @@
 
 ### **Pelamar**
 
-1. Signup e situs Loker
+1. Signup ke situs Loker.
 2. Mengajukan lamaran ke posisi/jabatan yang diinginkan dan memasukkan data diri serta data lain yang dibutuhkan.
 3. Memberikan konfirmasi kehadiran atas panggilan psikotas dan/atau wawancara.
 4. Menerima informasi hasil wawancara.

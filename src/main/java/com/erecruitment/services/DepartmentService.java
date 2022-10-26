@@ -35,7 +35,7 @@ public class DepartmentService implements IDepartmentService {
     @Override
     public Department updateDepartment(Long departmentId, Department department) {
         Optional<Department> newDept = departmentRepository.findById(departmentId);
-        if (newDept.isPresent()){
+        if (newDept.isPresent()) {
             Department response = newDept.get();
             response.setDepartmentName(department.getDepartmentName());
             return departmentRepository.save(response);
