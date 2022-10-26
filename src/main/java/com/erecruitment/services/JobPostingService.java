@@ -191,10 +191,11 @@ public class JobPostingService implements IJobPostingService {
     public DashboardSummaryResponse getSummary() {
 
         Set<PengajuanSDMEntity> jobPosting = pengajuanSDMRepository.findByStatus((short) 3);
-        Set<PengajuanSDMEntity> jobRequest = pengajuanSDMRepository.findByStatus((short) 0);
+        List<PengajuanSDMEntity> jobRequest = pengajuanSDMRepository.findAll();
+        Set<PengajuanSDMEntity> newJobRequest = pengajuanSDMRepository.findByStatus((short) 1);
         Set<Submission> appliedJob = submissionRepository.findByStatus(StatusRecruitment.APPLIED);
 
-        DashboardSummaryResponse response = new DashboardSummaryResponse(jobPosting.size(), jobRequest.size(), appliedJob.size());
+        DashboardSummaryResponse response = new DashboardSummaryResponse(jobPosting.size(), jobRequest.size(), newJobRequest.size(), appliedJob.size());
         return response;
     }
 
