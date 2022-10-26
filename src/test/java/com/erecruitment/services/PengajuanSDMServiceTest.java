@@ -11,13 +11,14 @@ import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.PengajuanSDMRepository;
 import com.erecruitment.repositories.PengajuanSDMSkillRepository;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class PengajuanSDMServiceTest {
@@ -36,15 +38,15 @@ public class PengajuanSDMServiceTest {
     @Mock
     PengajuanSDMSkillRepository pengajuanSDMSkillRepository;
 
+    @MockBean
     ModelMapper modelMapper = spy(new ModelMapper());
 
     @InjectMocks
     PengajuanSDMService serviceUnderTest = spy(new PengajuanSDMService());
 
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @Autowired
+    private MockMvc mockMvc;
+
 
     @Test(expected = ValidationErrorException.class)
     public void givenInValidRequestEmptyPosisi_whenAddNewData() {
@@ -257,7 +259,7 @@ public class PengajuanSDMServiceTest {
 
         PengajuanSDMSkillEntity pengajuanSDMSkillEntity = new PengajuanSDMSkillEntity();
         pengajuanSDMSkillEntity.setSkillName("JAVA");
-        pengajuanSDMSkillEntity.setSkillId(1l);
+        pengajuanSDMSkillEntity.setSkillId(1L);
 
         PengajuanSDMEntity entity = new PengajuanSDMEntity();
         entity.setIdPengajuan(1L);
@@ -274,5 +276,6 @@ public class PengajuanSDMServiceTest {
         response.setListSkill(pengajuanSDMSkillEntity1);
         assertThat(response.getIdPengajuan()).isEqualTo(entity.getIdPengajuan());
     }
+
 
 }

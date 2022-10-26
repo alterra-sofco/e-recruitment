@@ -21,7 +21,7 @@ public class ScheduledTasks {
     @Autowired
     private PengajuanSDMService pengajuanSDMService;
 
-    @Scheduled(cron = "${cron.scheduledtime2}")
+    @Scheduled(cron = "${cron.every5MinuteOn00Until01}")
     public void reportCurrentTime() {
         log.info("The time is now {}", dateFormat.format(new Date()));
         pengajuanSDMService.closeAutoJobPosted();
