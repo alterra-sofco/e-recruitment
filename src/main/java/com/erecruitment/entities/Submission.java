@@ -28,7 +28,7 @@ public class Submission {
     @CreationTimestamp
     private Date appliedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User appliedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)

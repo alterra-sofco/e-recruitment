@@ -1,10 +1,8 @@
 package com.erecruitment.services;
 
 import com.erecruitment.dtos.requests.JobApplyRequest;
-import com.erecruitment.dtos.response.JobAppliedHistoryResponse;
-import com.erecruitment.dtos.response.JobPostingDetailResponse;
-import com.erecruitment.dtos.response.JobPostingResponseList;
-import com.erecruitment.dtos.response.PageableResponse;
+import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
+import com.erecruitment.dtos.response.*;
 import com.erecruitment.entities.*;
 import com.erecruitment.exceptions.CredentialErrorException;
 import com.erecruitment.exceptions.DataNotFoundException;
@@ -142,6 +140,52 @@ public class JobPostingService implements IJobPostingService {
         return response;
     }
 
+    @Override
+    public PageableResponse getApplicantJobPosting(int page, int size, StatusRecruitment status, Long jobPostingId) {
+        Page<Submission> jobPosting;
+        Sort sort = Sort.by("appliedAt").ascending();
+
+        PengajuanSDMEntity jobDetail = pengajuanSDMRepository.findById(jobPostingId).orElseThrow(() ->
+                new DataNotFoundException("data job not found!"));
+
+
+        Pageable paging = PageRequest.of(page, size, sort);
+        jobPosting =  status != null ? submissionRepository.findByJobPostingAndStatus(jobDetail, status, paging) :
+                submissionRepository.findByJobPosting(jobDetail, paging);
+        List<Submission> dataList = jobPosting.getContent();
+        PageableResponse response = new PageableResponse();
+        if (!dataList.isEmpty()) {
+            response.setMessage("ok");
+            List<JobAppliedListResponse> dt = dataList.stream()
+                    .map(this::convertToApplicantList)
+                    .collect(Collectors.toList());
+            response.setData(dt);
+        } else {
+            List<JobAppliedListResponse> dt = Collections.emptyList();
+            response.setData(dt);
+        }
+        response.setTotalData(jobPosting.getTotalElements());
+        response.setTotalPages(jobPosting.getTotalPages());
+        response.setCurrentPage(jobPosting.getNumber() + 1);
+        response.setNext(jobPosting.hasNext());
+        response.setPrevious(jobPosting.hasPrevious());
+        response.setPageSize(jobPosting.getSize());
+
+        return response;
+    }
+
+    @Override
+    public Object setStatus(Long submissionId, StatusJobApplicantRequest bodyRequest) {
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new DataNotFoundException("submission not found"));
+        if (submission.getStatus() == bodyRequest.getStatus()){
+            throw new ValidationErrorException(String.format("submission already %s", submission.getStatus()));
+        }
+        submission.setStatus(bodyRequest.getStatus());
+        submission.setDescription(bodyRequest.getDescription());
+        return submissionRepository.save(submission);
+    }
+
     private JobPostingResponseList convertToDto(PengajuanSDMEntity pengajuanSDMEntity) {
         JobPostingResponseList response = modelMapper.map(pengajuanSDMEntity, JobPostingResponseList.class);
         return response;
@@ -149,6 +193,10 @@ public class JobPostingService implements IJobPostingService {
 
     private JobAppliedHistoryResponse convertToHistory(Submission dataApplied){
         return  modelMapper.map(dataApplied, JobAppliedHistoryResponse.class);
+    }
+
+    private JobAppliedListResponse convertToApplicantList(Submission dataApplied){
+        return modelMapper.map(dataApplied, JobAppliedListResponse.class);
     }
 
 
