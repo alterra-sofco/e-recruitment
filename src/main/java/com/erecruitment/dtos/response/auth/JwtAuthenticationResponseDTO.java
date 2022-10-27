@@ -12,5 +12,6 @@ public class JwtAuthenticationResponseDTO {
     private final String accessToken;
     private final String name;
     private final RoleName role;
+    private final Long userId;
     private String tokenType = "Bearer";
 }

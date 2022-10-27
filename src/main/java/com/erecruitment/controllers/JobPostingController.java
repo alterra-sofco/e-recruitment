@@ -1,6 +1,7 @@
 package com.erecruitment.controllers;
 
 import com.erecruitment.dtos.requests.JobApplyRequest;
+import com.erecruitment.dtos.requests.WebSocketDTO;
 import com.erecruitment.dtos.response.*;
 import com.erecruitment.entities.StatusRecruitment;
 import com.erecruitment.exceptions.CredentialErrorException;
@@ -8,6 +9,7 @@ import com.erecruitment.services.interfaces.IJobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class JobPostingController {
 
     @Autowired
     private IJobPostingService jobPostingService;
+
+    @Autowired
+    private SimpMessageSendingOperations messagingTemplate;
 
 
     @GetMapping
@@ -49,13 +54,13 @@ public class JobPostingController {
                                                    @RequestBody JobApplyRequest bodyRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
-            jobPostingService.applyJob(jobPostingId, bodyRequest);
+            WebSocketDTO webSocketDTO = (WebSocketDTO) jobPostingService.applyJob(jobPostingId, bodyRequest);
+            messagingTemplate.convertAndSend("/topic/applyJob", webSocketDTO);
         } else {
             throw new CredentialErrorException("Login required!");
         }
 
         ResponseGenerator responseGenerator = new ResponseGenerator();
-
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
                 "success, job applied!",
                 null), HttpStatus.OK);

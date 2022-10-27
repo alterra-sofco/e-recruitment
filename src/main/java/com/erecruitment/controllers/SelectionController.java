@@ -1,6 +1,7 @@
 package com.erecruitment.controllers;
 
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
+import com.erecruitment.dtos.requests.WebSocketDTO;
 import com.erecruitment.dtos.response.*;
 import com.erecruitment.entities.StatusRecruitment;
 import com.erecruitment.entities.User;
@@ -11,6 +12,10 @@ import com.erecruitment.services.interfaces.IJobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -62,6 +67,13 @@ public class SelectionController {
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
                 "Success, data setted!",
                 null), HttpStatus.OK);
+    }
+
+    @MessageMapping("/addUser")
+    @SendTo("/topic/applyJob")
+    public WebSocketDTO addUser(@Payload WebSocketDTO chatMessage, SimpMessageHeaderAccessor accessor) {
+        accessor.getSessionAttributes().put("username", chatMessage.getSender());
+        return chatMessage;
     }
 
 }

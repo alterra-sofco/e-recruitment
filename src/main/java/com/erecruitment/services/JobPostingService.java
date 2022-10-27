@@ -2,6 +2,7 @@ package com.erecruitment.services;
 
 import com.erecruitment.dtos.requests.JobApplyRequest;
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
+import com.erecruitment.dtos.requests.WebSocketDTO;
 import com.erecruitment.dtos.response.*;
 import com.erecruitment.entities.PengajuanSDMEntity;
 import com.erecruitment.entities.StatusRecruitment;
@@ -38,6 +39,7 @@ public class JobPostingService implements IJobPostingService {
 
     @Autowired
     private SubmissionRepository submissionRepository;
+
 
     @Override
     public PageableResponse getAllJobPosting(int page, int size, String keyword) {
@@ -102,8 +104,16 @@ public class JobPostingService implements IJobPostingService {
             submission.setStatus(StatusRecruitment.APPLIED);
             submission.setAppliedBy(user);
             submission.setJobPosting(jobDetail);
+            submissionRepository.save(submission);
 
-            return submissionRepository.save(submission);
+            User user1 = jobDetail.getUser();
+            WebSocketDTO webSocketDTO = new WebSocketDTO();
+            webSocketDTO.setSender(user.getName());
+            webSocketDTO.setType("applyJob");
+            webSocketDTO.setTitle(jobDetail.getPosisi());
+            webSocketDTO.setUserId(user1.getUserId());
+
+            return webSocketDTO;
         } else {
             throw new CredentialErrorException("Login required!");
         }
