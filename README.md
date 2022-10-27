@@ -23,8 +23,7 @@
 
 1. Signup ke situs Loker.
 2. Mengajukan lamaran ke posisi/jabatan yang diinginkan dan memasukkan data diri serta data lain yang dibutuhkan.
-3. Memberikan konfirmasi kehadiran atas panggilan psikotas dan/atau wawancara.
-4. Menerima informasi hasil wawancara.
+3. Menerima informasi hasil lulus atau tidaknya dalam proses test.
 
 ## Arsitektur & Fitur
 
@@ -32,9 +31,10 @@
 2. Database menggunakan PostgreSQL.
 3. JWT Spring Boot Security.
 4. Apache POI untuk export data.
-5. Schedule Task, untuk unpublish(close) loker yang telah melewati tanggal dealine.
-6. Unit Testing
-7. Swagger untuk dokumentasi API.
+5. Web socket, notifikasi pada sisi admin dashboard ketika ada pelamar yang apply pada loker.
+6. Schedule Task, untuk unpublish(close) loker yang telah melewati tanggal dealine.
+7. Unit Testing
+8. Swagger untuk dokumentasi API.
 
 ## How to install
 
