@@ -1,11 +1,7 @@
 package com.erecruitment.services;
 
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
-import com.erecruitment.dtos.response.DashboardSummaryResponse;
-import com.erecruitment.dtos.response.JobAppliedListResponse;
-import com.erecruitment.dtos.response.JobPostingDetailResponse;
-import com.erecruitment.dtos.response.JobPostingResponseList;
-import com.erecruitment.dtos.response.PageableResponse;
+import com.erecruitment.dtos.response.*;
 import com.erecruitment.entities.*;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
@@ -17,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -551,14 +546,14 @@ class JobPostingServiceTest {
      */
     @Test
     void testGetSummary() {
-        when(pengajuanSDMRepository.findByStatus((Short) any())).thenReturn(new HashSet<>());
-        when(submissionRepository.findByStatus((StatusRecruitment) any())).thenReturn(new HashSet<>());
+        when(pengajuanSDMRepository.findByStatus(any())).thenReturn(new HashSet<>());
+        when(submissionRepository.findByStatus(any())).thenReturn(new HashSet<>());
         DashboardSummaryResponse actualSummary = jobPostingService.getSummary();
         assertEquals(0, actualSummary.getTotalApplied().intValue());
         assertEquals(0, actualSummary.getTotalJobRequest().intValue());
         assertEquals(0, actualSummary.getTotalJobPosting().intValue());
-        verify(pengajuanSDMRepository, atLeast(1)).findByStatus((Short) any());
-        verify(submissionRepository).findByStatus((StatusRecruitment) any());
+        verify(pengajuanSDMRepository, atLeast(1)).findByStatus(any());
+        verify(submissionRepository).findByStatus(any());
     }
 
     /**
@@ -566,12 +561,12 @@ class JobPostingServiceTest {
      */
     @Test
     void testGetSummary2() {
-        when(pengajuanSDMRepository.findByStatus((Short) any())).thenReturn(new HashSet<>());
-        when(submissionRepository.findByStatus((StatusRecruitment) any()))
+        when(pengajuanSDMRepository.findByStatus(any())).thenReturn(new HashSet<>());
+        when(submissionRepository.findByStatus(any()))
                 .thenThrow(new ValidationErrorException("An error occurred"));
         assertThrows(ValidationErrorException.class, () -> jobPostingService.getSummary());
-        verify(pengajuanSDMRepository, atLeast(1)).findByStatus((Short) any());
-        verify(submissionRepository).findByStatus((StatusRecruitment) any());
+        verify(pengajuanSDMRepository, atLeast(1)).findByStatus(any());
+        verify(submissionRepository).findByStatus(any());
     }
 
 }

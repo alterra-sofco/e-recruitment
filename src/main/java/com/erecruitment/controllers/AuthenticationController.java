@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
@@ -88,7 +87,7 @@ public class AuthenticationController {
             String jwt = tokenProvider.generateToken(authentication);
             Timestamp currentDatetime = new Timestamp(System.currentTimeMillis());
             User user = (User) authentication.getPrincipal();
-            if (user.getRole() != RoleName.ADMIN && user.getRole() != RoleName.USER){
+            if (user.getRole() != RoleName.ADMIN && user.getRole() != RoleName.USER) {
                 throw new CredentialErrorException("Bad Credentials");
             }
             user.setLastLogin(currentDatetime);
@@ -96,8 +95,8 @@ public class AuthenticationController {
             ResponseGenerator responseGenerator = new ResponseGenerator();
             return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
                     "Login success!",
-                    new JwtAuthenticationResponseDTO(jwt, user.getName(), user.getRole())), HttpStatus.OK);
-        } catch (Exception e){
+                    new JwtAuthenticationResponseDTO(jwt, user.getName(), user.getRole(), user.getUserId())), HttpStatus.OK);
+        } catch (Exception e) {
             throw new CredentialErrorException(e.getMessage());
         }
 
@@ -128,8 +127,8 @@ public class AuthenticationController {
             ResponseGenerator responseGenerator = new ResponseGenerator();
             return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
                     "Login success!",
-                    new JwtAuthenticationResponseDTO(jwt, user.getName(), user.getRole())), HttpStatus.OK);
-        } catch (Exception e){
+                    new JwtAuthenticationResponseDTO(jwt, user.getName(), user.getRole(), user.getUserId())), HttpStatus.OK);
+        } catch (Exception e) {
             throw new CredentialErrorException(e.getMessage());
         }
 

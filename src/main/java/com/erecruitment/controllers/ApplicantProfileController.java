@@ -40,8 +40,8 @@ public class ApplicantProfileController {
     private EducationRepository educationRepository;
 
     @GetMapping
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> getProfile(){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         ApplicantProfileResponse response = applicantService.getUserDetail(user);
 
@@ -53,7 +53,7 @@ public class ApplicantProfileController {
     }
 
     @PatchMapping("/basic")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> editProfile(@RequestBody ApplicantEditProfileRequest bodyRequest, @ApiIgnore Errors errors){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> editProfile(@RequestBody ApplicantEditProfileRequest bodyRequest, @ApiIgnore Errors errors) {
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
@@ -61,7 +61,7 @@ public class ApplicantProfileController {
             }
         }
 
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.updateUserDetail(user, bodyRequest);
@@ -75,8 +75,8 @@ public class ApplicantProfileController {
     }
 
     @PatchMapping("/avatar")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> uploadProfilePicture(@RequestPart(value = "file", required = true) MultipartFile file){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> uploadProfilePicture(@RequestPart(value = "file", required = true) MultipartFile file) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (!file.getContentType().contains("image")) {
             throw new ValidationErrorException("file must be image");
@@ -96,8 +96,8 @@ public class ApplicantProfileController {
     }
 
     @PatchMapping("/cv")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> uploadCv(@RequestPart(value = "file", required = true) MultipartFile file){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> uploadCv(@RequestPart(value = "file", required = true) MultipartFile file) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (!file.getContentType().contains("pdf")) {
             throw new ValidationErrorException("file must be pdf");
@@ -115,14 +115,14 @@ public class ApplicantProfileController {
     }
 
     @PostMapping("/education")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> createEducational(@RequestBody EducationRequest bodyRequest, @ApiIgnore Errors errors){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> createEducational(@RequestBody EducationRequest bodyRequest, @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 throw new ValidationErrorException(error.getDefaultMessage());
             }
         }
 
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.addEducation(user, bodyRequest);
@@ -134,8 +134,8 @@ public class ApplicantProfileController {
     }
 
     @GetMapping("education/{educationId}")
-    public ResponseEntity<CommonResponse<Education>> getEducational(@PathVariable("educationId") Long educationId){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<CommonResponse<Education>> getEducational(@PathVariable("educationId") Long educationId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         Education education = educationRepository.findByIdaAndOwnedBy(educationId, user).orElseThrow(() ->
@@ -150,13 +150,13 @@ public class ApplicantProfileController {
     @PutMapping("/education/{educationId}")
     public ResponseEntity<CommonResponse<ApplicantProfileResponse>> updateEducational(@RequestBody EducationRequest bodyRequest,
                                                                                       @PathVariable("educationId") Long educationId,
-                                                                                      @ApiIgnore Errors errors){
+                                                                                      @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 throw new ValidationErrorException(error.getDefaultMessage());
             }
         }
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.updateEducation(educationId, bodyRequest, user);
@@ -169,8 +169,8 @@ public class ApplicantProfileController {
     }
 
     @DeleteMapping("/education/{educationId}")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> deleteEducational(@PathVariable("educationId") Long educationId){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> deleteEducational(@PathVariable("educationId") Long educationId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.deleteEducation(educationId, user);
@@ -183,14 +183,14 @@ public class ApplicantProfileController {
     }
 
     @PostMapping("experience")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> createExperience(@RequestBody ExperienceRequest bodyRequest, @ApiIgnore Errors errors){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> createExperience(@RequestBody ExperienceRequest bodyRequest, @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 throw new ValidationErrorException(error.getDefaultMessage());
             }
         }
 
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.addExperience(user, bodyRequest);
@@ -202,8 +202,8 @@ public class ApplicantProfileController {
     }
 
     @GetMapping("experience/{experienceId}")
-    public ResponseEntity<CommonResponse<Experience>> getExperience(@PathVariable("experienceId") Long experienceId){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<CommonResponse<Experience>> getExperience(@PathVariable("experienceId") Long experienceId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         Experience experience = experienceRepository.findByIdaAndOwnedBy(experienceId, user).orElseThrow(() ->
@@ -218,14 +218,14 @@ public class ApplicantProfileController {
     @PutMapping("experience/{experienceId}")
     public ResponseEntity<CommonResponse<ApplicantProfileResponse>> updateExperience(@PathVariable("experienceId") Long experienceId,
                                                                                      @RequestBody ExperienceRequest bodyRequest,
-                                                                                     @ApiIgnore Errors errors){
+                                                                                     @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 throw new ValidationErrorException(error.getDefaultMessage());
             }
         }
 
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.updateExperience(experienceId, bodyRequest, user);
@@ -238,8 +238,8 @@ public class ApplicantProfileController {
     }
 
     @DeleteMapping("experience/{experienceId}")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> deleteExperience(@PathVariable("experienceId") Long experienceId){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> deleteExperience(@PathVariable("experienceId") Long experienceId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.deleteExperience(experienceId, user);
@@ -252,14 +252,14 @@ public class ApplicantProfileController {
     }
 
     @PostMapping("skill")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> addSkills(@RequestBody SkillApplicantRequest bodyRequest, @ApiIgnore Errors errors){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> addSkills(@RequestBody SkillApplicantRequest bodyRequest, @ApiIgnore Errors errors) {
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 throw new ValidationErrorException(error.getDefaultMessage());
             }
         }
 
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.addSkill(user, bodyRequest);
@@ -273,8 +273,8 @@ public class ApplicantProfileController {
     }
 
     @DeleteMapping("skill/{skillId}")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> removeSkill(@PathVariable("skillId") Long skillId){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> removeSkill(@PathVariable("skillId") Long skillId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
         ApplicantProfileResponse response = applicantService.removeSkill(skillId, user);

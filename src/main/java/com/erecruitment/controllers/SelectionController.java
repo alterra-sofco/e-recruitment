@@ -1,9 +1,9 @@
 package com.erecruitment.controllers;
 
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
+import com.erecruitment.dtos.requests.WebSocketDTO;
 import com.erecruitment.dtos.response.*;
 import com.erecruitment.entities.StatusRecruitment;
-import com.erecruitment.entities.Submission;
 import com.erecruitment.entities.User;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.repositories.SubmissionRepository;
@@ -12,8 +12,10 @@ import com.erecruitment.services.interfaces.IJobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,11 +41,11 @@ public class SelectionController {
         PageableResponse responseList = jobPostingService.getApplicantJobPosting(page, size, status, jobPostingId);
 
         responseList.setStatus(String.valueOf(HttpStatus.OK.value()));
-            return new ResponseEntity<>(responseList, HttpStatus.OK);
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
     @GetMapping("/detail/{submissionId}")
-    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> getProfileApplicant(@PathVariable("submissionId") Long submissionId){
+    public ResponseEntity<CommonResponse<ApplicantProfileResponse>> getProfileApplicant(@PathVariable("submissionId") Long submissionId) {
         User user = submissionRepository.findById(submissionId).orElseThrow(() -> new DataNotFoundException("submission not found")).getAppliedBy();
         ApplicantProfileResponse response = applicantService.getUserDetail(user);
 
@@ -56,8 +58,8 @@ public class SelectionController {
 
     @PutMapping("/detail/{submissionId}")
     public ResponseEntity<CommonResponse> setJobStatusApplicant(@PathVariable("submissionId") Long submissionId,
-                                                                                          @RequestBody StatusJobApplicantRequest bodyRequest
-                                                                                          ){
+                                                                @RequestBody StatusJobApplicantRequest bodyRequest
+    ) {
         jobPostingService.setStatus(submissionId, bodyRequest);
 
         ResponseGenerator responseGenerator = new ResponseGenerator();
@@ -65,6 +67,13 @@ public class SelectionController {
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()),
                 "Success, data setted!",
                 null), HttpStatus.OK);
+    }
+
+    @MessageMapping("/addUser")
+    @SendTo("/topic/applyJob")
+    public WebSocketDTO addUser(@Payload WebSocketDTO chatMessage, SimpMessageHeaderAccessor accessor) {
+        accessor.getSessionAttributes().put("username", chatMessage.getSender());
+        return chatMessage;
     }
 
 }

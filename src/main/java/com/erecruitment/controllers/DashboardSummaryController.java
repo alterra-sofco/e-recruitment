@@ -19,7 +19,7 @@ public class DashboardSummaryController {
     private IJobPostingService jobPostingService;
 
     @GetMapping
-    public ResponseEntity<CommonResponse<DashboardSummaryResponse>> getSummaryDashboard(){
+    public ResponseEntity<CommonResponse<DashboardSummaryResponse>> getSummaryDashboard() {
 
         DashboardSummaryResponse response = jobPostingService.getSummary();
 

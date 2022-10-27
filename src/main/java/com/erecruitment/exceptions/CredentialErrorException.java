@@ -1,6 +1,6 @@
 package com.erecruitment.exceptions;
 
-public class CredentialErrorException extends RuntimeException{
+public class CredentialErrorException extends RuntimeException {
 
     public CredentialErrorException() {
         super();
