@@ -109,15 +109,14 @@ public class JobPostingService implements IJobPostingService {
             User user1 = jobDetail.getUser();
             WebSocketDTO webSocketDTO = new WebSocketDTO();
             webSocketDTO.setSender(user.getName());
-            webSocketDTO.setType("applyJob");
-            webSocketDTO.setTitle(jobDetail.getPosisi());
+            webSocketDTO.setType("newApplyJob");
+            webSocketDTO.setTitle(user.getName() + " apply pada posisi " + jobDetail.getPosisi());
             webSocketDTO.setUserId(user1.getUserId());
 
             return webSocketDTO;
         } else {
             throw new CredentialErrorException("Login required!");
         }
-
     }
 
     @Override
