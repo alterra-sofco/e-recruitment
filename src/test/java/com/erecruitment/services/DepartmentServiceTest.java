@@ -1,5 +1,6 @@
 package com.erecruitment.services;
 
+import com.erecruitment.dtos.requests.SkillRequest;
 import com.erecruitment.entities.Department;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.repositories.DepartmentRepository;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -77,7 +79,6 @@ class DepartmentServiceTest {
 
     @Test
     void givenDepartmentById_thenReturnUpdatedDataById() throws IOException {
-
         given(departmentRepository.findById(1L)).willReturn(Optional.ofNullable(dept1));
         departmentService.updateDepartment(1L, new Department(1L, "update"));
         assertThat(departmentRepository.findById(1L).get().getDepartmentName()).isEqualTo("update");
@@ -85,8 +86,13 @@ class DepartmentServiceTest {
 
     @Test
     void givenIdTODelete_ThenShouldDeleteTheDepartment() {
-
         departmentService.deleteDepartment(1L);
         verify(departmentRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void should_throw_exception_whenUpdateData_thanNotFound() throws DataNotFoundException {
+        when(departmentRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
+        assertThrows(DataNotFoundException.class, () -> departmentService.updateDepartment(1L, new Department(1L, "update")));
     }
 }
