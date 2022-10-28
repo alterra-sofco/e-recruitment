@@ -1,8 +1,11 @@
 package com.erecruitment.services.auth;
 
+import com.erecruitment.entities.Applicant;
 import com.erecruitment.entities.User;
+import com.erecruitment.exceptions.CredentialErrorException;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
+import com.erecruitment.repositories.ApplicantRepository;
 import com.erecruitment.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,13 +24,16 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    private ApplicantRepository applicantRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new DataNotFoundException(String.format("user with email '%s' not found", email)));
+                .orElseThrow(() -> new CredentialErrorException("Bad Credentials"));
     }
 
     public UserDetails loadUserById(Long id) {
@@ -49,6 +55,9 @@ public class UserService implements UserDetailsService {
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        Applicant profile = new Applicant();
+        profile.setOwnedBy(user);
+        applicantRepository.save(profile);
         return userRepository.save(user);
     }
 

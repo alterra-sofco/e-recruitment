@@ -99,7 +99,7 @@ public class JobPostingExcelExporter {
             createCell(row, columnCount++, job.getIdPengajuan(), style);
             createCell(row, columnCount++, job.getPosisi(), style);
             createCell(row, columnCount++, job.getDescription(), style);
-            createCell(row, columnCount++, job.getRemark_staff(), style);
+            createCell(row, columnCount++, job.getIdPengajuan(), style);
             createCell(row, columnCount++, job.getStatus(), style);
             createCell(row, columnCount++, job.getNumberRequired(), style);
             createCell(row, columnCount++, job.getNumberApplicant(), style);

@@ -7,13 +7,12 @@ import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.SkillRepository;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
@@ -26,15 +25,11 @@ public class SkillServiceTest {
     @Mock
     SkillRepository skillRepository;
 
+    @MockBean
     ModelMapper modelMapper = spy(new ModelMapper());
 
     @InjectMocks
     SkillService serviceUnderTest = spy(new SkillService());
-
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void givenValidRequest_whenAddNewData() {
@@ -76,5 +71,23 @@ public class SkillServiceTest {
         when(skillRepository.findById(entity.getSkillId())).thenReturn(Optional.of(entity));
         serviceUnderTest.removeOne(entity.getSkillId());
         verify(skillRepository).deleteById(entity.getSkillId());
+
+    }
+
+    @Test
+    public void whenGivenId_shouldUpdateDAta_ifFound() {
+        SkillRequest request = new SkillRequest();
+        request.setSkillName("Java");
+        request.setSkillId(1L);
+        SkillEntity skillEntity = modelMapper.map(request, SkillEntity.class);
+
+        SkillEntity entity = new SkillEntity();
+        entity.setSkillId(request.getSkillId());
+        when(skillRepository.findById(request.getSkillId())).thenReturn(Optional.of(entity));
+        when(skillRepository.save(any(SkillEntity.class)))
+                .thenReturn(skillEntity);
+        SkillResponse response = serviceUnderTest.saveData(request, request.getSkillId());
+        assertThat(response.getSkillId()).isEqualTo(request.getSkillId());
+        assertThat(response.getSkillName()).isEqualTo(request.getSkillName());
     }
 }

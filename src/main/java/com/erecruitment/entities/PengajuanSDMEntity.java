@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class PengajuanSDMEntity implements Serializable {
 
     @Id
@@ -30,16 +32,19 @@ public class PengajuanSDMEntity implements Serializable {
     @Column(columnDefinition = "text", nullable = true)
     private String description;
 
-    @Column(columnDefinition = "text", nullable = true)
-    private String remark_staff;
+    @Column(name = "remark_staff", columnDefinition = "text", nullable = true)
+    private String remarkStaff;
 
-    @Column(columnDefinition = "INT2", length = 1)
+    @Column(name = "remark_hr", columnDefinition = "text", nullable = true)
+    private String remarkHR;
+
+    @Column(length = 1)
     private Short status;
 
-    @Column(name ="number_required",  columnDefinition = "integer default 0", nullable = true)
+    @Column(name = "number_required", nullable = true)
     private Integer numberRequired;
 
-    @Column(name ="number_applicant",  columnDefinition = "integer default 0", nullable = true)
+    @Column(name = "number_applicant", nullable = true)
     private Integer numberApplicant;
 
     @Column(nullable = true)

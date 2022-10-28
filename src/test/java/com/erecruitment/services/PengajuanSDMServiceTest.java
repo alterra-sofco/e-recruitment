@@ -4,28 +4,30 @@ import com.erecruitment.dtos.requests.AddPengajuanSDMRequest;
 import com.erecruitment.dtos.requests.UpdateStatusPengajuanSDMRequest;
 import com.erecruitment.dtos.response.PengajuanSDMResponse;
 import com.erecruitment.entities.PengajuanSDMEntity;
+import com.erecruitment.entities.PengajuanSDMSkillEntity;
+import com.erecruitment.entities.User;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.PengajuanSDMRepository;
+import com.erecruitment.repositories.PengajuanSDMSkillRepository;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class PengajuanSDMServiceTest {
@@ -33,15 +35,18 @@ public class PengajuanSDMServiceTest {
     @Mock
     PengajuanSDMRepository pengajuanSDMRepository;
 
+    @Mock
+    PengajuanSDMSkillRepository pengajuanSDMSkillRepository;
+
+    @MockBean
     ModelMapper modelMapper = spy(new ModelMapper());
 
     @InjectMocks
     PengajuanSDMService serviceUnderTest = spy(new PengajuanSDMService());
 
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @Autowired
+    private MockMvc mockMvc;
+
 
     @Test(expected = ValidationErrorException.class)
     public void givenInValidRequestEmptyPosisi_whenAddNewData() {
@@ -180,8 +185,14 @@ public class PengajuanSDMServiceTest {
         PengajuanSDMEntity entity = new PengajuanSDMEntity();
         entity.setIdPengajuan(1L);
         entity.setStatus((short) 1);
+
+        User user = new User();
+        user.setUserId(1L);
+        user.setName("admin");
+
         when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(entity));
         PengajuanSDMEntity entity1 = modelMapper.map(request, PengajuanSDMEntity.class);
+        entity1.setUser(user);
         when(pengajuanSDMRepository.save(any(PengajuanSDMEntity.class)))
                 .thenReturn(entity1);
         PengajuanSDMResponse response = serviceUnderTest.updateStatus(request, 1L);
@@ -217,12 +228,54 @@ public class PengajuanSDMServiceTest {
         entity.setStatus((short) 3);
         when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(entity));
 
+        User user = new User();
+        user.setUserId(1L);
+        user.setName("admin");
         PengajuanSDMEntity entity1 = new PengajuanSDMEntity();
         entity1.setIdPengajuan(entity.getIdPengajuan());
         entity1.setStatus((short) 4);
+        entity1.setUser(user);
         when(pengajuanSDMRepository.save(any(PengajuanSDMEntity.class)))
                 .thenReturn(entity1);
         PengajuanSDMResponse response = serviceUnderTest.closeJobPosted(entity.getIdPengajuan());
         assertThat(response.getStatus()).isEqualTo(entity1.getStatus());
     }
+
+    @Test(expected = DataNotFoundException.class)
+    public void givenInValidRequestIdNotFound_getDetail() {
+        PengajuanSDMEntity entity = new PengajuanSDMEntity();
+        entity.setIdPengajuan(19L);
+        when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(null));
+        serviceUnderTest.getDetail(entity.getIdPengajuan());
+    }
+
+    @Test(expected = ValidationErrorException.class)
+    public void givenInValidRequestIdIs0_getDetail() {
+        serviceUnderTest.getDetail(0L);
+    }
+
+    @Test
+    public void givenValidRequest_getDetail() {
+
+        PengajuanSDMSkillEntity pengajuanSDMSkillEntity = new PengajuanSDMSkillEntity();
+        pengajuanSDMSkillEntity.setSkillName("JAVA");
+        pengajuanSDMSkillEntity.setSkillId(1L);
+
+        PengajuanSDMEntity entity = new PengajuanSDMEntity();
+        entity.setIdPengajuan(1L);
+        entity.setStatus((short) 1);
+
+        User user = new User();
+        user.setUserId(1L);
+        user.setName("admin");
+        entity.setUser(user);
+        Set<PengajuanSDMSkillEntity> pengajuanSDMSkillEntity1 = pengajuanSDMSkillRepository.findByPengajuanId(entity.getIdPengajuan());
+        pengajuanSDMSkillEntity1.add(pengajuanSDMSkillEntity);
+        when(pengajuanSDMRepository.findById(anyLong())).thenReturn(Optional.ofNullable(entity));
+        PengajuanSDMResponse response = serviceUnderTest.getDetail(1L);
+        response.setListSkill(pengajuanSDMSkillEntity1);
+        assertThat(response.getIdPengajuan()).isEqualTo(entity.getIdPengajuan());
+    }
+
+
 }

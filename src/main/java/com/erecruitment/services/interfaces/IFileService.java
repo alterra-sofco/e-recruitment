@@ -7,9 +7,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface IFileService {
-    Object store(MultipartFile file) throws IOException;
+    FileResponse store(MultipartFile file) throws IOException;
+
+    File upload(MultipartFile file) throws IOException;
+
+    File uploadChange(MultipartFile file, Long fileId) throws IOException;
 
     File downloadFile(Long fileId);
 
     FileResponse getFile(Long fileId);
+
+    String generateUrlFile(Long fileId);
 }

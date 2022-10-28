@@ -6,10 +6,15 @@ import com.erecruitment.dtos.response.CommonResponse;
 import com.erecruitment.dtos.response.PageableResponse;
 import com.erecruitment.dtos.response.PengajuanSDMResponse;
 import com.erecruitment.dtos.response.ResponseGenerator;
+import com.erecruitment.entities.RoleName;
+import com.erecruitment.entities.User;
+import com.erecruitment.exceptions.PermissionErrorException;
 import com.erecruitment.services.PengajuanSDMService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,15 +52,21 @@ public class PengajuanSDMController {
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.ACCEPTED.value()), "ok", response), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     public ResponseEntity<CommonResponse> removeOne(@PathVariable Long id) {
         pengajuanSDMService.removeOne(id);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", id), HttpStatus.OK);
-    }
+    }*/
 
     @PutMapping("/{id}/update_status")
     public ResponseEntity<CommonResponse<PengajuanSDMResponse>> updateStatus(@RequestBody UpdateStatusPengajuanSDMRequest request, @PathVariable("id") Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        if (user.getRole() != RoleName.ADMIN){
+            throw new PermissionErrorException("Not have permission");
+        }
         PengajuanSDMResponse response = pengajuanSDMService.updateStatus(request, id);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", response), HttpStatus.OK);
@@ -63,10 +74,22 @@ public class PengajuanSDMController {
 
     @PutMapping("/{id}/close_job")
     public ResponseEntity<CommonResponse<PengajuanSDMResponse>> closeJob(@PathVariable("id") Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        if (user.getRole() != RoleName.ADMIN){
+            throw new PermissionErrorException("Not have permission");
+        }
         PengajuanSDMResponse response = pengajuanSDMService.closeJobPosted(id);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", response), HttpStatus.OK);
+    }
 
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<CommonResponse<PengajuanSDMResponse>> getDetail(@PathVariable("id") Long id) {
+        PengajuanSDMResponse response = pengajuanSDMService.getDetail(id);
+        ResponseGenerator responseGenerator = new ResponseGenerator();
+        return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", response), HttpStatus.OK);
     }
 
 }
