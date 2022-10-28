@@ -52,12 +52,12 @@ public class PengajuanSDMController {
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.ACCEPTED.value()), "ok", response), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     public ResponseEntity<CommonResponse> removeOne(@PathVariable Long id) {
         pengajuanSDMService.removeOne(id);
         ResponseGenerator responseGenerator = new ResponseGenerator();
         return new ResponseEntity<>(responseGenerator.responseData(String.valueOf(HttpStatus.OK.value()), "ok", id), HttpStatus.OK);
-    }
+    }*/
 
     @PutMapping("/{id}/update_status")
     public ResponseEntity<CommonResponse<PengajuanSDMResponse>> updateStatus(@RequestBody UpdateStatusPengajuanSDMRequest request, @PathVariable("id") Long id) {

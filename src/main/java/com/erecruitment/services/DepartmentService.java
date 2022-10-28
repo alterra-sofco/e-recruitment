@@ -1,6 +1,7 @@
 package com.erecruitment.services;
 
 import com.erecruitment.entities.Department;
+import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.repositories.DepartmentRepository;
 import com.erecruitment.services.interfaces.IDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class DepartmentService implements IDepartmentService {
             response.setDepartmentName(department.getDepartmentName());
             return departmentRepository.save(response);
         }
-        return null;
+        throw new DataNotFoundException("Data with ID: " + departmentId + " not found");
     }
 
     @Override

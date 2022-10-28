@@ -106,6 +106,9 @@ public class JobPostingService implements IJobPostingService {
             submission.setJobPosting(jobDetail);
             submissionRepository.save(submission);
 
+            jobDetail.setNumberApplicant(jobDetail.getNumberApplicant() + 1);
+            pengajuanSDMRepository.save(jobDetail);
+
             User user1 = jobDetail.getUser();
             WebSocketDTO webSocketDTO = new WebSocketDTO();
             webSocketDTO.setSender(user.getName());
