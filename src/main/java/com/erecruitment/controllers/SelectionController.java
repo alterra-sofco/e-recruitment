@@ -3,9 +3,11 @@ package com.erecruitment.controllers;
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
 import com.erecruitment.dtos.requests.WebSocketDTO;
 import com.erecruitment.dtos.response.*;
+import com.erecruitment.entities.RoleName;
 import com.erecruitment.entities.StatusRecruitment;
 import com.erecruitment.entities.User;
 import com.erecruitment.exceptions.DataNotFoundException;
+import com.erecruitment.exceptions.PermissionErrorException;
 import com.erecruitment.repositories.SubmissionRepository;
 import com.erecruitment.services.interfaces.IApplicantService;
 import com.erecruitment.services.interfaces.IJobPostingService;
@@ -16,6 +18,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -60,6 +64,12 @@ public class SelectionController {
     public ResponseEntity<CommonResponse> setJobStatusApplicant(@PathVariable("submissionId") Long submissionId,
                                                                 @RequestBody StatusJobApplicantRequest bodyRequest
     ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        if (user.getRole() != RoleName.ADMIN){
+            throw new PermissionErrorException("Not have permission");
+        }
         jobPostingService.setStatus(submissionId, bodyRequest);
 
         ResponseGenerator responseGenerator = new ResponseGenerator();

@@ -66,6 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/api/authentication/**", "/swagger-ui/**",
                         "/api/file/download/**", "/api/master_skill/**", "/eRecruitmentWS/**").permitAll()
+                .antMatchers("/api/dashboard", "/api/department/**", "/api/request_sdm/**","/api/hr-selection/**").hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().authenticated();
         httpSecurity.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         httpSecurity.cors();

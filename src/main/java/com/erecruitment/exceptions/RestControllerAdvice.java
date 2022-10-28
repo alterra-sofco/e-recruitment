@@ -38,4 +38,12 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, responseData, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 
+    @ExceptionHandler(PermissionErrorException.class)
+    public ResponseEntity<Object> permissionErrorException(Exception ex, WebRequest request) {
+        ExceptionResponse responseData = new ExceptionResponse<>();
+        responseData.setStatus(String.valueOf(HttpStatus.FORBIDDEN.value()));
+        responseData.setMessage(ex.getMessage());
+        return handleExceptionInternal(ex, responseData, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
 }
