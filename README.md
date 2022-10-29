@@ -45,3 +45,5 @@
 5. Open browser and enter this <a href="http://127.0.0.1:8080/swagger-ui/">url http://127.0.0.1:8080/swagger-ui/ </a>
    to see the API documentation on swagger **or** you can access : https://e-recruitment-alterra.herokuapp.com/swagger-ui/#/
 
+## Unit Testing
+<img src="unitTestBackend.png" />
