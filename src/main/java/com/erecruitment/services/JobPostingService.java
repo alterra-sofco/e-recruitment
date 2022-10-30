@@ -109,8 +109,7 @@ public class JobPostingService implements IJobPostingService {
             submission.setJobPosting(jobDetail);
             submissionRepository.save(submission);
 
-            Integer numberApplicant = jobDetail.getNumberApplicant() > 0 ? jobDetail.getNumberApplicant() : 0;
-            jobDetail.setNumberApplicant(numberApplicant + 1);
+            jobDetail.setNumberApplicant(jobDetail.getNumberApplicant() > 0 ? jobDetail.getNumberApplicant() + 1 : 1);
             pengajuanSDMRepository.save(jobDetail);
 
             User user1 = jobDetail.getUser();
