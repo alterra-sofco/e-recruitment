@@ -1,14 +1,14 @@
 package com.erecruitment.controllers;
 
+import com.erecruitment.apachePoi.JobPostingExcelExporter;
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
 import com.erecruitment.dtos.requests.WebSocketDTO;
 import com.erecruitment.dtos.response.*;
-import com.erecruitment.entities.RoleName;
-import com.erecruitment.entities.StatusRecruitment;
-import com.erecruitment.entities.User;
+import com.erecruitment.entities.*;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.PermissionErrorException;
 import com.erecruitment.repositories.SubmissionRepository;
+import com.erecruitment.services.PengajuanSDMService;
 import com.erecruitment.services.interfaces.IApplicantService;
 import com.erecruitment.services.interfaces.IJobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,14 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/hr-selection")
@@ -84,6 +92,22 @@ public class SelectionController {
     public WebSocketDTO addUser(@Payload WebSocketDTO chatMessage, SimpMessageHeaderAccessor accessor) {
         accessor.getSessionAttributes().put("username", chatMessage.getSender());
         return chatMessage;
+    }
+
+    @GetMapping("/export-applicant/{jobPostingId}")
+    public void exportToExcel( HttpServletResponse response, @PathVariable("jobPostingId") Long jobPostingId) throws IOException {
+        response.setContentType("application/octet-stream");
+
+        DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        List<Submission> appliedListResponses = jobPostingService.exportAppliedListToExcel(jobPostingId);
+        String header = "Content-Disposition";
+        String headerValue = "attachment; filename="+appliedListResponses.get(1).getJobPosting() +" "+ currentDateTime +".xlsx";
+        response.setHeader(header, headerValue);
+
+        JobPostingExcelExporter excelExporter = new JobPostingExcelExporter(appliedListResponses);
+        excelExporter.export(response);
     }
 
 }

@@ -163,7 +163,6 @@ public class JobPostingService implements IJobPostingService {
         PengajuanSDMEntity jobDetail = pengajuanSDMRepository.findById(jobPostingId).orElseThrow(() ->
                 new DataNotFoundException("data job not found!"));
 
-
         Pageable paging = PageRequest.of(page, size, sort);
         jobPosting = status != null ? submissionRepository.findByJobPostingAndStatus(jobDetail, status, paging) :
                 submissionRepository.findByJobPosting(jobDetail, paging);
@@ -213,10 +212,27 @@ public class JobPostingService implements IJobPostingService {
         return response;
     }
 
+    @Override
+    //export xlsx
+    public List<Submission> exportAppliedListToExcel(Long jobPostingId){
+        Page<Submission> jobPosting;
+        Sort sort = Sort.by("appliedAt").ascending();
+
+        PengajuanSDMEntity jobDetail = pengajuanSDMRepository.findById(jobPostingId).orElseThrow(() ->
+                new DataNotFoundException("data job not found!"));
+
+        Pageable paging = PageRequest.of(0, 1000, sort);
+        jobPosting = submissionRepository.findByJobPosting(jobDetail, paging);
+        List<Submission> dataList = jobPosting.getContent();
+
+        return dataList;
+    }
+
     private JobPostingResponseList convertToDto(PengajuanSDMEntity pengajuanSDMEntity) {
         JobPostingResponseList response = modelMapper.map(pengajuanSDMEntity, JobPostingResponseList.class);
         return response;
     }
+
 
     private JobAppliedHistoryResponse convertToHistory(Submission dataApplied) {
         return modelMapper.map(dataApplied, JobAppliedHistoryResponse.class);

@@ -1,47 +1,33 @@
 package com.erecruitment.apachePoi;
 
-import com.erecruitment.entities.*;
-import com.erecruitment.repositories.StaffRepository;
+import com.erecruitment.entities.Submission;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
 
 public class JobPostingExcelExporter {
     private XSSFWorkbook workbook;
     private XSSFSheet sheet;
-    private List<PengajuanSDMEntity> listJobPosting;
-    private List<PengajuanSDMSkillEntity> skillTree;
-    private List<Department> tempDept;
-    @Autowired
-    private StaffRepository staffRepository;
+    private List<Submission> listApplicant;
 
-    public JobPostingExcelExporter(
-            List<PengajuanSDMEntity> listJobPosting
-            ,List<PengajuanSDMSkillEntity> skillTree
-            ,List<Department> tempDept
-    ) {
-        this.listJobPosting = listJobPosting;
-        this.skillTree =skillTree;
-        this.tempDept = tempDept;
+    public JobPostingExcelExporter(List<Submission> listApplicant) {
+       this.listApplicant = listApplicant;
         workbook = new XSSFWorkbook();
     }
 
     private void writeHeaderLine() {
-        sheet = workbook.createSheet("JobPosting");
+        sheet = workbook.createSheet("Applicant List");
 
         Row row = sheet.createRow(0);
 
@@ -51,31 +37,31 @@ public class JobPostingExcelExporter {
         font.setFontHeight(16);
         style.setFont(font);
 
-        createCell(row, 0, "Job ID", style);
-        createCell(row, 1, "Posisition", style);
-        createCell(row, 2, "Description", style);
-        createCell(row, 3, "remark_staff", style);
-        createCell(row, 4, "status", style);
-        createCell(row, 5, "numberRequired", style);
-        createCell(row, 6, "numberApplicant", style);
-        createCell(row, 7, "deadline", style);
-        createCell(row, 8, "createdAt", style);
-        createCell(row, 9, "skill", style);
-        createCell(row, 10, "department", style);
+        createCell(row, 0, "Applicant Id", style);
+        createCell(row, 1, "Nama", style);
+        createCell(row, 2, "Email", style);
+        createCell(row, 3, "Phone Number", style);
+        createCell(row, 4, "Cover Letter", style);
+        createCell(row, 5, "Status", style);
+        createCell(row, 6, "Description", style);
+        createCell(row, 7, "Applied at", style);
     }
 
     private void createCell(Row row, int columnCount, Object value, CellStyle style) {
         sheet.autoSizeColumn(columnCount);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss");
-
         Cell cell = row.createCell(columnCount);
-        if (value instanceof Integer) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss");
+        DecimalFormat dFormat = new DecimalFormat("####,###,###.00");
+
+        if (value instanceof Long) {
+            cell.setCellValue((Long) value);
+        } else if (value instanceof Integer) {
             cell.setCellValue((Integer) value);
-        } else if (value instanceof Boolean) {
-            cell.setCellValue((Boolean) value);
-        }else if ( value instanceof Date){
+        } else if (value instanceof Date) {
             String valueDate = formatter.format(value);
             cell.setCellValue(valueDate);
+        }  else if (value instanceof Boolean){
+            cell.setCellValue((Boolean) value);
         }else {
             cell.setCellValue((String) value);
         }
@@ -84,45 +70,25 @@ public class JobPostingExcelExporter {
 
     private void writeDataLines() {
         int rowCount = 1;
-        ArrayList<String> skill = new ArrayList<>();
-        Optional<Staff> tempStaff;
 
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
         font.setFontHeight(14);
         style.setFont(font);
 
-        for (PengajuanSDMEntity job : listJobPosting) {
+        for (Submission job : listApplicant) {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
 
-            createCell(row, columnCount++, job.getIdPengajuan(), style);
-            createCell(row, columnCount++, job.getPosisi(), style);
-            createCell(row, columnCount++, job.getDescription(), style);
-            createCell(row, columnCount++, job.getIdPengajuan(), style);
+            System.out.println(job.getAppliedBy().getName());
+            createCell(row, columnCount++, job.getAppliedBy().getUserId(), style);
+            createCell(row, columnCount++, job.getAppliedBy().getName(), style);
+            createCell(row, columnCount++, job.getAppliedBy().getEmail(), style);
+            createCell(row, columnCount++, job.getAppliedBy().getPhoneNumber(), style);
+            createCell(row, columnCount++, job.getCoverLetter(), style);
             createCell(row, columnCount++, job.getStatus(), style);
-            createCell(row, columnCount++, job.getNumberRequired(), style);
-            createCell(row, columnCount++, job.getNumberApplicant(), style);
-            createCell(row, columnCount++, job.getDeadline(), style);
-            createCell(row, columnCount++, job.getCreatedAt(), style);
-
-            for(PengajuanSDMSkillEntity item: skillTree) {
-                if (item.getPengajuanSDMEntity().getIdPengajuan().equals(job.getIdPengajuan())) {
-                    skill.add(item.getSkillName());
-                }
-            }
-            createCell(row, columnCount++, skill.toString(), style);
-            skill = null;
-
-            tempStaff = staffRepository.findById(job.getUser().getUserId());
-            if(tempStaff.isPresent() ){
-                for (Department item: tempDept){
-                    if(item.getDepartmentId().equals(tempStaff.get().getDepartmentId())){
-                        createCell(row, columnCount++, item.getDepartmentName(), style);
-                    }
-                }
-            }
-
+            createCell(row, columnCount++, job.getDescription(), style);
+            createCell(row, columnCount++, job.getAppliedAt(), style);
         }
     }
 
@@ -136,4 +102,6 @@ public class JobPostingExcelExporter {
 
         outputStream.close();
     }
+
+
 }
