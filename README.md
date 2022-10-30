@@ -12,12 +12,10 @@
 1. Memasang loker berdasarkan permintaan Penambahan SDM sesuai dengan jabatan dan kriteria yang dibutuhkan
 2. Secara otomatis, dari lamaran yang masuk akan membentuk daftar prioritas kandidat berdasarkan perbandingan
    antara kriteria yang dibutuhkan terhadap data diri kandidat.
-3. Mengelola pemanggilan pelamar untuk melakukan psikotest dan wawancara.
-4. Psikotest dan Wawancara adalah dua kegiatan yang tidak saling terkait dan tidak berurutan, bisa dilakukan keduanya,
+3. Psikotest dan Wawancara adalah dua kegiatan yang tidak saling terkait dan tidak berurutan, bisa dilakukan keduanya,
    bisa hanya salah satu saja.
-5. Mengelola daftar kehadiran psikotes dan/atau wawancara.
-6. Mengelola hasil psikotes dan/atau wawancara.
-7. Memberi informasi via email/via situs loker kepada kandidat terkait hasil wawancara, diterima atau tidak.
+4. Mengelola hasil psikotes dan/atau wawancara.
+5. Memberi informasi via email/via situs loker kepada kandidat terkait hasil wawancara, diterima atau tidak.
 
 ### **Pelamar**
 
@@ -27,7 +25,7 @@
 
 ## Arsitektur & Fitur
 
-1. Java Spring Boot untuk REST API.
+1. Java 11 dan Spring Boot 2.7.
 2. Database menggunakan PostgreSQL.
 3. JWT Spring Boot Security.
 4. Apache POI untuk export data.
@@ -45,3 +43,5 @@
 5. Open browser and enter this <a href="http://127.0.0.1:8080/swagger-ui/">url http://127.0.0.1:8080/swagger-ui/ </a>
    to see the API documentation on swagger **or** you can access : https://e-recruitment-alterra.herokuapp.com/swagger-ui/#/
 
+## Unit Testing
+<img src="unitTestBackend.png" />

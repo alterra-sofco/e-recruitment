@@ -1,22 +1,31 @@
 package com.erecruitment.services;
 
 import com.erecruitment.dtos.requests.SkillRequest;
+import com.erecruitment.dtos.response.PageableResponse;
 import com.erecruitment.dtos.response.SkillResponse;
 import com.erecruitment.entities.SkillEntity;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.SkillRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,6 +39,7 @@ public class SkillServiceTest {
 
     @InjectMocks
     SkillService serviceUnderTest = spy(new SkillService());
+
 
     @Test
     public void givenValidRequest_whenAddNewData() {
@@ -90,4 +100,6 @@ public class SkillServiceTest {
         assertThat(response.getSkillId()).isEqualTo(request.getSkillId());
         assertThat(response.getSkillName()).isEqualTo(request.getSkillName());
     }
+
+
 }
