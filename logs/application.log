@@ -7807,3 +7807,127 @@ java.lang.ClassCastException: class com.erecruitment.entities.StatusRecruitment 
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
 	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
 
+2022-10-30 15:00:00.011  INFO 22332 --- [MessageBroker-2] c.e.configuration.ScheduledTasks         : The time is now 15:00:00
+2022-10-30 15:00:05.005  INFO 22332 --- [MessageBroker-3] c.e.configuration.ScheduledTasks         : The time is now 15:00:05
+2022-10-30 15:00:10.000  INFO 22332 --- [MessageBroker-2] c.e.configuration.ScheduledTasks         : The time is now 15:00:10
+2022-10-30 15:00:15.010  INFO 22332 --- [MessageBroker-1] c.e.configuration.ScheduledTasks         : The time is now 15:00:15
+2022-10-30 15:00:20.003  INFO 22332 --- [MessageBroker-5] c.e.configuration.ScheduledTasks         : The time is now 15:00:20
+2022-10-30 15:00:25.001  INFO 22332 --- [MessageBroker-2] c.e.configuration.ScheduledTasks         : The time is now 15:00:25
+2022-10-30 15:00:30.015  INFO 22332 --- [MessageBroker-3] c.e.configuration.ScheduledTasks         : The time is now 15:00:30
+2022-10-30 15:00:35.013  INFO 22332 --- [MessageBroker-7] c.e.configuration.ScheduledTasks         : The time is now 15:00:35
+2022-10-30 15:00:40.004  INFO 22332 --- [MessageBroker-5] c.e.configuration.ScheduledTasks         : The time is now 15:00:40
+2022-10-30 15:00:45.000  INFO 22332 --- [MessageBroker-6] c.e.configuration.ScheduledTasks         : The time is now 15:00:45
+2022-10-30 15:00:50.014  INFO 22332 --- [MessageBroker-9] c.e.configuration.ScheduledTasks         : The time is now 15:00:50
+2022-10-30 15:00:55.012  INFO 22332 --- [MessageBroker-9] c.e.configuration.ScheduledTasks         : The time is now 15:00:55
+2022-10-30 15:01:00.004  INFO 22332 --- [MessageBroker-9] c.e.configuration.ScheduledTasks         : The time is now 15:01:00
+2022-10-30 15:01:05.002  INFO 22332 --- [MessageBroker-9] c.e.configuration.ScheduledTasks         : The time is now 15:01:05
+2022-10-30 15:01:10.013  INFO 22332 --- [MessageBroker-9] c.e.configuration.ScheduledTasks         : The time is now 15:01:10
+2022-10-30 15:01:15.013  INFO 22332 --- [MessageBroker-2] c.e.configuration.ScheduledTasks         : The time is now 15:01:15
+2022-10-30 15:01:20.002  INFO 22332 --- [MessageBroker-2] c.e.configuration.ScheduledTasks         : The time is now 15:01:20
+2022-10-30 15:01:25.014  INFO 22332 --- [MessageBroker-2] c.e.configuration.ScheduledTasks         : The time is now 15:01:25
+2022-10-30 15:01:30.015  INFO 22332 --- [MessageBroker-2] c.e.configuration.ScheduledTasks         : The time is now 15:01:30
+2022-10-30 15:01:35.012  INFO 22332 --- [MessageBroker-2] c.e.configuration.ScheduledTasks         : The time is now 15:01:35
+2022-10-30 15:01:40.011  INFO 22332 --- [MessageBroker-12] c.e.configuration.ScheduledTasks         : The time is now 15:01:40
+2022-10-30 15:01:45.007  INFO 22332 --- [MessageBroker-12] c.e.configuration.ScheduledTasks         : The time is now 15:01:45
+2022-10-30 15:01:50.003  INFO 22332 --- [MessageBroker-12] c.e.configuration.ScheduledTasks         : The time is now 15:01:50
+2022-10-30 15:01:55.010  INFO 22332 --- [MessageBroker-12] c.e.configuration.ScheduledTasks         : The time is now 15:01:55
+2022-10-30 15:10:54.033  INFO 22332 --- [MessageBroker-5] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 12, active threads = 1, queued tasks = 1, completed tasks = 25]
+2022-10-30 15:40:54.036  INFO 22332 --- [MessageBroker-5] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 12, active threads = 1, queued tasks = 1, completed tasks = 26]
+2022-10-30 15:51:33.036  INFO 22332 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2022-10-30 15:51:33.037  INFO 22332 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4b980e9f]]
+2022-10-30 15:51:33.037  INFO 22332 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2022-10-30 15:51:33.112  INFO 22332 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-10-30 15:51:33.130  INFO 22332 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-10-30 15:51:35.942  INFO 22332 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-10-30 15:51:42.379  INFO 14228 --- [restartedMain] c.erecruitment.ERecruitmentApplication   : Starting ERecruitmentApplication using Java 18.0.2 on Alfika with PID 14228 (C:\Users\alfik\Java\CAPSTONE-PROJECT-ALTERRA\BackEnd\target\classes started by alfik in C:\Users\alfik\Java\CAPSTONE-PROJECT-ALTERRA\BackEnd)
+2022-10-30 15:51:42.381  INFO 14228 --- [restartedMain] c.erecruitment.ERecruitmentApplication   : The following 1 profile is active: "dev"
+2022-10-30 15:51:42.469  INFO 14228 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-10-30 15:51:42.469  INFO 14228 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-10-30 15:51:44.017  INFO 14228 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-10-30 15:51:44.148  INFO 14228 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 118 ms. Found 11 JPA repository interfaces.
+2022-10-30 15:51:45.428  INFO 14228 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-10-30 15:51:45.444  INFO 14228 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-10-30 15:51:45.445  INFO 14228 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-10-30 15:51:45.598  INFO 14228 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-10-30 15:51:45.598  INFO 14228 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3128 ms
+2022-10-30 15:51:45.716  WARN 14228 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-10-30 15:51:45.880  INFO 14228 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-10-30 15:51:45.974  INFO 14228 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.11.Final
+2022-10-30 15:51:46.236  INFO 14228 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-10-30 15:51:46.407  INFO 14228 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-10-30 15:51:49.599  INFO 14228 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-10-30 15:51:49.628  INFO 14228 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL9Dialect
+2022-10-30 15:52:01.738  INFO 14228 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-10-30 15:52:01.752  INFO 14228 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-10-30 15:52:03.954  WARN 14228 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/v2/api-docs']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:52:03.955  INFO 14228 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/v2/api-docs']
+2022-10-30 15:52:03.956  WARN 14228 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/configuration/ui']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:52:03.956  INFO 14228 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/configuration/ui']
+2022-10-30 15:52:03.956  WARN 14228 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/swagger-resources/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:52:03.957  INFO 14228 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/swagger-resources/**']
+2022-10-30 15:52:03.957  WARN 14228 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/configuration/security']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:52:03.957  INFO 14228 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/configuration/security']
+2022-10-30 15:52:03.957  WARN 14228 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/swagger-ui.html']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:52:03.957  INFO 14228 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/swagger-ui.html']
+2022-10-30 15:52:03.957  WARN 14228 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:52:03.957  INFO 14228 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2022-10-30 15:52:04.024  INFO 14228 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1d4462b1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3a09af4, org.springframework.security.web.context.SecurityContextPersistenceFilter@7976f3c3, org.springframework.security.web.header.HeaderWriterFilter@6bb327e, org.springframework.web.filter.CorsFilter@33cd9226, org.springframework.security.web.authentication.logout.LogoutFilter@1760b9f1, com.erecruitment.configuration.security.JwtAuthenticationFilter@3dd0c142, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@21244a17, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3d6d0848, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@111db6d5, org.springframework.security.web.session.SessionManagementFilter@3e66bdd2, org.springframework.security.web.access.ExceptionTranslationFilter@63d379f1, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4f8cdc39]
+2022-10-30 15:52:04.133  INFO 14228 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-10-30 15:52:04.442  INFO 14228 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-10-30 15:52:05.264  INFO 14228 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2022-10-30 15:52:05.265  INFO 14228 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@61cff242]]
+2022-10-30 15:52:05.266  INFO 14228 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2022-10-30 15:52:05.289  INFO 14228 --- [restartedMain] c.erecruitment.ERecruitmentApplication   : Started ERecruitmentApplication in 23.524 seconds (JVM running for 24.357)
+2022-10-30 15:52:45.457  INFO 14228 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-10-30 15:52:45.457  INFO 14228 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-10-30 15:52:45.460  INFO 14228 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2022-10-30 15:53:03.755  INFO 14228 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 1, completed tasks = 0]
+2022-10-30 15:55:31.511  INFO 14228 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2022-10-30 15:55:31.512  INFO 14228 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@61cff242]]
+2022-10-30 15:55:31.512  INFO 14228 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2022-10-30 15:55:31.550  INFO 14228 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-10-30 15:55:31.555  INFO 14228 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-10-30 15:55:34.025  INFO 14228 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-10-30 15:55:39.789  INFO 22816 --- [restartedMain] c.erecruitment.ERecruitmentApplication   : Starting ERecruitmentApplication using Java 18.0.2 on Alfika with PID 22816 (C:\Users\alfik\Java\CAPSTONE-PROJECT-ALTERRA\BackEnd\target\classes started by alfik in C:\Users\alfik\Java\CAPSTONE-PROJECT-ALTERRA\BackEnd)
+2022-10-30 15:55:39.790  INFO 22816 --- [restartedMain] c.erecruitment.ERecruitmentApplication   : The following 1 profile is active: "dev"
+2022-10-30 15:55:39.870  INFO 22816 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-10-30 15:55:39.871  INFO 22816 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-10-30 15:55:41.428  INFO 22816 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-10-30 15:55:41.567  INFO 22816 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 129 ms. Found 11 JPA repository interfaces.
+2022-10-30 15:55:42.737  INFO 22816 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-10-30 15:55:42.755  INFO 22816 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-10-30 15:55:42.756  INFO 22816 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-10-30 15:55:42.907  INFO 22816 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-10-30 15:55:42.908  INFO 22816 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3036 ms
+2022-10-30 15:55:43.032  WARN 22816 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-10-30 15:55:43.182  INFO 22816 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-10-30 15:55:43.264  INFO 22816 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.11.Final
+2022-10-30 15:55:43.509  INFO 22816 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-10-30 15:55:43.656  INFO 22816 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-10-30 15:55:47.004  INFO 22816 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-10-30 15:55:47.029  INFO 22816 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL9Dialect
+2022-10-30 15:56:01.094  INFO 22816 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-10-30 15:56:01.106  INFO 22816 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-10-30 15:56:03.377  WARN 22816 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/v2/api-docs']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:56:03.378  INFO 22816 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/v2/api-docs']
+2022-10-30 15:56:03.379  WARN 22816 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/configuration/ui']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:56:03.379  INFO 22816 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/configuration/ui']
+2022-10-30 15:56:03.379  WARN 22816 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/swagger-resources/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:56:03.379  INFO 22816 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/swagger-resources/**']
+2022-10-30 15:56:03.379  WARN 22816 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/configuration/security']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:56:03.379  INFO 22816 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/configuration/security']
+2022-10-30 15:56:03.379  WARN 22816 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/swagger-ui.html']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:56:03.379  INFO 22816 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/swagger-ui.html']
+2022-10-30 15:56:03.379  WARN 22816 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2022-10-30 15:56:03.379  INFO 22816 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2022-10-30 15:56:03.441  INFO 22816 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@33cd9226, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@111db6d5, org.springframework.security.web.context.SecurityContextPersistenceFilter@21244a17, org.springframework.security.web.header.HeaderWriterFilter@168a6898, org.springframework.web.filter.CorsFilter@2f720fad, org.springframework.security.web.authentication.logout.LogoutFilter@5ecfbfce, com.erecruitment.configuration.security.JwtAuthenticationFilter@4a687fa1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1a031d02, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4ec7eea1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2882478d, org.springframework.security.web.session.SessionManagementFilter@7841a6b3, org.springframework.security.web.access.ExceptionTranslationFilter@6bb327e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4f9cfcda]
+2022-10-30 15:56:03.545  INFO 22816 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-10-30 15:56:03.841  INFO 22816 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-10-30 15:56:04.744  INFO 22816 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2022-10-30 15:56:04.745  INFO 22816 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@79db80b5]]
+2022-10-30 15:56:04.745  INFO 22816 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2022-10-30 15:56:04.763  INFO 22816 --- [restartedMain] c.erecruitment.ERecruitmentApplication   : Started ERecruitmentApplication in 25.588 seconds (JVM running for 26.399)
+2022-10-30 15:56:15.081  INFO 22816 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-10-30 15:56:15.081  INFO 22816 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-10-30 15:56:15.083  INFO 22816 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2022-10-30 15:57:03.185  INFO 22816 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 1, completed tasks = 0]

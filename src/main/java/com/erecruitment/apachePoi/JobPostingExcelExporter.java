@@ -51,7 +51,6 @@ public class JobPostingExcelExporter {
         sheet.autoSizeColumn(columnCount);
         Cell cell = row.createCell(columnCount);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss");
-        DecimalFormat dFormat = new DecimalFormat("####,###,###.00");
 
         if (value instanceof Long) {
             cell.setCellValue((Long) value);
@@ -80,13 +79,12 @@ public class JobPostingExcelExporter {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
 
-            System.out.println(job.getAppliedBy().getName());
-//            createCell(row, columnCount++, job.getAppliedBy().getUserId(), style);
-//            createCell(row, columnCount++, job.getAppliedBy().getName(), style);
-//            createCell(row, columnCount++, job.getAppliedBy().getEmail(), style);
-//            createCell(row, columnCount++, job.getAppliedBy().getPhoneNumber(), style);
+            createCell(row, columnCount++, job.getAppliedBy().getUserId(), style);
+            createCell(row, columnCount++, job.getAppliedBy().getName(), style);
+            createCell(row, columnCount++, job.getAppliedBy().getEmail(), style);
+            createCell(row, columnCount++, job.getAppliedBy().getPhoneNumber(), style);
             createCell(row, columnCount++, job.getCoverLetter(), style);
-            createCell(row, columnCount++, job.getStatus(), style);
+            createCell(row, columnCount++, job.getStatus().toString(), style);
             createCell(row, columnCount++, job.getDescription(), style);
             createCell(row, columnCount++, job.getAppliedAt(), style);
         }
