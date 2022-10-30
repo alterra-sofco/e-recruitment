@@ -77,12 +77,15 @@ public class JobPostingService implements IJobPostingService {
                 new DataNotFoundException("data job not found!"));
         JobPostingDetailResponse response = modelMapper.map(jobDetail, JobPostingDetailResponse.class);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            User user = (User) authentication.getPrincipal();
+        User user = new User();
+        try {
+            user = (User) authentication.getPrincipal();
             Boolean isApplied = submissionRepository.findByJobPostingAndAndAppliedBy(jobDetail, user).isPresent();
             if (isApplied) {
                 response.setIsApplied(true);
             }
+        } catch (Exception e){
+            response.setIsApplied(true);
         }
 
         return response;
