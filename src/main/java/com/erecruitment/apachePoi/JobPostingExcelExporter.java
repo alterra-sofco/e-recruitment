@@ -81,10 +81,10 @@ public class JobPostingExcelExporter {
             int columnCount = 0;
 
             System.out.println(job.getAppliedBy().getName());
-            createCell(row, columnCount++, job.getAppliedBy().getUserId(), style);
-            createCell(row, columnCount++, job.getAppliedBy().getName(), style);
-            createCell(row, columnCount++, job.getAppliedBy().getEmail(), style);
-            createCell(row, columnCount++, job.getAppliedBy().getPhoneNumber(), style);
+//            createCell(row, columnCount++, job.getAppliedBy().getUserId(), style);
+//            createCell(row, columnCount++, job.getAppliedBy().getName(), style);
+//            createCell(row, columnCount++, job.getAppliedBy().getEmail(), style);
+//            createCell(row, columnCount++, job.getAppliedBy().getPhoneNumber(), style);
             createCell(row, columnCount++, job.getCoverLetter(), style);
             createCell(row, columnCount++, job.getStatus(), style);
             createCell(row, columnCount++, job.getDescription(), style);
