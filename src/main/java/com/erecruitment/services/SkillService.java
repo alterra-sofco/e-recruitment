@@ -57,7 +57,7 @@ public class SkillService {
         if (!dataList.isEmpty()) {
             response.setMessage("ok");
             List<SkillResponse> dt = dataList.stream()
-                    .map(barang -> modelMapper.map(barang, SkillResponse.class))
+                    .map(skills -> modelMapper.map(skills, SkillResponse.class))
                     .collect(Collectors.toList());
             response.setData(dt);
         } else {
@@ -70,6 +70,17 @@ public class SkillService {
         response.setPrevious(skillEntities.hasPrevious());
         response.setPageSize(skillEntities.getSize());
         return response;
+    }
+
+    public List<SkillResponse> saveBatch(List<SkillRequest> requests) {
+        List<SkillEntity> dt = requests.stream()
+                .map(skills -> modelMapper.map(skills, SkillEntity.class))
+                .collect(Collectors.toList());
+        List<SkillEntity> dataList = skillRepository.saveAll(dt);
+        List<SkillResponse> dts = dataList.stream()
+                .map(skills -> modelMapper.map(skills, SkillResponse.class))
+                .collect(Collectors.toList());
+        return dts;
     }
 
     public void removeOne(Long id) {

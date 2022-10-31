@@ -2,7 +2,6 @@ package com.erecruitment.services;
 
 import com.erecruitment.dtos.requests.AddPengajuanSDMRequest;
 import com.erecruitment.dtos.requests.UpdateStatusPengajuanSDMRequest;
-import com.erecruitment.dtos.response.PageableResponse;
 import com.erecruitment.dtos.response.PengajuanSDMResponse;
 import com.erecruitment.entities.PengajuanSDMEntity;
 import com.erecruitment.entities.PengajuanSDMSkillEntity;
@@ -18,10 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import springfox.documentation.spi.service.contexts.SecurityContext;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +24,6 @@ import java.time.ZoneId;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -256,7 +250,6 @@ public class PengajuanSDMServiceTest {
 
     @Test
     public void givenValidRequest_getDetail() {
-
         PengajuanSDMSkillEntity pengajuanSDMSkillEntity = new PengajuanSDMSkillEntity();
         pengajuanSDMSkillEntity.setSkillName("JAVA");
         pengajuanSDMSkillEntity.setSkillId(1L);
@@ -276,8 +269,6 @@ public class PengajuanSDMServiceTest {
         response.setListSkill(pengajuanSDMSkillEntity1);
         assertThat(response.getIdPengajuan()).isEqualTo(entity.getIdPengajuan());
     }
-
-
 
 
 }

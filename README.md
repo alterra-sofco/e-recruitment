@@ -28,10 +28,10 @@
 1. Java 11 dan Spring Boot 2.7.
 2. Database menggunakan PostgreSQL.
 3. JWT Spring Boot Security.
-4. Apache POI untuk export data.
+4. Apache POI untuk import data master skill dan Export data (.xlsx).
 5. Web socket, notifikasi pada sisi admin dashboard ketika ada pelamar yang apply pada loker.
 6. Schedule Task, untuk unpublish(close) loker yang telah melewati tanggal dealine.
-7. Unit Testing
+7. Unit Testing.
 8. Swagger untuk dokumentasi API.
 
 ## How to install
