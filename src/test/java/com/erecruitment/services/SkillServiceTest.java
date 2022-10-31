@@ -9,24 +9,25 @@ import com.erecruitment.exceptions.ValidationErrorException;
 import com.erecruitment.repositories.SkillRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class SkillServiceTest {
@@ -40,6 +41,10 @@ public class SkillServiceTest {
     @InjectMocks
     SkillService serviceUnderTest = spy(new SkillService());
 
+    @Before
+    public void setup() throws Exception {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     public void givenValidRequest_whenAddNewData() {
@@ -100,6 +105,5 @@ public class SkillServiceTest {
         assertThat(response.getSkillId()).isEqualTo(request.getSkillId());
         assertThat(response.getSkillName()).isEqualTo(request.getSkillName());
     }
-
 
 }
