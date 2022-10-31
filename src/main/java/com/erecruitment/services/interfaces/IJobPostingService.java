@@ -3,7 +3,6 @@ package com.erecruitment.services.interfaces;
 import com.erecruitment.dtos.requests.JobApplyRequest;
 import com.erecruitment.dtos.requests.StatusJobApplicantRequest;
 import com.erecruitment.dtos.response.DashboardSummaryResponse;
-import com.erecruitment.dtos.response.JobAppliedListResponse;
 import com.erecruitment.dtos.response.JobPostingDetailResponse;
 import com.erecruitment.dtos.response.PageableResponse;
 import com.erecruitment.entities.StatusRecruitment;

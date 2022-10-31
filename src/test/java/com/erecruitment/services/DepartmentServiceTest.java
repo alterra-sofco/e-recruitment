@@ -1,6 +1,5 @@
 package com.erecruitment.services;
 
-import com.erecruitment.dtos.requests.SkillRequest;
 import com.erecruitment.entities.Department;
 import com.erecruitment.exceptions.DataNotFoundException;
 import com.erecruitment.repositories.DepartmentRepository;

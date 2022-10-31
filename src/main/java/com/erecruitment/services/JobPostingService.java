@@ -84,7 +84,7 @@ public class JobPostingService implements IJobPostingService {
             if (isApplied) {
                 response.setIsApplied(true);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             response.setIsApplied(true);
         }
 
@@ -217,7 +217,7 @@ public class JobPostingService implements IJobPostingService {
 
     @Override
     //export xlsx
-    public List<Submission> exportAppliedListToExcel(Long jobPostingId){
+    public List<Submission> exportAppliedListToExcel(Long jobPostingId) {
         Page<Submission> jobPosting;
         Sort sort = Sort.by("appliedAt").ascending();
 

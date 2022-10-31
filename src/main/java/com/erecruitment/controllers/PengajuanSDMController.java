@@ -64,7 +64,7 @@ public class PengajuanSDMController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        if (user.getRole() != RoleName.ADMIN){
+        if (user.getRole() != RoleName.ADMIN) {
             throw new PermissionErrorException("Not have permission");
         }
         PengajuanSDMResponse response = pengajuanSDMService.updateStatus(request, id);
@@ -77,7 +77,7 @@ public class PengajuanSDMController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        if (user.getRole() != RoleName.ADMIN){
+        if (user.getRole() != RoleName.ADMIN) {
             throw new PermissionErrorException("Not have permission");
         }
         PengajuanSDMResponse response = pengajuanSDMService.closeJobPosted(id);

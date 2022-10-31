@@ -11,18 +11,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class JobPostingExcelExporter {
-    private XSSFWorkbook workbook;
+    private final XSSFWorkbook workbook;
+    private final List<Submission> listApplicant;
     private XSSFSheet sheet;
-    private List<Submission> listApplicant;
 
     public JobPostingExcelExporter(List<Submission> listApplicant) {
-       this.listApplicant = listApplicant;
+        this.listApplicant = listApplicant;
         workbook = new XSSFWorkbook();
     }
 
@@ -59,9 +58,9 @@ public class JobPostingExcelExporter {
         } else if (value instanceof Date) {
             String valueDate = formatter.format(value);
             cell.setCellValue(valueDate);
-        }  else if (value instanceof Boolean){
+        } else if (value instanceof Boolean) {
             cell.setCellValue((Boolean) value);
-        }else {
+        } else {
             cell.setCellValue((String) value);
         }
         cell.setCellStyle(style);
