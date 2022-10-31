@@ -270,5 +270,18 @@ public class PengajuanSDMServiceTest {
         assertThat(response.getIdPengajuan()).isEqualTo(entity.getIdPengajuan());
     }
 
+    @Test
+    public void testCloseJob() {
+        PengajuanSDMEntity entity = new PengajuanSDMEntity();
+        entity.setIdPengajuan(1L);
+
+        PengajuanSDMEntity entity2 = new PengajuanSDMEntity();
+        entity.setIdPengajuan(2L);
+        List<PengajuanSDMEntity> pengajuanSDMEntityList = List.of(entity, entity2);
+        when(pengajuanSDMRepository.closeAutoJob()).thenReturn(pengajuanSDMEntityList);
+        serviceUnderTest.closeAutoJobPosted();
+        assertThat(pengajuanSDMEntityList.size()).isEqualTo(2);
+    }
+
 
 }

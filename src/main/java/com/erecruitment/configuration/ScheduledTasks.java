@@ -31,7 +31,7 @@ public class ScheduledTasks {
 
     @Scheduled(cron = "${cron.every5MinuteOn00Until01}")
     public void reportCurrentTime() {
-        log.info("The time is now {}", dateFormat.format(new Date()));
+        log.info("Sceduler last run on => ", dateFormat.format(new Date()));
         pengajuanSDMService.closeAutoJobPosted();
     }
 
@@ -44,7 +44,6 @@ public class ScheduledTasks {
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String username = (String) accessor.getSessionAttributes().get("username");
-
         if (username != null) {
             log.info("User disconnected : " + username);
             WebSocketDTO chatMessage = new WebSocketDTO();

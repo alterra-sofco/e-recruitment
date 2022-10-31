@@ -18,7 +18,7 @@ public class EducationRequest {
     private String educationName;
 
     @NotBlank(message = "degree is required")
-    @ApiModelProperty(notes = "level of deegree ('HIGH_SCHOOL', 'BACHELOR', 'MASTER', 'DOCTOR', 'PHD')",  required = true)
+    @ApiModelProperty(notes = "level of deegree ('HIGH_SCHOOL', 'BACHELOR', 'MASTER', 'DOCTOR', 'PHD')", required = true)
     private Degree degree;
 
     @NotBlank(message = "major is required")
